@@ -5,10 +5,15 @@ type FormRow = {
   form_identifier: string
   tax_year: number
   form_version: string
-  required_or_conditional: "REQUIRED" | "CONDITIONAL"
+  required_or_conditional: "REQUIRED" | "CONDITIONAL" | "REFERENCE"
   verification_status: "VERIFIED" | "UNVERIFIED"
   mapping_status: "NOT_STARTED" | "IN_PROGRESS" | "COMPLETE"
   technical_pdf_status: "NOT_AVAILABLE" | "AVAILABLE" | "VALIDATED"
+  official_source?: string | null
+  official_file?: string | null
+  source_type?: "form" | "instruction"
+  transaction_family?: string
+  bulgarian_title?: string
 }
 
 export function TaxFormRegistry({ forms }: { forms: FormRow[] }) {
@@ -29,9 +34,9 @@ export function TaxFormRegistry({ forms }: { forms: FormRow[] }) {
           </thead>
           <tbody className="divide-y divide-border">
             {forms.map((form) => <tr key={form.form_identifier}>
-              <td className="px-4 py-3"><div className="font-medium text-foreground">{form.official_name}</div><div className="font-mono text-xs text-muted-foreground">{form.form_identifier}</div></td>
+              <td className="px-4 py-3"><div className="font-medium text-foreground">{form.bulgarian_title ?? form.official_name}</div><div className="text-xs text-muted-foreground">{form.official_name}</div><div className="font-mono text-xs text-muted-foreground">{form.form_identifier}</div></td>
               <td className="px-4 py-3 text-muted-foreground">{form.tax_year} · v{form.form_version}</td>
-              <td className="px-4 py-3"><Badge variant={form.required_or_conditional === "REQUIRED" ? "default" : "secondary"}>{form.required_or_conditional === "REQUIRED" ? "Pflicht" : "Bedingt"}</Badge><div className="mt-1 text-xs text-muted-foreground">{form.verification_status === "VERIFIED" ? "Verifiziert" : "Unverifiziert"}</div></td>
+              <td className="px-4 py-3"><Badge variant={form.required_or_conditional === "REQUIRED" ? "default" : "secondary"}>{form.required_or_conditional === "REQUIRED" ? "Pflicht" : form.required_or_conditional === "REFERENCE" ? "Referenz" : "Bedingt"}</Badge><div className="mt-1 text-xs text-muted-foreground">{form.verification_status === "VERIFIED" ? "Verifiziert" : "Unverifiziert"}</div></td>
               <td className="px-4 py-3 text-xs text-muted-foreground">{form.mapping_status === "NOT_STARTED" ? "Nicht gestartet" : form.mapping_status === "IN_PROGRESS" ? "In Arbeit" : "Vollständig"}</td>
               <td className="px-4 py-3 text-xs text-muted-foreground">{form.technical_pdf_status === "NOT_AVAILABLE" ? "Nicht verfügbar" : form.technical_pdf_status === "AVAILABLE" ? "Verfügbar" : "Validiert"}</td>
             </tr>)}
