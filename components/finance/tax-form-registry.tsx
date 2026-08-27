@@ -9,6 +9,9 @@ type FormRow = {
   verification_status: "VERIFIED" | "UNVERIFIED"
   mapping_status: "NOT_STARTED" | "IN_PROGRESS" | "COMPLETE"
   technical_pdf_status: "NOT_AVAILABLE" | "AVAILABLE" | "VALIDATED"
+  registry_status?: "AVAILABLE" | "NOT_AVAILABLE"
+  source_retrieval_status?: "RETRIEVED" | "SOURCE_RETRIEVAL_BLOCKED"
+  source_id?: string | null
   official_source?: string | null
   official_file?: string | null
   source_type?: "form" | "instruction"
@@ -26,7 +29,7 @@ export function TaxFormRegistry({ forms }: { forms: FormRow[] }) {
         </div>
         <Badge variant="outline">{forms.length} Formulare</Badge>
       </div>
-      <p className="mt-3 text-sm leading-6 text-muted-foreground">Nur offiziell verifizierte Formulare werden später für eine Einreichung verwendet. Bis dahin bleiben Quellen und technische PDFs klar als offen markiert.</p>
+      <p className="mt-3 text-sm leading-6 text-muted-foreground">Nur offiziell verifizierte Formulare werden später für eine Einreichung verwendet. Bis dahin bleiben Quellen und technische PDFs klar als offen markiert.</p><div className="mt-3 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs leading-5 text-amber-200">Quellenstatus: Die offiziellen FMS-Ziele sind erfasst, aber der Abruf der Dokumentinhalte ist aktuell blockiert. Es werden keine Werte oder mappings daraus abgeleitet.</div>
       <div className="mt-5 overflow-x-auto rounded-xl border border-border bg-card">
         <table className="w-full min-w-[720px] text-left text-sm">
           <thead className="border-b border-border bg-muted/60 text-xs text-muted-foreground">
