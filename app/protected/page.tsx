@@ -1,13 +1,19 @@
-import Link from "next/link"
 import { redirect } from "next/navigation"
-import { ArrowRight, FileText, Landmark, Receipt, WalletCards } from "lucide-react"
 import { createClient } from "@/lib/supabase/server"
-import { Button } from "@/components/ui/button"
-
-const modules = [{ href: "/steuer", label: "Steuererklärung", text: "Bereite deine Steuerdaten vor.", icon: Receipt }, { href: "/anspruch", label: "Ansprüche", text: "Prüfe mögliche staatliche Leistungen.", icon: Landmark }, { href: "/tarife", label: "Verträge & Tarife", text: "Finde Einsparungen bei deinen Verträgen.", icon: WalletCards }, { href: "/documents", label: "Dokumente", text: "Halte wichtige Unterlagen an einem Ort.", icon: FileText }]
+import { DashboardWorkspace } from "@/components/finance/dashboard-workspace"
 
 export default async function ProtectedPage() {
-  const supabase = await createClient(); const { data: { user } } = await supabase.auth.getUser(); if (!user) redirect("/auth/login")
-  const { data: reminders } = await supabase.from("reminders").select("id,title,due_at,status").eq("user_id", user.id).eq("status", "open").order("due_at", { ascending: true }).limit(3)
-  return <main className="min-h-screen bg-background"><header className="border-b border-border bg-card"><div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5"><Link href="/" className="font-bold text-primary">FinanzBG</Link><form action="/auth/logout" method="post"><Button variant="outline" size="sm">Abmelden</Button></form></div></header><div className="mx-auto max-w-6xl px-4 py-10"><div><p className="text-sm font-medium text-primary">Dein Finanzbereich</p><h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground">Hallo{user.user_metadata?.first_name ? `, ${user.user_metadata.first_name}` : ""}.</h1><p className="mt-2 text-muted-foreground">Wähle ein Thema, um strukturiert weiterzumachen.</p></div><section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{modules.map(({ href,label,text,icon: Icon }) => <Link key={href} href={href} className="group rounded-2xl border border-border bg-card p-5 transition hover:-translate-y-0.5 hover:shadow-md"><Icon className="h-6 w-6 text-primary" /><h2 className="mt-4 font-semibold text-foreground">{label}</h2><p className="mt-2 text-sm leading-relaxed text-muted-foreground">{text}</p><span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-primary">Öffnen <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></span></Link>)}</section><section className="mt-8 rounded-2xl border border-border bg-card p-6"><h2 className="font-semibold text-foreground">Offene Erinnerungen</h2>{reminders?.length ? <ul className="mt-4 divide-y divide-border">{reminders.map((item) => <li key={item.id} className="flex justify-between gap-4 py-3 text-sm"><span className="text-foreground">{item.title}</span><span className="text-muted-foreground">{item.due_at ? new Date(item.due_at).toLocaleDateString("de-DE") : "Ohne Termin"}</span></li>)}</ul> : <p className="mt-3 text-sm text-muted-foreground">Noch keine offenen Erinnerungen.</p>}</section></div></main>
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect("/auth/login")
+
+  const { data: reminders } = await supabase
+    .from("reminders")
+    .select("id,title,due_at")
+    .eq("user_id", user.id)
+    .eq("status", "open")
+    .order("due_at", { ascending: true })
+    .limit(3)
+
+  return <DashboardWorkspace userId={user.id} firstName={user.user_metadata?.first_name} initialReminders={reminders ?? []} />
 }
