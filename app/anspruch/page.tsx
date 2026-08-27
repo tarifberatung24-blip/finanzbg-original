@@ -1,0 +1,2 @@
+import { FinanceModulePage } from "@/components/finance/module-page"
+export default function Page() { return <FinanceModulePage title="Ansprüche prüfen" description="Prüfe strukturiert, ob staatliche Leistungen zu deiner Lebenssituation passen." items={["Haushalt und Wohnsituation erfassen", "Einkommen und laufende Kosten angeben", "Kindergeld, Wohngeld und weitere Leistungen prüfen", "Nächste Schritte und benötigte Unterlagen erhalten"]} /> }

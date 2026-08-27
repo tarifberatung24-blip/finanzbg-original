@@ -1,0 +1,2 @@
+import { FinanceModulePage } from "@/components/finance/module-page"
+export default function Page() { return <FinanceModulePage title="Steuererklärung" description="Sammle deine steuerrelevanten Informationen und erkenne fehlende Angaben." items={["Persönliche Situation und Steuerjahr erfassen", "Werbungskosten und abzugsfähige Ausgaben sammeln", "Belege sicher zuordnen", "Ergebnis vor dem Einreichen prüfen"]} /> }
