@@ -29,7 +29,7 @@ export function TaxFormRegistry({ forms }: { forms: FormRow[] }) {
         </div>
         <Badge variant="outline">{forms.length} Formulare</Badge>
       </div>
-      <p className="mt-3 text-sm leading-6 text-muted-foreground">Nur offiziell verifizierte Formulare werden später für eine Einreichung verwendet. Bis dahin bleiben Quellen und technische PDFs klar als offen markiert.</p><div className="mt-3 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs leading-5 text-amber-200">Quellenstatus: Die offiziellen FMS-Ziele sind erfasst, aber der Abruf der Dokumentinhalte ist aktuell blockiert. Es werden keine Werte oder mappings daraus abgeleitet.</div>
+      <p className="mt-3 text-sm leading-6 text-muted-foreground">Die offiziellen 2025-PDFs sind als Quellen hinterlegt. Feld-Mappings bleiben separat offen, bis sie fachlich geprüft wurden.</p><div className="mt-3 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs leading-5 text-emerald-200">Quellenstatus: {forms.filter((form) => form.source_retrieval_status === "RETRIEVED").length} von {forms.length} Quellen abgerufen und registriert. Keine Feld-Mappings wurden automatisch als vollständig markiert.</div>
       <div className="mt-5 overflow-x-auto rounded-xl border border-border bg-card">
         <table className="w-full min-w-[720px] text-left text-sm">
           <thead className="border-b border-border bg-muted/60 text-xs text-muted-foreground">
@@ -41,7 +41,7 @@ export function TaxFormRegistry({ forms }: { forms: FormRow[] }) {
               <td className="px-4 py-3 text-muted-foreground">{form.tax_year} · v{form.form_version}</td>
               <td className="px-4 py-3"><Badge variant={form.required_or_conditional === "REQUIRED" ? "default" : "secondary"}>{form.required_or_conditional === "REQUIRED" ? "Pflicht" : form.required_or_conditional === "REFERENCE" ? "Referenz" : "Bedingt"}</Badge><div className="mt-1 text-xs text-muted-foreground">{form.verification_status === "VERIFIED" ? "Verifiziert" : "Unverifiziert"}</div></td>
               <td className="px-4 py-3 text-xs text-muted-foreground">{form.mapping_status === "NOT_STARTED" ? "Nicht gestartet" : form.mapping_status === "IN_PROGRESS" ? "In Arbeit" : "Vollständig"}</td>
-              <td className="px-4 py-3 text-xs text-muted-foreground">{form.technical_pdf_status === "NOT_AVAILABLE" ? "Nicht verfügbar" : form.technical_pdf_status === "AVAILABLE" ? "Verfügbar" : "Validiert"}</td>
+              <td className="px-4 py-3 text-xs text-muted-foreground">{form.official_file ? <a className="text-primary underline-offset-4 hover:underline" href={form.official_file} target="_blank" rel="noreferrer">PDF öffnen</a> : form.technical_pdf_status === "NOT_AVAILABLE" ? "Nicht verfügbar" : form.technical_pdf_status === "AVAILABLE" ? "Verfügbar" : "Validiert"}</td>
             </tr>)}
           </tbody>
         </table>
