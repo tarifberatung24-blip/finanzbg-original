@@ -35,7 +35,7 @@ export function OpportunityDemo() {
         <div className="max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#9dcaFF]">Opportunity Demo</p>
           <h2 id="opportunity-demo-title" className="mt-4 text-balance text-3xl font-bold tracking-tight md:text-5xl">Виж какво може да се провери.</h2>
-          <p className="mt-4 max-w-xl text-pretty leading-7 text-[#b8c8e2]">Настрой ориентировъчните си месечни разходи. Това демо показва само текущия разход — не обещава спестяване.</p>
+          <p className="mt-4 max-w-xl text-pretty leading-7 text-[#b8c8e2]">Настрой ориентировъчните си месечни разходи. Това демо показва само текущия разход</p>
         </div>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:items-stretch">
