@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { ArrowRight, Check, ChevronRight, Gauge, ShieldCheck, Wifi } from "lucide-react"
+import { ArrowDown, ArrowRight, Check, ChevronRight, Gauge, ShieldCheck, Wifi, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 const modules = [
@@ -19,6 +19,7 @@ const outcomes = [
 ]
 
 export function OpportunityDemo() {
+  const [isOpen, setIsOpen] = useState(false)
   const [values, setValues] = useState<Record<string, number>>(() => Object.fromEntries(modules.map((module) => [module.id, module.initial])))
   const [state, setState] = useState<"idle" | "analysing" | "done">("idle")
   const monthly = Object.values(values).reduce((sum, value) => sum + value, 0)
@@ -29,13 +30,28 @@ export function OpportunityDemo() {
   }
 
   return (
-    <section className="relative overflow-hidden border-y border-[#0b3d91]/50 bg-[#030817] text-[#f4f8ff]" aria-labelledby="opportunity-demo-title">
+    <>
+      <section className="relative overflow-hidden border-y border-[#0b3d91]/50 bg-[#030817] py-5 text-[#f4f8ff] sm:hidden" aria-label="Opportunity Demo öffnen">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#9dcaff]">Opportunity Demo</p>
+            <p className="mt-1 text-sm font-semibold text-[#f4f8ff]">Verschaffe dir einen schnellen Überblick.</p>
+          </div>
+          <Button type="button" onClick={() => setIsOpen(true)} aria-label="Opportunity Demo öffnen" className="relative shrink-0 bg-[#1677ff] text-[#f4f8ff] shadow-[0_0_24px_rgba(22,119,255,0.32)] hover:bg-[#3b91ff]"><ArrowDown className="absolute -top-8 left-1/2 -translate-x-1/2 text-[#6eafff]" aria-hidden="true" /><span>Demo öffnen</span><ChevronRight data-icon="inline-end" /></Button>
+        </div>
+      </section>
+      <div className="hidden justify-center bg-[#030817] py-8 sm:flex">
+        <Button type="button" onClick={() => setIsOpen(true)} className="bg-[#1677ff] text-[#f4f8ff] shadow-[0_0_28px_rgba(22,119,255,0.28)] hover:bg-[#3b91ff]">Opportunity Demo öffnen<ChevronRight data-icon="inline-end" /></Button>
+      </div>
+      <section className={`fixed inset-0 z-50 overflow-y-auto bg-[#030817]/90 px-4 py-8 backdrop-blur-sm sm:px-6 ${isOpen ? "block" : "hidden"}`} role="dialog" aria-modal="true" aria-labelledby="opportunity-demo-title">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(22,119,255,0.16),transparent_35%),radial-gradient(circle_at_90%_80%,rgba(11,61,145,0.22),transparent_34%)]" />
       <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:px-8">
+        <Button type="button" onClick={() => setIsOpen(false)} variant="outline" aria-label="Opportunity Demo schließen" className="absolute right-4 top-4 border-[#6eafff]/40 bg-[#071b45]/80 text-[#d8e8ff] hover:bg-[#1677ff]/20"><X data-icon="inline-start" />Schließen</Button>
         <div className="max-w-2xl">
+          <p className="mb-2 hidden text-sm font-semibold text-[#6eafff] sm:block">Opportunity Demo</p>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#9dcaFF]">Opportunity Demo</p>
-          <h2 id="opportunity-demo-title" className="mt-4 text-balance text-3xl font-bold tracking-tight md:text-5xl">Виж какво може да се провери.</h2>
-          <p className="mt-4 max-w-xl text-pretty leading-7 text-[#b8c8e2]">Настрой ориентировъчните си месечни разходи. Това демо показва само текущия разход</p>
+          <h2 id="opportunity-demo-title" className="mt-4 text-balance text-3xl font-bold tracking-tight text-[#f4f8ff] md:text-5xl">Намали разходите си от УТРЕ !</h2>
+          <p className="mt-4 max-w-xl text-pretty leading-7 text-[#b8c8e2]">Тук само с няколко клика намаляш дългосрочно основните месечни разходи.</p>
         </div>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:items-stretch">
@@ -43,7 +59,7 @@ export function OpportunityDemo() {
             {modules.map((module, index) => {
               const Icon = module.icon
               return (
-                <label key={module.id} className={`group relative overflow-hidden rounded-3xl border border-[#1677ff]/35 bg-gradient-to-br ${module.tone} p-5 shadow-[0_22px_55px_rgba(3,8,23,0.62)] transition duration-300 hover:-translate-y-1 hover:border-[#6eafff]/70 motion-reduce:transform-none ${index % 2 ? "lg:translate-y-5" : ""}`}>
+                <label key={module.id} className={`group relative overflow-hidden rounded-3xl border border-[#1677ff]/35 bg-gradient-to-br ${module.tone} p-5 text-[#f4f8ff] shadow-[0_22px_55px_rgba(3,8,23,0.62)] transition duration-300 hover:-translate-y-1 hover:border-[#6eafff]/70 motion-reduce:transform-none ${index % 2 ? "lg:translate-y-5" : ""}`}>
                   <span className="absolute -right-8 -top-8 size-28 rounded-full border border-[#6eafff]/25 bg-[#1677ff]/10 shadow-[0_0_35px_rgba(22,119,255,0.25)]" />
                   <span className="relative flex items-center justify-between">
                     <span className="flex items-center gap-3"><span className="flex size-10 items-center justify-center rounded-2xl border border-[#6eafff]/35 bg-[#071b45]/80 text-[#9dcaFF]"><Icon aria-hidden="true" /></span><span className="font-semibold">{module.name}</span></span>
@@ -80,6 +96,7 @@ export function OpportunityDemo() {
         </div>
         <p className="mt-5 max-w-4xl text-xs leading-5 text-[#8fa6c9]">Това е илюстративно демо, а не оферта или обещание за спестяване. Реалните резултати зависят от твоите данни и проверени партньорски оферти.</p>
       </div>
-    </section>
+      </section>
+    </>
   )
 }
