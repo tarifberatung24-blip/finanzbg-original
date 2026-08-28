@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowUpRight, Check, ChevronRight, CircleDollarSign, Gauge, House, Lightbulb, ShieldCheck, Wifi } from "lucide-react"
+import { ArrowUpRight, Check, ChevronRight, CircleDollarSign, Gauge, Lightbulb, ShieldCheck, Wifi } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 
@@ -26,7 +26,7 @@ const products: Product[] = [
     title: "Stromkosten im Blick",
     description: "Vergleiche deinen aktuellen Vertrag mit passenden Stromtarifen.",
     icon: Lightbulb,
-    accent: "bg-amber-400/15 text-amber-300",
+    accent: "bg-[#1677FF]/15 text-[#9DCAFF]",
     eyebrow: "Mögliche monatliche Optimierung",
     detail: ["Verbrauch strukturiert erfassen", "Preis und Laufzeit vergleichen", "Wechsel transparent vorbereiten"],
     action: "Tarife vergleichen",
@@ -38,7 +38,7 @@ const products: Product[] = [
     title: "Vertrag, der zu dir passt",
     description: "Finde heraus, ob dein Internetvertrag noch zu deinem Alltag passt.",
     icon: Wifi,
-    accent: "bg-sky-400/15 text-sky-300",
+    accent: "bg-[#1677FF]/15 text-[#9DCAFF]",
     eyebrow: "Noch nicht verfügbar",
     detail: ["Bandbreite und Bedarf klären", "Vertragslaufzeit prüfen", "Anbieterangebote später vergleichen"],
     action: "Auf die Merkliste",
@@ -49,7 +49,7 @@ const products: Product[] = [
     title: "Schutz ohne Lücken",
     description: "Ordne deine Verträge und erkenne, wo Prüfung sinnvoll ist.",
     icon: ShieldCheck,
-    accent: "bg-emerald-400/15 text-emerald-300",
+    accent: "bg-[#0B3D91]/25 text-[#BBD9FF]",
     eyebrow: "Noch nicht verfügbar",
     detail: ["Bestehende Verträge sammeln", "Deckung und Selbstbehalt prüfen", "Doppelte Absicherung vermeiden"],
     action: "Verträge prüfen",
@@ -60,7 +60,7 @@ const products: Product[] = [
     title: "Finanzierung mit Klarheit",
     description: "Bereite deine Finanzierungsfragen vor, bevor du Angebote vergleichst.",
     icon: CircleDollarSign,
-    accent: "bg-violet-400/15 text-violet-300",
+    accent: "bg-[#071B45]/70 text-[#9DCAFF]",
     eyebrow: "Noch nicht verfügbar",
     detail: ["Finanzierungsziel festhalten", "Rate und Laufzeit verstehen", "Keine Empfehlung ohne echte Anbieterbasis"],
     action: "Vormerken",
@@ -73,14 +73,14 @@ export function ProductOpportunityBoard() {
   const ActiveIcon = active.icon
 
   return (
-    <section className="relative overflow-hidden border-b border-border bg-background" aria-labelledby="produkte-title">
+    <section className="relative overflow-hidden border-b border-[#0B3D91]/40 bg-[#030817] text-[#F4F8FF]" aria-labelledby="produkte-title">
       <div className="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 md:pb-24 md:pt-16 lg:px-8">
         <div className="max-w-3xl">
-          <Badge variant="outline" className="mb-5 rounded-full border-primary/30 bg-primary/5 px-3 py-1 text-primary">
+          <Badge variant="outline" className="mb-5 rounded-full border-[#1677FF]/40 bg-[#071B45]/70 px-3 py-1 text-[#BBD9FF] shadow-[0_0_24px_rgba(22,119,255,0.18)]">
             Dein Finanzradar
           </Badge>
           <h1 id="produkte-title" className="text-balance text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl">
-            Finde die Hebel, die <span className="text-primary">wirklich zählen.</span>
+            Finde die Hebel, die <span className="text-[#6EAFFF] drop-shadow-[0_0_18px_rgba(22,119,255,0.55)]">wirklich zählen.</span>
           </h1>
           <p className="mt-5 max-w-2xl text-pretty text-base leading-7 text-muted-foreground sm:text-lg">
             FinanzBG verbindet deine persönlichen Daten mit konkreten nächsten Schritten. Nicht alles ist sofort verfügbar — aber alles bleibt nachvollziehbar.
@@ -99,7 +99,7 @@ export function ProductOpportunityBoard() {
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setActiveId(product.id)}
-                  className={`group flex items-center gap-4 rounded-2xl border p-4 text-left transition-all ${isActive ? "border-primary/60 bg-card shadow-lg shadow-primary/5" : "border-border bg-card/40 hover:border-primary/30 hover:bg-card"}`}
+                  className={`group flex items-center gap-4 rounded-2xl border p-4 text-left transition-all duration-300 motion-reduce:transform-none motion-reduce:transition-none ${isActive ? "border-[#1677FF]/70 bg-[#071B45]/90 shadow-[0_18px_50px_rgba(3,8,23,0.65),0_0_28px_rgba(22,119,255,0.16)] [transform:perspective(900px)_rotateX(2deg)_translateZ(8px)]" : "border-[#0B3D91]/45 bg-[#071B45]/45 hover:border-[#1677FF]/50 hover:bg-[#071B45]/75"}`}
                 >
                   <span className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${product.accent}`}>
                     <Icon aria-hidden="true" className="size-5" />
@@ -108,14 +108,14 @@ export function ProductOpportunityBoard() {
                     <span className="block text-sm font-semibold text-foreground">{product.label}</span>
                     <span className="mt-1 block truncate text-sm text-muted-foreground">{product.title}</span>
                   </span>
-                  <ChevronRight aria-hidden="true" className={`size-4 shrink-0 text-muted-foreground transition-transform ${isActive ? "translate-x-0.5 text-primary" : "group-hover:translate-x-0.5"}`} />
+                  <ChevronRight aria-hidden="true" className={`size-4 shrink-0 text-[#6EAFFF] transition-transform ${isActive ? "translate-x-0.5" : "group-hover:translate-x-0.5"}`} />
                 </button>
               )
             })}
           </div>
 
-          <div className="relative min-h-[430px] overflow-hidden rounded-[2rem] border border-border bg-card p-6 shadow-2xl shadow-primary/5 sm:p-8">
-            <div className="pointer-events-none absolute -right-12 -top-12 size-48 rounded-full border border-primary/20 bg-primary/5" />
+          <div className="relative min-h-[430px] overflow-hidden rounded-[2rem] border border-[#1677FF]/35 bg-[linear-gradient(145deg,rgba(11,61,145,0.42),rgba(7,27,69,0.9)_54%,rgba(3,8,23,0.98))] p-6 shadow-[0_32px_90px_rgba(3,8,23,0.82),inset_0_1px_0_rgba(157,202,255,0.2)] [transform:perspective(1400px)_rotateY(-2deg)] sm:p-8">
+            <div className="pointer-events-none absolute -right-12 -top-12 size-48 rounded-full border border-[#1677FF]/30 bg-[#1677FF]/10 shadow-[0_0_70px_rgba(22,119,255,0.25)]" />
             <div className="pointer-events-none absolute bottom-8 right-8 size-20 rounded-full border border-border bg-background/60" />
             <div className="relative flex h-full flex-col">
               <div className="flex items-start justify-between gap-4">

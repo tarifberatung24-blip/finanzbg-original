@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function ProduktePage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#030817]">
       <SiteHeader />
       <main>
         <ProductOpportunityBoard />
