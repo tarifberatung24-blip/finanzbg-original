@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { ArrowRight, CheckCircle2, FileText, Landmark, Receipt, ShieldCheck, WalletCards } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { FinancialOsOverview } from "@/components/marketing/financial-os-overview"
 import { Hero } from "@/components/marketing/hero"
 import { OpportunityCheck } from "@/components/marketing/opportunity-check"
 import { OpportunityDemo } from "@/components/marketing/opportunity-demo"
@@ -27,6 +28,7 @@ export default function HomePage() {
         <Hero />
         <OpportunityDemo />
         <OpportunityCheck />
+        <FinancialOsOverview />
 
         <section className="border-y border-border bg-card">
           <div className="mx-auto max-w-6xl px-4 py-16 md:py-20">

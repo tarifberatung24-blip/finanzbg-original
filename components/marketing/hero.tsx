@@ -29,7 +29,7 @@ export function Hero() {
           <h1 className="mt-5 text-pretty text-4xl font-bold leading-[1.1] tracking-tight text-foreground md:text-5xl">
             {t.home.heroTitle}
           </h1>
-          <p className="mt-4 text-balance text-lg font-medium text-foreground/80">{t.home.heroSubtitle}</p>
+          <p className="mt-4 text-balance text-lg font-medium text-foreground/80">Твоят дигитален финансов и административен помощник в Германия.</p>
           <p className="mt-3 max-w-md text-pretty leading-relaxed text-muted-foreground">{t.home.heroDescription}</p>
 
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
