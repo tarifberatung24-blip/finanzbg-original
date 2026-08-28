@@ -5,6 +5,7 @@ import { ArrowRight, CheckCircle2, FileText, Landmark, Receipt, ShieldCheck, Wal
 import { Button } from "@/components/ui/button"
 import { Hero } from "@/components/marketing/hero"
 import { OpportunityCheck } from "@/components/marketing/opportunity-check"
+import { OpportunityDemo } from "@/components/marketing/opportunity-demo"
 import { SiteFooter } from "@/components/marketing/site-footer"
 import { SiteHeader } from "@/components/marketing/site-header"
 import { useLanguage } from "@/lib/i18n/language-context"
@@ -24,6 +25,7 @@ export default function HomePage() {
       <SiteHeader />
       <main>
         <Hero />
+        <OpportunityDemo />
         <OpportunityCheck />
 
         <section className="border-y border-border bg-card">
