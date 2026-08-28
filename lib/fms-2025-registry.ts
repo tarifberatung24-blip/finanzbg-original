@@ -34,11 +34,13 @@ const bgTitles: Record<string, string> = {
   "Anlage N-Doppelte Haushaltsführung": "Приложение N — двойно домакинство", "Anlage Unterhalt": "Приложение Unterhalt — издръжка",
 }
 
+const verifiedFormIds = new Set(["034098_25", "035006_25", "035007_25", "035009_25", "034031_25", "034027d_25"])
+
 export const fms2025Registry: Fms2025Form[] = manifestForms.map(([title, id]) => ({
   formId: id.toLowerCase().replaceAll("_", "-"), officialGermanTitle: title, bulgarianTitle: bgTitles[title] ?? title,
   taxYear: 2025, fmsIdentifier: id, officialFmsUrl: `${fmsBase}${id}`, sourceType: "form",
   transactionFamily: "EINKOMMENSTEUERERKLAERUNG", applicability: title === "Hauptvordruck ESt 1 A" ? "REQUIRED" : "CONDITIONAL",
-  verificationStatus: "UNVERIFIED", officialSourceReference: officialIndex,
+  verificationStatus: verifiedFormIds.has(id) ? "VERIFIED" : "UNVERIFIED", officialSourceReference: officialIndex,
 }))
 
 fms2025Registry.push({ formId: "anleitung-est-2025", officialGermanTitle: "Anleitung Einkommensteuererklärung 2025", bulgarianTitle: "Инструкция за данъчната декларация 2025", taxYear: 2025, fmsIdentifier: null, officialFmsUrl: null, sourceType: "instruction", transactionFamily: "INFORMATION", applicability: "REFERENCE", verificationStatus: "UNVERIFIED", officialSourceReference: officialIndex })
