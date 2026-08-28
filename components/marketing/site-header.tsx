@@ -15,8 +15,10 @@ export function SiteHeader() {
 
   const links = [
     { href: "/uslugi", label: t.nav.services },
+    { href: "/steuer", label: "Steuer" },
     { href: "/anspruch", label: t.nav.benefits },
-    { href: "/vertraege", label: t.nav.contracts },
+    { href: "/tarife", label: "Tarife" },
+    { href: "/documents", label: "Dokumente" },
     { href: "/za-nas", label: t.nav.about },
   ]
 
