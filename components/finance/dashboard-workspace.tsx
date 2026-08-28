@@ -11,6 +11,7 @@ type Props = { userId: string; firstName?: string | null; initialReminders: Arra
 const modules = [
   { href: "/steuer", label: "Steuern", description: "Steuerdaten strukturiert vorbereiten", icon: Receipt, tone: "bg-primary/10 text-primary" },
   { href: "/anspruch", label: "Ansprüche", description: "Leistungen und Zuschüsse prüfen", icon: Landmark, tone: "bg-success/15 text-success" },
+  { href: "/kindergeld", label: "Kindergeld", description: "Formulare und Checkliste vorbereiten", icon: Landmark, tone: "bg-primary/10 text-primary" },
   { href: "/tarife", label: "Verträge & Tarife", description: "Kosten erkennen und senken", icon: WalletCards, tone: "bg-accent/10 text-accent" },
   { href: "/documents", label: "Dokumente", description: "Unterlagen sicher bündeln", icon: FileText, tone: "bg-secondary text-foreground" },
 ]
