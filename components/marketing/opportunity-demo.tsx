@@ -40,8 +40,9 @@ export function OpportunityDemo() {
           <Button type="button" onClick={() => setIsOpen(true)} aria-label="Opportunity Demo öffnen" className="relative shrink-0 bg-[#1677ff] text-[#f4f8ff] shadow-[0_0_24px_rgba(22,119,255,0.32)] hover:bg-[#3b91ff]"><ArrowDown className="absolute -top-8 left-1/2 -translate-x-1/2 text-[#6eafff]" aria-hidden="true" /><span>Demo öffnen</span><ChevronRight data-icon="inline-end" /></Button>
         </div>
       </section>
-      <div className="hidden justify-center bg-[#030817] py-8 sm:flex">
-        <Button type="button" onClick={() => setIsOpen(true)} className="bg-[#1677ff] text-[#f4f8ff] shadow-[0_0_28px_rgba(22,119,255,0.28)] hover:bg-[#3b91ff]">Opportunity Demo öffnen<ChevronRight data-icon="inline-end" /></Button>
+      <div className="relative hidden min-h-24 items-center justify-center overflow-hidden border-y border-[#0b3d91]/35 bg-[#030817] px-4 py-6 sm:flex">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(22,119,255,0.12),transparent_55%)]" aria-hidden="true" />
+        <Button type="button" onClick={() => setIsOpen(true)} className="relative bg-[#1677ff] text-[#f4f8ff] shadow-[0_5px_0_#0b3d91,0_0_28px_rgba(22,119,255,0.28)] transition-transform duration-200 hover:-translate-y-1 hover:bg-[#3b91ff] hover:shadow-[0_7px_0_#0b3d91,0_0_34px_rgba(22,119,255,0.38)] active:translate-y-1 active:shadow-[0_1px_0_#0b3d91,0_0_18px_rgba(22,119,255,0.25)] motion-reduce:transform-none">Opportunity Demo öffnen<ChevronRight data-icon="inline-end" /></Button>
       </div>
       <section className={`fixed inset-0 z-50 overflow-y-auto bg-[#030817]/90 px-4 py-8 backdrop-blur-sm sm:px-6 ${isOpen ? "block" : "hidden"}`} role="dialog" aria-modal="true" aria-labelledby="opportunity-demo-title">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(22,119,255,0.16),transparent_35%),radial-gradient(circle_at_90%_80%,rgba(11,61,145,0.22),transparent_34%)]" />
