@@ -1,7 +1,7 @@
 import { KindergeldNavigator } from "@/components/finance/kindergeld-navigator"
 
 export const metadata = {
-  title: "Kindergeld Navigator | FinanzBG",
+  title: "Kindergeld Navigator | FinanzberaterBG",
   description: "Структурирана предварителна проверка на формулярите за Kindergeld.",
 }
 

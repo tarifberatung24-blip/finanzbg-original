@@ -41,7 +41,7 @@ export function SiteFooter() {
         <div className="mt-10 border-t border-border pt-6">
           <p className="text-xs leading-relaxed text-muted-foreground">{t.home.disclaimer}</p>
           <p className="mt-4 text-xs text-muted-foreground">
-            © {new Date().getFullYear()} FinanzBG · Made for life in Germany
+            © {new Date().getFullYear()} FinanzberaterBG · Made for life in Germany
           </p>
         </div>
       </div>

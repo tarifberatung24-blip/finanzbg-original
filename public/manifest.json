@@ -1,6 +1,6 @@
 {
-  "name": "FinanzBG",
-  "short_name": "FinanzBG",
+  "name": "FinanzberaterBG",
+  "short_name": "FinanzberaterBG",
   "description": "Финансовият и административен помощник за живота в Германия.",
   "start_url": "/",
   "display": "standalone",
