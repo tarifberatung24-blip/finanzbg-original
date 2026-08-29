@@ -1,13 +1,13 @@
 {
   "brand": {
-    "name": "FinanzBG",
+    "name": "FinanzberaterBG",
     "tagline": "Dein digitaler Finanz- und Verwaltungsassistent in Deutschland."
   },
   "nav": {
     "services": "Leistungen",
     "benefits": "Staatliche Hilfen",
     "contracts": "Verträge",
-    "about": "Über FinanzBG",
+    "about": "Über FinanzberaterBG",
     "help": "Hilfe",
     "login": "Anmelden",
     "register": "Registrieren",
@@ -31,12 +31,12 @@
     "ctaSecondary": "Meine Kosten optimieren",
     "trust": "Kostenlos starten.",
     "promise": "Lass kein Geld liegen.",
-    "promiseSub": "FinanzBG prüft Verträge, Kosten, Steuermöglichkeiten und mögliche staatliche Hilfen, die für deine Situation relevant sind.",
+    "promiseSub": "FinanzberaterBG prüft Verträge, Kosten, Steuermöglichkeiten und mögliche staatliche Hilfen, die für deine Situation relevant sind.",
     "opportunityTitle": "Wo verlierst du Geld?",
     "opportunitySub": "Wähle, wo wir mit der Prüfung beginnen.",
     "servicesTitle": "Alles für das Leben in Deutschland — an einem Ort",
     "servicesSub": "Werkzeuge, die dir helfen, mehr zu bekommen und weniger zu zahlen.",
-    "howTitle": "So funktioniert FinanzBG",
+    "howTitle": "So funktioniert FinanzberaterBG",
     "howSub": "Einfach Schritt für Schritt — ohne Verwirrung.",
     "step1Title": "Beantworte ein paar Fragen",
     "step1Desc": "Erzähl uns kurz von deiner Situation. Keine Dokumente, keine Verpflichtung.",
@@ -44,14 +44,14 @@
     "step2Desc": "Wir zeigen dir Steuermöglichkeiten, Hilfen und Verträge, die sich zu prüfen lohnen.",
     "step3Title": "Handle mit Sicherheit",
     "step3Desc": "Wir bereiten Dokumente, Fristen und nächste Schritte vor — klar und verständlich.",
-    "whatTitle": "Wobei FinanzBG dir hilft",
+    "whatTitle": "Wobei FinanzberaterBG dir hilft",
     "what1": "Welches Geld kann ich rechtmäßig bekommen?",
     "what2": "Wo kann ich meine Kosten senken?",
     "what3": "Wie bewältige ich schwierige Dokumente in Deutschland?",
     "what4": "Welche Verträge und Fristen muss ich im Blick behalten?",
     "finalCtaTitle": "Bereit, deine Möglichkeiten zu prüfen?",
-    "finalCtaDesc": "Erstelle ein kostenloses Profil und speichere deine Ergebnisse in FinanzBG.",
-    "disclaimer": "FinanzBG bietet Informationen und Dokumentenvorbereitung. Es ist kein Steuerberater, Rechtsanwalt oder Versicherungsberater. Offizielle Entscheidungen treffen die zuständigen Behörden."
+    "finalCtaDesc": "Erstelle ein kostenloses Profil und speichere deine Ergebnisse in FinanzberaterBG.",
+    "disclaimer": "FinanzberaterBG bietet Informationen und Dokumentenvorbereitung. Es ist kein Steuerberater, Rechtsanwalt oder Versicherungsberater. Offizielle Entscheidungen treffen die zuständigen Behörden."
   },
   "opportunityCards": {
     "taxTitle": "Steuern",
@@ -74,9 +74,9 @@
     "energie": { "title": "Energie sparen", "desc": "Senke deine Rechnungen und deinen Verbrauch." }
   },
   "auth": {
-    "loginTitle": "Melde dich bei deinem FinanzBG-Profil an",
+    "loginTitle": "Melde dich bei deinem FinanzberaterBG-Profil an",
     "loginSubtitle": "Mach dort weiter, wo du aufgehört hast.",
-    "registerTitle": "Erstelle ein kostenloses FinanzBG-Profil",
+    "registerTitle": "Erstelle ein kostenloses FinanzberaterBG-Profil",
     "registerSubtitle": "Speichere Ergebnisse und entdecke neue Möglichkeiten.",
     "email": "E-Mail",
     "password": "Passwort",

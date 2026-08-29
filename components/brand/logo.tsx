@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils"
 
 /**
- * FinanzBG brand mark.
+ * FinanzberaterBG brand mark.
  * An upward "shield + rising bars" mark — trust (shield) + growth/savings (bars).
  * Pure geometric SVG, scales crisply at any size.
  */
@@ -11,7 +11,7 @@ export function LogoMark({ className }: { className?: string }) {
       viewBox="0 0 40 40"
       className={cn("h-8 w-8", className)}
       role="img"
-      aria-label="FinanzBG"
+      aria-label="FinanzberaterBG"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >

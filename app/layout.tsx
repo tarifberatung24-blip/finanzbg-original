@@ -14,15 +14,15 @@ const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono"
 export const metadata: Metadata = {
   metadataBase: new URL("https://finanzbg.de"),
   title: {
-    default: "FinanzBG — Финансовият ти помощник в Германия",
-    template: "%s · FinanzBG",
+    default: "FinanzberaterBG — Финансовият ти помощник в Германия",
+    template: "%s · FinanzberaterBG",
   },
   description:
-    "FinanzBG проверява данъци, държавни помощи, договори и месечни разходи за живота ти в Германия. Не оставяй пари на масата.",
+    "FinanzberaterBG проверява данъци, държавни помощи, договори и месечни разходи за живота ти в Германия. Не оставяй пари на масата.",
   generator: "v0.app",
-  applicationName: "FinanzBG",
+  applicationName: "FinanzberaterBG",
   keywords: [
-    "FinanzBG",
+    "FinanzberaterBG",
     "данъци Германия",
     "Steuererklärung",
     "Kindergeld",
@@ -34,8 +34,8 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   openGraph: {
     type: "website",
-    siteName: "FinanzBG",
-    title: "FinanzBG — Финансовият ти помощник в Германия",
+    siteName: "FinanzberaterBG",
+    title: "FinanzberaterBG — Финансовият ти помощник в Германия",
     description: "Провери данъци, държавни помощи, договори и разходи — на едно място.",
   },
   icons: {
