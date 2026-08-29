@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import { Logo } from "@/components/brand/logo"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { useLanguage } from "@/lib/i18n/language-context"
@@ -42,6 +43,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <LanguageSwitcher className="hidden sm:inline-flex" />
           <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex">
             <Link href="/auth/login">{t.nav.login}</Link>
@@ -75,7 +77,10 @@ export function SiteHeader() {
             </Link>
           ))}
           <div className="mt-2 flex items-center justify-between gap-2 border-t border-border pt-3">
-            <LanguageSwitcher />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <LanguageSwitcher />
+            </div>
             <div className="flex gap-2">
               <Button asChild variant="outline" size="sm">
                 <Link href="/auth/login" onClick={() => setOpen(false)}>
