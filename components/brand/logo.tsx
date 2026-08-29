@@ -40,7 +40,7 @@ export function Logo({
       <LogoMark />
       {showText ? (
         <span className={cn("font-sans text-lg font-bold tracking-tight text-foreground", textClassName)}>
-          Finanz<span className="text-primary">BG</span>
+          Finanzberater<span className="text-primary">BG</span>
         </span>
       ) : null}
     </span>
