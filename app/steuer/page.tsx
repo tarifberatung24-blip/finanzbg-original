@@ -3,6 +3,8 @@ import { FinanceModulePage } from "@/components/finance/module-page"
 import { TaxFormRegistry } from "@/components/finance/tax-form-registry"
 import { TaxQuestionnaire } from "@/components/finance/tax-questionnaire"
 import { createClient } from "@/lib/supabase/server"
+import { buildCanonicalTaxReturn } from "@/lib/tax-pipeline"
+import { TaxPipelineReview } from "@/components/finance/tax-pipeline-review"
 
 export default async function Page() {
   const supabase = await createClient()
@@ -27,5 +29,6 @@ export default async function Page() {
     ? (taxCase.data as { questionnaire_answers?: Record<string, unknown> }).questionnaire_answers ?? {}
     : {}
 
-  return <main className="min-h-screen bg-background"><FinanceModulePage title="Steuererklärung" description="Sammle deine steuerrelevanten Informationen und erkenne fehlende Angaben." items={["Persönliche Situation und Steuerjahr erfassen", "Werbungskosten und abzugsfähige Ausgaben sammeln", "Belege sicher zuordnen", "Ergebnis vor dem Einreichen prüfen"]} /><div className="mx-auto -mt-10 max-w-3xl px-4 pb-10"><TaxQuestionnaire initialCase={taxCase ? { id: taxCase.id, answers: initialAnswers, status: taxCase.status } : null} /><TaxFormRegistry forms={forms ?? []} /></div></main>
+  const canonical = buildCanonicalTaxReturn(initialAnswers)
+  return <main className="min-h-screen bg-background"><FinanceModulePage title="Steuererklärung" description="Sammle deine steuerrelevanten Informationen und erkenne fehlende Angaben." items={["Persönliche Situation und Steuerjahr erfassen", "Werbungskosten und abzugsfähige Ausgaben sammeln", "Belege sicher zuordnen", "Ergebnis vor dem Einreichen prüfen"]} /><div className="mx-auto -mt-10 max-w-3xl px-4 pb-10"><TaxQuestionnaire initialCase={taxCase ? { id: taxCase.id, answers: initialAnswers, status: taxCase.status } : null} /><TaxPipelineReview canonical={canonical} /><TaxFormRegistry forms={forms ?? []} /></div></main>
 }
