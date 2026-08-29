@@ -2,6 +2,7 @@ import { Analytics } from "@vercel/analytics/next"
 import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { cookies } from "next/headers"
+import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/lib/i18n/language-context"
 import { isLocale, defaultLocale, type Locale } from "@/lib/i18n/dictionaries"
 import { LOCALE_COOKIE_KEY } from "@/lib/i18n/language-context"
@@ -65,9 +66,11 @@ export default async function RootLayout({
   const initialLocale: Locale = isLocale(stored) ? stored : defaultLocale
 
   return (
-    <html lang={initialLocale} className={`${geistSans.variable} ${geistMono.variable} bg-background`}>
+    <html lang={initialLocale} suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} bg-background`}>
       <body className="font-sans antialiased">
-        <LanguageProvider initialLocale={initialLocale}>{children}</LanguageProvider>
+        <ThemeProvider>
+          <LanguageProvider initialLocale={initialLocale}>{children}</LanguageProvider>
+        </ThemeProvider>
         {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
