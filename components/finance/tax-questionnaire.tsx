@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { taxQuestionnaire2025, type TaxQuestion } from "@/lib/tax-questionnaire-schema"
 import { createClient } from "@/lib/supabase/client"
+import { buildCanonicalTaxReturn } from "@/lib/tax-pipeline"
 
 const categoryLabels: Record<TaxQuestion["category"], string> = {
   personal_data: "Лични данни",
@@ -38,7 +39,8 @@ export function TaxQuestionnaire({ initialCase }: { initialCase: { id: string; a
     const supabase = createClient()
     const { data: userData } = await supabase.auth.getUser()
     if (!userData.user) return
-    const payload = { user_id: userData.user.id, tax_year: 2025, status: "in_progress", data: { questionnaire_answers: answers } }
+    const canonical = buildCanonicalTaxReturn(answers)
+    const payload = { user_id: userData.user.id, tax_year: 2025, status: "in_progress", data: { questionnaire_answers: answers, canonical_tax_return: canonical } }
     const result = caseId
       ? await supabase.from("tax_cases").update(payload).eq("id", caseId).select("id").single()
       : await supabase.from("tax_cases").insert(payload).select("id").single()
