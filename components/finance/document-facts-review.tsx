@@ -1,0 +1,7 @@
+import { FileText } from "lucide-react"
+import { StatusBadge } from "@/components/status-badge"
+
+export function DocumentFactsReview() {
+  return <section className="rounded-2xl border border-border bg-card p-6" aria-labelledby="facts-title"><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Analyse</p><h2 id="facts-title" className="mt-2 font-semibold text-foreground">Fakten prüfen</h2></div><FileText className="size-5 text-muted-foreground" aria-hidden="true" /></div><div className="mt-5 flex flex-col gap-3"><Fact label="Absender" value="Noch kein Dokument vorhanden" /><Fact label="Dokumenttyp" value="Nicht bestimmt" /><Fact label="Betrag" value="Nicht bestimmt" /><Fact label="Explizite Frist" value="Nur anzeigen, wenn im Dokument genannt" /></div><div className="mt-5 flex flex-wrap items-center gap-2"><StatusBadge status="UNVERIFIED" /><span className="text-xs text-muted-foreground">Bestätigung durch dich erforderlich</span></div></section>
+}
+function Fact({ label, value }: { label: string; value: string }) { return <div className="flex flex-col gap-1 border-b border-border pb-3 last:border-0 last:pb-0 sm:flex-row sm:items-baseline sm:justify-between"><span className="text-sm text-muted-foreground">{label}</span><span className="text-sm font-medium text-foreground sm:text-right">{value}</span></div> }
