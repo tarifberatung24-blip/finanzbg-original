@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/client"
 type Props = { userId: string; firstName?: string | null; initialReminders: Array<{ id: string; title: string; due_at: string | null }> }
 
 const modules = [
+  { href: "/protected/home-office", label: "AI Digital Home Office", description: "Dokumente prüfen und nächste Schritte vorbereiten", icon: FileText, tone: "bg-primary/10 text-primary" },
   { href: "/steuer", label: "Steuern", description: "Steuerdaten strukturiert vorbereiten", icon: Receipt, tone: "bg-primary/10 text-primary" },
   { href: "/anspruch", label: "Ansprüche", description: "Leistungen und Zuschüsse prüfen", icon: Landmark, tone: "bg-success/15 text-success" },
   { href: "/kindergeld", label: "Kindergeld", description: "Formulare und Checkliste vorbereiten", icon: Landmark, tone: "bg-primary/10 text-primary" },
