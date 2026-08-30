@@ -1,4 +1,5 @@
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { cookies } from "next/headers"
@@ -71,7 +72,12 @@ export default async function RootLayout({
         <ThemeProvider>
           <LanguageProvider initialLocale={initialLocale}>{children}</LanguageProvider>
         </ThemeProvider>
-        {process.env.NODE_ENV === "production" && <Analytics />}
+        {process.env.NODE_ENV === "production" && (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        )}
       </body>
     </html>
   )
