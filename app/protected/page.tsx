@@ -7,13 +7,23 @@ export default async function ProtectedPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/auth/login")
 
-  const { data: reminders } = await supabase
-    .from("reminders")
-    .select("id,title,due_at")
-    .eq("user_id", user.id)
-    .eq("status", "open")
-    .order("due_at", { ascending: true })
-    .limit(3)
+  const { data: household } = await supabase
+    .from("households")
+    .select("id")
+    .eq("owner_id", user.id)
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle()
 
-  return <DashboardWorkspace userId={user.id} firstName={user.user_metadata?.first_name} initialReminders={reminders ?? []} />
+  const { data: reminders } = household
+    ? await supabase
+        .from("tasks")
+        .select("id,title,due_at:due_at")
+        .eq("household_id", household.id)
+        .in("status", ["open", "in_progress", "waiting"])
+        .order("due_at", { ascending: true, nullsFirst: false })
+        .limit(3)
+    : { data: [] }
+
+  return <DashboardWorkspace userId={user.id} householdId={household?.id ?? null} firstName={user.user_metadata?.first_name} initialReminders={reminders ?? []} />
 }
