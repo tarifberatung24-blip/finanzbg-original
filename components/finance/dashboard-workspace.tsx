@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client"
 
 type Reminder = { id: string; title: string; due_at: string | null }
-type Props = { userId: string; firstName?: string | null; initialReminders: Reminder[] }
+type Props = { userId: string; householdId?: string | null; firstName?: string | null; initialReminders: Reminder[] }
 
 type NavItem = { href: string; label: string; icon: typeof Inbox }
 const navItems: NavItem[] = [
@@ -31,17 +31,25 @@ function SectionHeading({ eyebrow, title, icon: Icon }: { eyebrow?: string; titl
   return <div className="flex items-start gap-3"><span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><Icon className="h-5 w-5" /></span><div>{eyebrow ? <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">{eyebrow}</p> : null}<h2 className="mt-1 text-xl font-bold tracking-tight text-foreground">{title}</h2></div></div>
 }
 
-export function DashboardWorkspace({ userId, firstName, initialReminders }: Props) {
+export function DashboardWorkspace({ userId, householdId, firstName, initialReminders }: Props) {
   const [reminders, setReminders] = useState(initialReminders)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
 
   async function addReminder() {
+    if (!householdId) {
+      setError("Създай първо Haushalt, за да запазиш задача.")
+      return
+    }
     setSaving(true); setError(null)
     const supabase = createClient()
-    const { data, error: insertError } = await supabase.from("reminders").insert({ user_id: userId, title: "Следваща административна стъпка" }).select("id,title,due_at").single()
-    if (insertError) setError("Напомнянето не можа да бъде запазено. Опитай отново.")
+    const { data, error: insertError } = await supabase
+      .from("tasks")
+      .insert({ household_id: householdId, title: "Следваща административна стъпка" })
+      .select("id,title,due_at")
+      .single()
+    if (insertError) setError("Задачата не можа да бъде запазена. Опитай отново.")
     if (data) setReminders((current) => [...current, data])
     setSaving(false)
   }
