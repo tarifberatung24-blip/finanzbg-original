@@ -6,8 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "lint": "eslint .",
     "i18n:check": "node scripts/i18n-check.mjs",
-    "i18n:verify": "pnpm i18n:check"
+    "i18n:unused": "node scripts/i18n-unused.mjs",
+    "i18n:hardcoded": "node scripts/i18n-hardcoded.mjs",
+    "i18n:verify": "pnpm i18n:check && pnpm i18n:unused && pnpm i18n:hardcoded"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
@@ -32,6 +35,8 @@
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.4",
     "postcss": "^8.5",
     "tailwindcss": "^4.3.3",
     "typescript": "5.7.3"
