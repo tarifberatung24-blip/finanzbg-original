@@ -1,9 +1,8 @@
 "use client"
 
-import { usePathname, useRouter } from "next/navigation"
 import { useLanguage } from "@/lib/i18n/language-context"
-import { localizedPath, stripLocale } from "@/lib/i18n/routing"
-import { locales, type Locale } from "@/lib/i18n/dictionaries"
+import { usePathname, useRouter } from "@/i18n/navigation"
+import { routing, type Locale } from "@/i18n/routing"
 import { cn } from "@/lib/utils"
 
 export function LanguageSwitcher({ className }: { className?: string }) {
@@ -13,7 +12,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
 
   function changeLocale(nextLocale: Locale) {
     setLocale(nextLocale)
-    router.push(localizedPath(stripLocale(pathname), nextLocale))
+    router.push(pathname, {locale: nextLocale})
   }
 
   return (
@@ -22,7 +21,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
       role="group"
       aria-label="Language"
     >
-      {locales.map((l: Locale) => (
+      {routing.locales.map((l: Locale) => (
         <button
           key={l}
           type="button"
