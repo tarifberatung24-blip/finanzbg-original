@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useCallback, useMemo, useState, type ReactNode } from "react"
+import { createContext, useContext, useCallback, useEffect, useMemo, useState, type ReactNode } from "react"
 import { getDictionary, type Dictionary, type Locale, defaultLocale } from "./dictionaries"
 
 type LanguageContextValue = {
@@ -21,6 +21,11 @@ export function LanguageProvider({
   initialLocale?: Locale
 }) {
   const [locale, setLocaleState] = useState<Locale>(initialLocale)
+
+  useEffect(() => {
+    const pathLocale = window.location.pathname.split("/")[1]
+    if (pathLocale === "bg" || pathLocale === "de") setLocaleState(pathLocale)
+  }, [])
 
   const setLocale = useCallback((next: Locale) => {
     setLocaleState(next)
