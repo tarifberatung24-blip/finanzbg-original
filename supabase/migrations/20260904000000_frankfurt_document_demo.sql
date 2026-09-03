@@ -1,4 +1,4 @@
--- PREPARED ONLY: Frankfurt demo project (rfxzibsuhzkipbdeedhq)
+-- PREPARED ONLY: Frankfurt demo project (numyqalfphyrnedlfzfs)
 -- Review and apply intentionally. This migration has not been executed.
 
 create table if not exists public.documents (
