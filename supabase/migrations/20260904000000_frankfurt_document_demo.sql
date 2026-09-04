@@ -8,7 +8,7 @@ create table if not exists public.documents (
   original_name text not null,
   mime_type text not null,
   byte_size bigint not null check (byte_size > 0),
-  status text not null default 'uploaded' check (status in ('uploaded', 'analyzed', 'reviewed')),
+  status text not null default 'uploaded' check (status in ('uploaded', 'awaiting_analysis', 'processing', 'processed', 'needs_review', 'reviewed', 'analysis_not_configured', 'failed')),
   created_at timestamptz not null default now()
 );
 
@@ -56,9 +56,9 @@ create policy "audit_owner_select_insert" on public.audit_events for select to a
 create policy "audit_owner_insert" on public.audit_events for insert to authenticated with check ((select auth.uid()) = owner_id);
 
 insert into storage.buckets (id, name, public)
-values ('frankfurt-document-demo', 'frankfurt-document-demo', false)
+values ('documents', 'documents', false)
 on conflict (id) do nothing;
 
-create policy "demo_documents_owner_select" on storage.objects for select to authenticated using (bucket_id = 'frankfurt-document-demo' and (storage.foldername(name))[1] = (select auth.uid())::text);
-create policy "demo_documents_owner_insert" on storage.objects for insert to authenticated with check (bucket_id = 'frankfurt-document-demo' and (storage.foldername(name))[1] = (select auth.uid())::text);
-create policy "demo_documents_owner_delete" on storage.objects for delete to authenticated using (bucket_id = 'frankfurt-document-demo' and (storage.foldername(name))[1] = (select auth.uid())::text);
+create policy "documents_owner_select" on storage.objects for select to authenticated using (bucket_id = 'documents' and (storage.foldername(name))[1] = 'households' and exists (select 1 from public.documents d where d.owner_id = (select auth.uid()) and d.storage_path = name));
+create policy "documents_owner_insert" on storage.objects for insert to authenticated with check (bucket_id = 'documents' and (storage.foldername(name))[1] = 'households' and exists (select 1 from public.documents d where d.owner_id = (select auth.uid()) and d.storage_path = name));
+create policy "documents_owner_delete" on storage.objects for delete to authenticated using (bucket_id = 'documents' and (storage.foldername(name))[1] = 'households' and exists (select 1 from public.documents d where d.owner_id = (select auth.uid()) and d.storage_path = name));
