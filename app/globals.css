@@ -160,5 +160,16 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 767px) {
+  input, textarea, select {
+    min-height: 2.75rem;
+  }
+
+  button:not([data-slot="icon"]), [role="button"] {
+    min-height: 2.75rem;
   }
 }
