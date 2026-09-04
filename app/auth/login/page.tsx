@@ -8,25 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { sanitizeNextPath } from "@/lib/supabase/auth-routing"
-
-function normalizeGermanMobile(value: string) {
-  const digits = value.replace(/[^0-9+]/g, "")
-  if (digits.startsWith("+49")) return digits
-  if (digits.startsWith("0049")) return `+49${digits.slice(4)}`
-  if (digits.startsWith("0")) return `+49${digits.slice(1)}`
-  return `+49${digits}`
-}
-
-function isGermanMobile(value: string) {
-  return /^\+49(?:15|16|17)\d{8,9}$/.test(value)
-}
-
-function authMessage(message: string) {
-  const lower = message.toLowerCase()
-  if (lower.includes("rate") || lower.includes("too many")) return "Zu viele Versuche. Bitte warte kurz und versuche es später erneut."
-  if (lower.includes("expired") || lower.includes("invalid") || lower.includes("otp")) return "Der Code ist falsch oder abgelaufen. Bitte fordere einen neuen Code an."
-  return "Die Anmeldung konnte nicht abgeschlossen werden. Bitte versuche es erneut."
-}
+import { isGermanMobile, normalizeGermanMobile, phoneAuthMessage } from "@/lib/supabase/phone-auth"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -70,8 +52,8 @@ export default function LoginPage() {
     if (cooldown > 0) { setError(`Bitte warte noch ${cooldown} Sekunden, bevor du einen neuen Code anforderst.`); return }
     if (!isGermanMobile(normalized)) { setError("Bitte gib eine gültige deutsche Mobilnummer mit +49 ein."); return }
     setLoading(true)
-    const { error } = await createClient().auth.signInWithOtp({ phone: normalized })
-    if (error) setError(authMessage(error.message))
+    const { error } = await createClient().auth.signInWithOtp({ phone: normalized, options: { shouldCreateUser: true } })
+    if (error) setError(phoneAuthMessage(error.message))
     else { setPhone(normalized); setOtpSent(true); setCooldown(60) }
     setLoading(false)
   }
@@ -80,8 +62,10 @@ export default function LoginPage() {
     event.preventDefault(); setError(null)
     if (!/^\d{6}$/.test(otp)) { setError("Bitte gib den 6-stelligen SMS-Code ein."); return }
     setLoading(true)
-    const { error } = await createClient().auth.verifyOtp({ phone, token: otp, type: "sms" })
-    if (error) setError(authMessage(error.message))
+    const normalized = normalizeGermanMobile(phone)
+    if (!isGermanMobile(normalized)) { setError("Bitte fordere zuerst einen neuen SMS-Code an."); setLoading(false); return }
+    const { error } = await createClient().auth.verifyOtp({ phone: normalized, token: otp, type: "sms" })
+    if (error) setError(phoneAuthMessage(error.message))
     else router.push(destination())
     setLoading(false)
   }
