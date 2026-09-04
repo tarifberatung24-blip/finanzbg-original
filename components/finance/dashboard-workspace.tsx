@@ -34,7 +34,7 @@ export function DashboardWorkspace({ userId, firstName, initialReminders }: Prop
       <header className="border-b border-border bg-card/90">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
           <Link href="/" className="text-lg font-bold tracking-tight text-primary">FinanzberaterBG</Link>
-          <div className="flex items-center gap-3"><span className="hidden text-sm text-muted-foreground sm:block">Dein persönlicher Finanzbereich</span><form action="/auth/logout" method="post"><Button variant="outline" size="sm">Abmelden</Button></form></div>
+          <div className="flex items-center gap-2"><Button asChild variant="ghost" size="sm"><Link href="/protected/security"><ShieldCheck className="size-4" /> Сигурност</Link></Button><form action="/auth/logout" method="post"><Button variant="outline" size="sm">Abmelden</Button></form></div>
         </div>
       </header>
       <div className="mx-auto max-w-6xl px-5 py-10">
