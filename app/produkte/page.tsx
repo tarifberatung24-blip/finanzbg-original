@@ -3,7 +3,6 @@ import Script from "next/script"
 import { ArrowUpRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SiteFooter } from "@/components/marketing/site-footer"
-import { SiteHeader } from "@/components/marketing/site-header"
 import { ProductOpportunityBoard } from "@/components/marketing/product-opportunity-board"
 
 export const metadata: Metadata = {
@@ -14,7 +13,6 @@ export const metadata: Metadata = {
 export default function ProduktePage() {
   return (
     <div className="min-h-screen bg-[#030817]">
-      <SiteHeader />
       <main>
         <ProductOpportunityBoard />
         <section className="border-b border-[#0b3d91]/40 bg-[#030817] px-4 py-8 sm:px-6 md:py-12 lg:px-8" aria-labelledby="internet-banner-title">
