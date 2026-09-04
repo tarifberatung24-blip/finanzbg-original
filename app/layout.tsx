@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { cookies } from "next/headers"
 import { ThemeProvider } from "@/components/theme-provider"
+import { SiteHeader } from "@/components/marketing/site-header"
 import { LanguageProvider } from "@/lib/i18n/language-context"
 import { isLocale, defaultLocale, type Locale } from "@/lib/i18n/dictionaries"
 import { LOCALE_COOKIE_KEY } from "@/lib/i18n/language-context"
@@ -69,7 +70,10 @@ export default async function RootLayout({
     <html lang={initialLocale} suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} bg-background`}>
       <body className="font-sans antialiased">
         <ThemeProvider>
-          <LanguageProvider initialLocale={initialLocale}>{children}</LanguageProvider>
+          <LanguageProvider initialLocale={initialLocale}>
+            <SiteHeader />
+            {children}
+          </LanguageProvider>
         </ThemeProvider>
         {process.env.NODE_ENV === "production" && <Analytics />}
       </body>

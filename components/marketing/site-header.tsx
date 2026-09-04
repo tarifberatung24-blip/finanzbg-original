@@ -1,7 +1,8 @@
 "use client"
 
-import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { Link, useRouter } from "@/i18n/navigation"
+import { createClient } from "@/lib/supabase/client"
 import { Menu, X } from "lucide-react"
 import { Logo } from "@/components/brand/logo"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -12,17 +13,34 @@ import { cn } from "@/lib/utils"
 import { LegalBanner } from "@/components/marketing/legal-banner"
 
 export function SiteHeader() {
-  const { t } = useLanguage()
+  const { t, locale } = useLanguage()
+  const router = useRouter()
   const [open, setOpen] = useState(false)
+  const [authenticated, setAuthenticated] = useState(false)
+  const [authReady, setAuthReady] = useState(false)
 
+  useEffect(() => {
+    const supabase = createClient()
+    void supabase.auth.getUser().then(({ data }) => { setAuthenticated(Boolean(data.user)); setAuthReady(true) })
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => setAuthenticated(Boolean(session)))
+    return () => listener.subscription.unsubscribe()
+  }, [])
+
+  const labels = locale === "de"
+    ? { home: "Startseite", services: "Leistungen", taxes: "Steuern", benefits: "Staatliche Hilfen", tariffs: "Tarife", documents: "Dokumente", about: "Über FinanzberaterBG", profile: "Persönlicher Bereich", logout: "Abmelden", menu: "Menü" }
+    : { home: "Начало", services: "Услуги", taxes: "Данъци", benefits: "Държавни помощи", tariffs: "Тарифи", documents: "Документи", about: "За FinanzberaterBG", profile: "Личен профил", logout: "Изход", menu: "Меню" }
   const links = [
-    { href: "/uslugi", label: t.nav.services },
-    { href: "/steuer", label: "Steuer" },
-    { href: "/anspruch", label: t.nav.benefits },
-    { href: "/tarife", label: "Tarife" },
-    { href: "/documents", label: "Dokumente" },
-    { href: "/za-nas", label: t.nav.about },
+    { href: "/", label: labels.home },
+    { href: "/uslugi", label: labels.services },
+    { href: "/kindergeld", label: "Kindergeld" },
+    { href: "/steuer", label: labels.taxes },
+    { href: "/anspruch", label: labels.benefits },
+    { href: "/tarife", label: labels.tariffs },
+    { href: "/documents", label: labels.documents },
+    { href: "/za-nas", label: labels.about },
   ]
+  const closeMenu = () => setOpen(false)
+  async function logout() { await createClient().auth.signOut(); closeMenu(); router.push("/") }
 
   return (
     <>
@@ -47,17 +65,22 @@ export function SiteHeader() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <LanguageSwitcher className="hidden sm:inline-flex" />
-          <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex">
-            <Link href="/auth/login">{t.nav.login}</Link>
-          </Button>
-          <Button asChild size="sm" className="hidden md:inline-flex">
-            <Link href="/auth/sign-up">{t.nav.register}</Link>
-          </Button>
+          {authReady && authenticated ? (
+            <>
+              <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex"><Link href="/protected">{labels.profile}</Link></Button>
+              <Button variant="outline" size="sm" className="hidden md:inline-flex" onClick={logout}>{labels.logout}</Button>
+            </>
+          ) : authReady ? (
+            <>
+              <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex"><Link href="/auth/login">{t.nav.login}</Link></Button>
+              <Button asChild size="sm" className="hidden md:inline-flex"><Link href="/auth/sign-up">{t.nav.register}</Link></Button>
+            </>
+          ) : null}
 
           <button
             type="button"
             className="inline-flex h-11 w-11 items-center justify-center rounded-md text-foreground md:hidden"
-            aria-label="Menu"
+            aria-label={labels.menu}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
           >
@@ -72,7 +95,7 @@ export function SiteHeader() {
             <Link
               key={l.href}
               href={l.href}
-              onClick={() => setOpen(false)}
+              onClick={closeMenu}
               className="rounded-md px-3 py-3 text-sm font-medium text-foreground hover:bg-secondary"
             >
               {l.label}
@@ -84,16 +107,17 @@ export function SiteHeader() {
               <LanguageSwitcher />
             </div>
             <div className="flex gap-2">
-              <Button asChild variant="outline" size="sm">
-                <Link href="/auth/login" onClick={() => setOpen(false)}>
-                  {t.nav.login}
-                </Link>
-              </Button>
-              <Button asChild size="sm">
-                <Link href="/auth/sign-up" onClick={() => setOpen(false)}>
-                  {t.nav.register}
-                </Link>
-              </Button>
+              {authReady && authenticated ? (
+                <>
+                  <Button asChild variant="outline" size="sm"><Link href="/protected" onClick={closeMenu}>{labels.profile}</Link></Button>
+                  <Button variant="outline" size="sm" onClick={logout}>{labels.logout}</Button>
+                </>
+              ) : authReady ? (
+                <>
+                  <Button asChild variant="outline" size="sm"><Link href="/auth/login" onClick={closeMenu}>{t.nav.login}</Link></Button>
+                  <Button asChild size="sm"><Link href="/auth/sign-up" onClick={closeMenu}>{t.nav.register}</Link></Button>
+                </>
+              ) : null}
             </div>
           </div>
         </nav>
