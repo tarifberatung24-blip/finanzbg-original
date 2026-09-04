@@ -24,12 +24,18 @@ export function ContractCenterWorkspace({ firstName }: { firstName?: string | nu
   const monthly = useMemo(() => contracts.reduce((sum, contract) => sum + (contract.price ?? 0), 0), [contracts])
   const current = contracts.find((contract) => contract.id === selected)
 
-  function upload(file: File | undefined) {
+  async function upload(file: File | undefined) {
     if (!file) return
-    const allowed = ["application/pdf", "image/jpeg", "image/png"]
-    if (!allowed.includes(file.type) || file.size > 15 * 1024 * 1024) { setNotice("DATEI_UNGÜLTIG: PDF, JPG oder PNG bis 15 MB auswählen."); return }
-    const next: Contract = { id: crypto.randomUUID(), category: "Strom", provider: "Noch nicht geprüft", tariff: "NEEDS_DATA", price: null, renewal: null, cancellation: null, coverage: "NEEDS_DATA", confidence: 0, status: "needs_review", fileName: file.name }
-    setContracts((items) => [next, ...items]); setSelected(next.id); setNotice("Datei lokal ausgewählt. OCR und Anbieterprüfung sind nicht konfiguriert.")
+    setNotice("Upload läuft…")
+    const form = new FormData()
+    form.append("file", file)
+    try {
+      const response = await fetch("/api/documents/upload", { method: "POST", body: form })
+      const payload = await response.json() as { code?: string; document?: { id: string; name: string; size: number; type: string; status: "uploaded" } }
+      if (!response.ok || !payload.document) { setNotice(payload.code ?? "UPLOAD_FAILED"); return }
+      const next: Contract = { id: payload.document.id, category: "Strom", provider: "Noch nicht geprüft", tariff: "NEEDS_DATA", price: null, renewal: null, cancellation: null, coverage: "NEEDS_DATA", confidence: 0, status: "needs_review", fileName: payload.document.name }
+      setContracts((items) => [next, ...items]); setSelected(next.id); setNotice("Datei sicher hochgeladen. Analyse und Fakten bleiben unbestätigt, bis du sie prüfst.")
+    } catch { setNotice("UPLOAD_NETWORK_ERROR") }
   }
 
   function confirm() { if (!current) return; setContracts((items) => items.map((item) => item.id === current.id ? { ...item, status: "confirmed" } : item)); setNotice("Vertrag bestätigt. Er darf jetzt als Quelle für den Assistenten dienen.") }
