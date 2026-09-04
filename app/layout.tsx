@@ -75,7 +75,7 @@ export default async function RootLayout({
 
   return (
     <html lang={initialLocale} suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} bg-background`}>
-      <body className="font-sans antialiased">
+      <body suppressHydrationWarning className="font-sans antialiased">
         <ThemeProvider>
           <LanguageProvider initialLocale={initialLocale}>
             <SiteHeader />
