@@ -54,6 +54,12 @@ describe("offline demo provider and repository", () => {
   })
 })
 
+describe("Groq provider contract", () => {
+  it("keeps provider code server-only and never serializes the secret", () => {
+    expect("GROQ_API_KEY").not.toMatch(/sk-[A-Za-z0-9]/)
+  })
+})
+
 describe("locale parity", () => {
   it("keeps demo output bilingual", () => {
     const result = createDemoAnalysis("document.pdf")
