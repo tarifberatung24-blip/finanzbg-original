@@ -5,7 +5,7 @@ import { Logo } from "@/components/brand/logo"
 import { useLanguage } from "@/lib/i18n/language-context"
 
 export function SiteFooter() {
-  const { t } = useLanguage()
+  const { t, locale } = useLanguage()
 
   return (
     <footer className="border-t border-border bg-card">
@@ -34,6 +34,12 @@ export function SiteFooter() {
             </Link>
             <Link href="/auth/sign-up" className="text-muted-foreground hover:text-foreground">
               {t.nav.register}
+            </Link>
+            <Link href={`/${locale}/datenschutz`} className="text-muted-foreground hover:text-foreground">
+              {locale === "bg" ? "Поверителност" : "Datenschutz"}
+            </Link>
+            <Link href={`/${locale}/agb`} className="text-muted-foreground hover:text-foreground">
+              {locale === "bg" ? "Общи условия" : "AGB"}
             </Link>
           </nav>
         </div>
