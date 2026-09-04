@@ -28,7 +28,7 @@ export function FinanceModulePage({ title, description, items }: { title: string
         <div className="mt-10 overflow-hidden rounded-[2rem] border border-border bg-card shadow-xl shadow-primary/5">
           <div className="border-b border-border bg-secondary/40 p-7 md:p-10">
             <div className="flex flex-wrap items-center justify-between gap-3"><p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">FinanzberaterBG · {labels.area}</p><span className="inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-3 py-1.5 text-xs text-muted-foreground"><LockKeyhole className="size-3.5" /> {labels.secure}</span></div>
-            <h1 className="mt-5 max-w-2xl text-balance text-3xl font-bold tracking-tight text-foreground md:text-5xl">{displayTitle}</h1>
+            <h1 className="mt-5 max-w-2xl text-balance text-3xl font-bold tracking-tight text-ring md:text-5xl">{displayTitle}</h1>
             <p className="mt-4 max-w-2xl text-pretty text-base leading-7 text-muted-foreground">{displayDescription}</p>
             <p className="mt-3 text-sm leading-6 text-muted-foreground">{labels.steps}</p>
             <div className="mt-7 flex flex-wrap gap-3"><Button asChild><Link href="/auth/sign-up">{labels.start} <ArrowRight data-icon="inline-end" /></Link></Button><Button asChild variant="outline"><Link href="/protected">{labels.dashboard}</Link></Button></div>

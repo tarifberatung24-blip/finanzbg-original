@@ -24,6 +24,8 @@ import SecurityPage from "@/app/protected/security/page"
 import SteuerPage from "@/app/steuer/page"
 import ProvidersPage from "@/app/steuer/providers/page"
 import ReviewPage from "@/app/steuer/review/page"
+import DatenschutzPage from "@/app/datenschutz/page"
+import AgbPage from "@/app/agb/page"
 
 const pages: Record<string, React.ComponentType> = {
   "": HomePage, check: CheckPage, uslugi: UslugiPage, anspruch: AnspruchPage, kindergeld: KindergeldPage,
@@ -31,7 +33,7 @@ const pages: Record<string, React.ComponentType> = {
   "auth/login": LoginPage, "auth/sign-up": SignUpPage, "auth/sign-up-success": SignUpSuccessPage, "auth/error": AuthErrorPage,
   "auth/forgot-password": ForgotPasswordPage, "auth/update-password": UpdatePasswordPage, "auth/mfa-verify": MfaVerifyPage,
   finanzamt: FinanzamtPage, profil: ProfilPage, protected: ProtectedPage, "protected/home-office": HomeOfficePage, "protected/security": SecurityPage,
-  steuer: SteuerPage, "steuer/providers": ProvidersPage, "steuer/review": ReviewPage,
+  steuer: SteuerPage, "steuer/providers": ProvidersPage, "steuer/review": ReviewPage, datenschutz: DatenschutzPage, agb: AgbPage,
 }
 
 export default async function LocalizedPage({params}: {params: Promise<{locale: string; slug?: string[]}>}) {
