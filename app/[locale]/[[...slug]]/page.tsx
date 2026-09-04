@@ -13,10 +13,14 @@ import LoginPage from "@/app/auth/login/page"
 import SignUpPage from "@/app/auth/sign-up/page"
 import SignUpSuccessPage from "@/app/auth/sign-up-success/page"
 import AuthErrorPage from "@/app/auth/error/page"
+import ForgotPasswordPage from "@/app/auth/forgot-password/page"
+import UpdatePasswordPage from "@/app/auth/update-password/page"
+import MfaVerifyPage from "@/app/auth/mfa-verify/page"
 import FinanzamtPage from "@/app/finanzamt/page"
 import ProfilPage from "@/app/profil/page"
 import ProtectedPage from "@/app/protected/page"
 import HomeOfficePage from "@/app/protected/home-office/page"
+import SecurityPage from "@/app/protected/security/page"
 import SteuerPage from "@/app/steuer/page"
 import ProvidersPage from "@/app/steuer/providers/page"
 import ReviewPage from "@/app/steuer/review/page"
@@ -25,7 +29,8 @@ const pages: Record<string, React.ComponentType> = {
   "": HomePage, check: CheckPage, uslugi: UslugiPage, anspruch: AnspruchPage, kindergeld: KindergeldPage,
   produkte: ProduktePage, tarife: TarifePage, vertraege: VertraegePage, documents: DocumentsPage, "za-nas": ZaNasPage,
   "auth/login": LoginPage, "auth/sign-up": SignUpPage, "auth/sign-up-success": SignUpSuccessPage, "auth/error": AuthErrorPage,
-  finanzamt: FinanzamtPage, profil: ProfilPage, protected: ProtectedPage, "protected/home-office": HomeOfficePage,
+  "auth/forgot-password": ForgotPasswordPage, "auth/update-password": UpdatePasswordPage, "auth/mfa-verify": MfaVerifyPage,
+  finanzamt: FinanzamtPage, profil: ProfilPage, protected: ProtectedPage, "protected/home-office": HomeOfficePage, "protected/security": SecurityPage,
   steuer: SteuerPage, "steuer/providers": ProvidersPage, "steuer/review": ReviewPage,
 }
 
