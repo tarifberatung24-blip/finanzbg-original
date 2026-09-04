@@ -29,7 +29,11 @@ const signatures: Record<SupportedDocument, (bytes: Uint8Array) => boolean> = {
 }
 
 export function normalizeDocumentName(name: string) {
-  const normalized = name.normalize("NFKC").replace(/[\\/\u0000-\u001f]/g, "").trim()
+  const normalizedInput = name.normalize("NFKC")
+  if (/[\\/]/.test(normalizedInput) || normalizedInput.includes("..")) {
+    throw new DocumentValidationError("FILE_NAME_INVALID")
+  }
+  const normalized = normalizedInput.replace(/[\u0000-\u001f]/g, "").trim()
   if (!normalized || normalized.length > 180 || normalized === "." || normalized === "..") {
     throw new DocumentValidationError("FILE_NAME_INVALID")
   }
