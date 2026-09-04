@@ -1,4 +1,4 @@
-import { KindergeldNavigator } from "@/components/finance/kindergeld-navigator"
+import { GuidedWizard } from "@/components/finance/guided-wizard"
 
 export const metadata = {
   title: "Kindergeld Navigator | FinanzberaterBG",
@@ -6,5 +6,5 @@ export const metadata = {
 }
 
 export default function KindergeldPage() {
-  return <KindergeldNavigator />
+  return <GuidedWizard kind="kindergeld" />
 }
