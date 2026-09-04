@@ -1,10 +1,22 @@
 import { updateSession } from "./lib/supabase/proxy"
 import { NextRequest, NextResponse } from "next/server"
-import { defaultLocale, isLocale, LOCALE_COOKIE_KEY } from "./lib/i18n/routing"
+import { defaultLocale, isLocale, LOCALE_COOKIE_KEY, stripLocale } from "./lib/i18n/routing"
 
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const segment = pathname.split("/")[1]
+  const authPath = stripLocale(pathname)
+
+  // Route handlers live outside the localized page tree. Preserve the query
+  // string and HTTP method when recovering a previously localized auth URL.
+  if (authPath === "/auth/callback" || authPath === "/auth/logout") {
+    if (isLocale(segment)) {
+      const url = request.nextUrl.clone()
+      url.pathname = authPath
+      return NextResponse.redirect(url, 307)
+    }
+    return await updateSession(request)
+  }
 
   if (isLocale(segment)) {
     const response = await updateSession(request)

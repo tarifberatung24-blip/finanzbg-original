@@ -1,6 +1,8 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import { getSupabaseConfig, hasSupabaseConfig, missingConfigurationMessage } from './config'
+import { isProtectedAppPath, requiresMfa } from './auth-routing'
+import { stripLocale } from '../i18n/routing'
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -53,15 +55,23 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (
-    // if the user is not logged in and the app path, in this case, /protected, is accessed, redirect to the login page
-    request.nextUrl.pathname.startsWith('/protected') &&
-    !user
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
+  if (isProtectedAppPath(request.nextUrl.pathname) && !user) {
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
+    url.search = ''
+    url.searchParams.set('next', `${stripLocale(request.nextUrl.pathname)}${request.nextUrl.search}`)
     return NextResponse.redirect(url)
+  }
+
+  if (isProtectedAppPath(request.nextUrl.pathname) && user) {
+    const { data: assurance } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+    if (requiresMfa(assurance?.currentLevel, assurance?.nextLevel)) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/auth/mfa-verify'
+      url.search = ''
+      url.searchParams.set('next', `${stripLocale(request.nextUrl.pathname)}${request.nextUrl.search}`)
+      return NextResponse.redirect(url)
+    }
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
