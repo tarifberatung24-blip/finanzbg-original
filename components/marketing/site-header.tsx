@@ -12,6 +12,7 @@ import { LanguageSwitcher } from "@/components/language-switcher"
 import { useLanguage } from "@/lib/i18n/language-context"
 import { cn } from "@/lib/utils"
 import { LegalBanner } from "@/components/marketing/legal-banner"
+import { openPwaInstallPrompt } from "@/components/pwa-install-prompt"
 
 export function SiteHeader() {
   const { t, locale } = useLanguage()
@@ -28,8 +29,8 @@ export function SiteHeader() {
   }, [])
 
   const labels = locale === "de"
-    ? { home: "Startseite", services: "Leistungen", taxes: "Steuern", benefits: "Staatliche Hilfen", tariffs: "Tarife", documents: "Dokumente", about: "Über FinanzberaterBG", profile: "Persönlicher Bereich", logout: "Abmelden", menu: "Menü" }
-    : { home: "Начало", services: "Услуги", taxes: "Данъци", benefits: "Държавни помощи", tariffs: "Тарифи", documents: "Документи", about: "За FinanzberaterBG", profile: "Личен профил", logout: "Изход", menu: "Меню" }
+    ? { home: "Startseite", services: "Leistungen", taxes: "Steuern", benefits: "Staatliche Hilfen", tariffs: "Tarife", documents: "Dokumente", about: "Über FinanzberaterBG", profile: "Persönlicher Bereich", logout: "Abmelden", install: "App installieren", menu: "Menü" }
+    : { home: "Начало", services: "Услуги", taxes: "Данъци", benefits: "Държавни помощи", tariffs: "Тарифи", documents: "Документи", about: "За FinanzberaterBG", profile: "Личен профил", logout: "Изход", install: "Инсталирай приложението", menu: "Меню" }
   const links = [
     { href: "/", label: labels.home },
     { href: "/uslugi", label: labels.services },
@@ -103,7 +104,8 @@ export function SiteHeader() {
               {l.label}
             </Link>
           ))}
-          <div className="mt-2 flex items-center justify-between gap-2 border-t border-border pt-3">
+          <div className="mt-2 flex flex-col gap-3 border-t border-border pt-3 sm:flex-row sm:items-center sm:justify-between">
+            <Button type="button" variant="ghost" size="sm" className="justify-start" onClick={openPwaInstallPrompt}>{labels.install}</Button>
             <div className="flex items-center gap-2">
               <ThemeToggle />
               <LanguageSwitcher />

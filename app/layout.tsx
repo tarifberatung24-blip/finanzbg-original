@@ -4,6 +4,8 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { cookies } from "next/headers"
 import { ThemeProvider } from "@/components/theme-provider"
 import { SiteHeader } from "@/components/marketing/site-header"
+import { PwaInstallPrompt } from "@/components/pwa-install-prompt"
+import { PwaServiceWorker } from "@/components/pwa-service-worker"
 import { LanguageProvider } from "@/lib/i18n/language-context"
 import { isLocale, defaultLocale, type Locale } from "@/lib/i18n/dictionaries"
 import { LOCALE_COOKIE_KEY } from "@/lib/i18n/language-context"
@@ -41,7 +43,12 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
-    apple: "/apple-icon.png",
+    apple: [{ url: "/icons/finanzbg-192.png", sizes: "192x192", type: "image/png" }],
+  },
+  appleWebApp: {
+    capable: true,
+    title: "FinanzberaterBG",
+    statusBarStyle: "black-translucent",
   },
 }
 
@@ -73,6 +80,8 @@ export default async function RootLayout({
           <LanguageProvider initialLocale={initialLocale}>
             <SiteHeader />
             {children}
+            <PwaInstallPrompt />
+            <PwaServiceWorker />
           </LanguageProvider>
         </ThemeProvider>
         {process.env.NODE_ENV === "production" && <Analytics />}
