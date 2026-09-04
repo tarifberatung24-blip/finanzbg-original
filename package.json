@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "test": "vitest run",
     "i18n:check": "node scripts/i18n-check.mjs",
     "i18n:unused": "node scripts/i18n-unused.mjs",
     "i18n:hardcoded": "node scripts/i18n-hardcoded.mjs",
@@ -39,6 +40,7 @@
     "eslint-config-next": "^16.3.4",
     "postcss": "^8.5",
     "tailwindcss": "^4.3.3",
-    "typescript": "5.7.3"
+    "typescript": "5.7.3",
+    "vitest": "^3.2.7"
   }
 }

@@ -1,16 +1,26 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { getSupabaseConfig, hasSupabaseConfig, missingConfigurationMessage } from './config'
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   })
 
+  if (!hasSupabaseConfig()) {
+    console.error(`[supabase-config] ${missingConfigurationMessage}`)
+    return new NextResponse('Supabase Preview configuration is missing.', {
+      status: 503,
+      headers: { 'content-type': 'text/plain; charset=utf-8' },
+    })
+  }
+
   // With Fluid compute, don't put this client in a global environment
   // variable. Always create a new one on each request.
+  const { url, key } = getSupabaseConfig()
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    url,
+    key,
     {
       // Secure cookies in production; not in dev, so localhost still works.
       cookieOptions: { secure: process.env.NODE_ENV === 'production' },
