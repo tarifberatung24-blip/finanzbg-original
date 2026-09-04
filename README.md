@@ -26,6 +26,12 @@ Copy `.env.example` to `.env.local` and provide the Supabase project values if a
 cp .env.example .env.local
 ```
 
+## Groq AI assistant
+
+Set `GROQ_API_KEY` in the Vercel project Environment Variables for the server-only `/api/ai/chat` route. Never expose this key with a `NEXT_PUBLIC_` prefix and never place it in client code.
+
+If the key is missing, the protected chat panel stays usable through its clearly labelled local demo fallback. Demo replies are illustrative only: they do not inspect uploaded files, confirm eligibility, submit forms, or replace official verification.
+
 ## Notes
 
 The v0 project was paused after reaching the free-credit limit while the application foundation was being built. The repository therefore reflects the latest source that was available at that point. A small set of standard Next.js scaffold files and the homepage entry point are included so the extracted source compiles and runs as a standalone project.
