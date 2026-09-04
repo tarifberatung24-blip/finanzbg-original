@@ -7,13 +7,13 @@ import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { isGermanMobile, normalizeGermanMobile, phoneAuthMessage } from "@/lib/supabase/phone-auth"
+import { isSupportedMobile, normalizeGermanMobile, phoneAuthMessage } from "@/lib/supabase/phone-auth"
 import { useLanguage } from "@/lib/i18n/language-context"
 
 export default function SignUpPage() {
   const { locale } = useLanguage()
   const de = locale === "de"
-  const copy = de ? { title: "Konto erstellen", intro: "Starte mit einem klaren Blick auf deine Finanzen.", phone: "Deutsche Mobilnummer", send: "SMS-Code senden", sending: "Wird gesendet…", otp: "SMS-Code eingeben", verify: "Registrierung bestätigen", verifying: "Prüfung…", login: "Anmelden", existing: "Schon registriert?" } : { title: "Създай акаунт", intro: "Започни с ясен поглед върху финансите си.", phone: "Немски мобилен номер", send: "Регистрирай се със SMS код", sending: "Изпращане…", otp: "Въведи кода от SMS", verify: "Потвърди регистрацията", verifying: "Проверка…", login: "Вход", existing: "Вече си регистриран?" }
+  const copy = de ? { title: "Konto erstellen", intro: "Starte mit einem klaren Blick auf deine Finanzen.", phone: "Mobilnummer", send: "SMS-Code senden", sending: "Wird gesendet…", otp: "SMS-Code eingeben", verify: "Registrierung bestätigen", verifying: "Prüfung…", login: "Anmelden", existing: "Schon registriert?", wait: "Bitte warte noch", resend: "Neuen Code senden", emailOption: "oder mit E-Mail", firstName: "Vorname", email: "E-Mail", password: "Passwort", create: "Konto mit E-Mail erstellen", creating: "Wird erstellt…", invalidPhone: "Bitte gib eine gültige Mobilnummer mit Ländervorwahl ein.", invalidOtp: "Bitte gib den 6-stelligen SMS-Code ein." } : { title: "Създай акаунт", intro: "Започни с ясен поглед върху финансите си.", phone: "Мобилен номер", send: "Изпрати SMS код", sending: "Изпращане…", otp: "Въведи кода от SMS", verify: "Потвърди регистрацията", verifying: "Проверка…", login: "Вход", existing: "Вече си регистриран?", wait: "Изчакай още", resend: "Изпрати нов код", emailOption: "или с имейл", firstName: "Име", email: "Имейл", password: "Парола", create: "Създай акаунт с имейл", creating: "Създаване…", invalidPhone: "Въведи валиден мобилен номер с международен код.", invalidOtp: "Въведи 6-цифрения код от SMS." }
   const router = useRouter()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -54,11 +54,11 @@ export default function SignUpPage() {
     setSmsError(null)
     const normalized = normalizeGermanMobile(phone)
     if (cooldown > 0) {
-      setSmsError(`Bitte warte noch ${cooldown} Sekunden, bevor du einen neuen Code anforderst.`)
+      setSmsError(`${copy.wait} ${cooldown} ${de ? "Sekunden" : "секунди"}.`)
       return
     }
-    if (!isGermanMobile(normalized)) {
-      setSmsError("Bitte gib eine gültige deutsche Mobilnummer mit +49 ein.")
+    if (!isSupportedMobile(normalized)) {
+      setSmsError(copy.invalidPhone)
       return
     }
     setLoading(true)
@@ -76,18 +76,18 @@ export default function SignUpPage() {
     event.preventDefault()
     setSmsError(null)
     if (!/^\d{6}$/.test(otp)) {
-      setSmsError("Bitte gib den 6-stelligen SMS-Code ein.")
+      setSmsError(copy.invalidOtp)
       return
     }
     const normalized = normalizeGermanMobile(phone)
-    if (!isGermanMobile(normalized)) {
-      setSmsError("Bitte fordere zuerst einen neuen SMS-Code an.")
+    if (!isSupportedMobile(normalized)) {
+      setSmsError(copy.invalidPhone)
       return
     }
     setLoading(true)
     const { error } = await createClient().auth.verifyOtp({ phone: normalized, token: otp, type: "sms" })
     if (error) setSmsError(phoneAuthMessage(error.message))
-    else router.push("/protected")
+    else router.push(`/${locale}/protected`)
     setLoading(false)
   }
 
