@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import {notFound} from "next/navigation"
 import HomePage from "@/app/page"
 import CheckPage from "@/app/check/page"
@@ -6,6 +7,7 @@ import AnspruchPage from "@/app/anspruch/page"
 import KindergeldPage from "@/app/kindergeld/page"
 import ProduktePage from "@/app/produkte/page"
 import AffiliateTarifePage from "@/app/affiliate-tarife/page"
+import KfzPage from "@/app/kfz/page"
 import VertraegePage from "@/app/vertraege/page"
 import DocumentsPage from "@/app/documents/page"
 import ZaNasPage from "@/app/za-nas/page"
@@ -23,10 +25,20 @@ import ReviewPage from "@/app/steuer/review/page"
 
 const pages: Record<string, React.ComponentType> = {
   "": HomePage, check: CheckPage, uslugi: UslugiPage, anspruch: AnspruchPage, kindergeld: KindergeldPage,
-  produkte: ProduktePage, tarife: AffiliateTarifePage, vertraege: VertraegePage, documents: DocumentsPage, "za-nas": ZaNasPage,
+  produkte: ProduktePage, tarife: AffiliateTarifePage, kfz: KfzPage, vertraege: VertraegePage, documents: DocumentsPage, "za-nas": ZaNasPage,
   "auth/login": LoginPage, "auth/sign-up": SignUpPage, "auth/sign-up-success": SignUpSuccessPage, "auth/error": AuthErrorPage,
   finanzamt: FinanzamtPage, profil: ProfilPage, protected: ProtectedPage, "protected/home-office": HomeOfficePage,
   steuer: SteuerPage, "steuer/providers": ProvidersPage, "steuer/review": ReviewPage,
+}
+
+export async function generateMetadata({params}: {params: Promise<{locale: string; slug?: string[]}>}): Promise<Metadata> {
+  const {locale, slug = []} = await params
+  if (slug.join("/") === "kfz") {
+    return locale === "de"
+      ? {title: "Kfz-Versicherung vergleichen | FinanzberaterBG", description: "Kfz-Versicherungen in Deutschland verständlich vergleichen."}
+      : {title: "Автозастраховка в Германия | FinanzberaterBG", description: "Разбери Haftpflicht, Teilkasko и Vollkasko и сравни автозастраховки."}
+  }
+  return {}
 }
 
 export default async function LocalizedPage({params}: {params: Promise<{locale: string; slug?: string[]}>}) {

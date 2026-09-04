@@ -19,6 +19,7 @@ export function SiteHeader() {
     { href: "/steuer", label: "Steuer" },
     { href: "/anspruch", label: t.nav.benefits },
     { href: "/tarife", label: "Tarife" },
+    { href: "/kfz", label: "Kfz" },
     { href: "/documents", label: "Dokumente" },
     { href: "/za-nas", label: t.nav.about },
   ]
