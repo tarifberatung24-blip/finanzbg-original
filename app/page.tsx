@@ -11,7 +11,7 @@ import { SiteFooter } from "@/components/marketing/site-footer"
 import { useLanguage } from "@/lib/i18n/language-context"
 
 export default function HomePage() {
-  const { t } = useLanguage()
+  const { t, locale } = useLanguage()
 
   const services = [
     { href: "/steuer", icon: Receipt, key: "steuer" as const },
@@ -22,7 +22,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-card focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-foreground focus:shadow-lg">Към съдържанието</a>
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-card focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-foreground focus:shadow-lg">{locale === "de" ? "Zum Inhalt" : "Към съдържанието"}</a>
       <main id="main-content">
         <Hero />
         <OpportunityDemo />

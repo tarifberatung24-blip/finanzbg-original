@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useState } from "react"
+import { useLanguage } from "@/lib/i18n/language-context"
 import { ArrowDown, ArrowRight, Check, ChevronRight, Gauge, ShieldCheck, Wifi, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -12,13 +13,14 @@ const modules = [
   { id: "versicherung", name: "Versicherungen", icon: ShieldCheck, min: 25, max: 260, initial: 112, tone: "from-[#0b3d91]/35 to-[#030817]" },
 ] as const
 
-const outcomes = [
-  "Nужна е проверка на тарифата",
-  "Липсват данни за сравнение",
-  "Готово за персонална проверка",
-]
+const outcomes = {
+  bg: ["Нужна е проверка на тарифата", "Липсват данни за сравнение", "Готово за персонална проверка"],
+  de: ["Tarifprüfung erforderlich", "Vergleichsdaten fehlen", "Bereit für die persönliche Prüfung"],
+}
 
 export function OpportunityDemo() {
+  const { locale } = useLanguage()
+  const de = locale === "de"
   const [isOpen, setIsOpen] = useState(false)
   const [values, setValues] = useState<Record<string, number>>(() => Object.fromEntries(modules.map((module) => [module.id, module.initial])))
   const [state, setState] = useState<"idle" | "analysing" | "done">("idle")
@@ -31,23 +33,23 @@ export function OpportunityDemo() {
 
   return (
     <>
-      <section className="relative overflow-hidden border-y border-[#0b3d91]/50 bg-[#030817] py-5 text-[#f4f8ff] sm:hidden" aria-label="Opportunity Demo öffnen">
+      <section className="relative overflow-hidden border-y border-[#0b3d91]/50 bg-[#030817] py-5 text-[#f4f8ff] sm:hidden" aria-label={de ? "Opportunity Demo öffnen" : "Отвори демо за възможности"}>
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#9dcaff]">Opportunity Demo</p>
-            <p className="mt-1 text-sm font-semibold text-[#f4f8ff]">Verschaffe dir einen schnellen Überblick.</p>
+            <p className="mt-1 text-sm font-semibold text-[#f4f8ff]">{de ? "Verschaffe dir einen schnellen Überblick." : "Получи бърз преглед на възможностите."}</p>
           </div>
-          <Button type="button" onClick={() => setIsOpen(true)} aria-label="Opportunity Demo öffnen" className="relative shrink-0 bg-[#1677ff] text-[#f4f8ff] shadow-[0_0_24px_rgba(22,119,255,0.32)] hover:bg-[#3b91ff]"><ArrowDown className="absolute -top-8 left-1/2 -translate-x-1/2 text-[#6eafff]" aria-hidden="true" /><span>Demo öffnen</span><ChevronRight data-icon="inline-end" /></Button>
+          <Button type="button" onClick={() => setIsOpen(true)} aria-label={de ? "Opportunity Demo öffnen" : "Отвори демо за възможности"} className="relative shrink-0 bg-[#1677ff] text-[#f4f8ff] shadow-[0_0_24px_rgba(22,119,255,0.32)] hover:bg-[#3b91ff]"><ArrowDown className="absolute -top-8 left-1/2 -translate-x-1/2 text-[#6eafff]" aria-hidden="true" /><span>{de ? "Demo öffnen" : "Отвори демо"}</span><ChevronRight data-icon="inline-end" /></Button>
         </div>
       </section>
       <div className="relative hidden min-h-24 items-center justify-center overflow-hidden border-y border-[#0b3d91]/35 bg-[#030817] px-4 py-6 sm:flex">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(22,119,255,0.12),transparent_55%)]" aria-hidden="true" />
-        <Button type="button" onClick={() => setIsOpen(true)} className="relative bg-[#1677ff] text-[#f4f8ff] shadow-[0_5px_0_#0b3d91,0_0_28px_rgba(22,119,255,0.28)] transition-transform duration-200 hover:-translate-y-1 hover:bg-[#3b91ff] hover:shadow-[0_7px_0_#0b3d91,0_0_34px_rgba(22,119,255,0.38)] active:translate-y-1 active:shadow-[0_1px_0_#0b3d91,0_0_18px_rgba(22,119,255,0.25)] motion-reduce:transform-none">Opportunity Demo öffnen<ChevronRight data-icon="inline-end" /></Button>
+        <Button type="button" onClick={() => setIsOpen(true)} className="relative bg-[#1677ff] text-[#f4f8ff] shadow-[0_5px_0_#0b3d91,0_0_28px_rgba(22,119,255,0.28)] transition-transform duration-200 hover:-translate-y-1 hover:bg-[#3b91ff] hover:shadow-[0_7px_0_#0b3d91,0_0_34px_rgba(22,119,255,0.38)] active:translate-y-1 active:shadow-[0_1px_0_#0b3d91,0_0_18px_rgba(22,119,255,0.25)] motion-reduce:transform-none">{de ? "Opportunity Demo öffnen" : "Отвори демо за възможности"}<ChevronRight data-icon="inline-end" /></Button>
       </div>
       <section className={`fixed inset-0 z-50 overflow-y-auto bg-[#030817]/90 px-4 py-8 backdrop-blur-sm sm:px-6 ${isOpen ? "block" : "hidden"}`} role="dialog" aria-modal="true" aria-labelledby="opportunity-demo-title">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(22,119,255,0.16),transparent_35%),radial-gradient(circle_at_90%_80%,rgba(11,61,145,0.22),transparent_34%)]" />
       <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20 lg:px-8">
-        <Button type="button" onClick={() => setIsOpen(false)} variant="outline" aria-label="Opportunity Demo schließen" className="absolute right-4 top-4 border-[#6eafff]/40 bg-[#071b45]/80 text-[#d8e8ff] hover:bg-[#1677ff]/20"><X data-icon="inline-start" />Schließen</Button>
+        <Button type="button" onClick={() => setIsOpen(false)} variant="outline" aria-label={de ? "Opportunity Demo schließen" : "Затвори демо за възможности"} className="absolute right-4 top-4 border-[#6eafff]/40 bg-[#071b45]/80 text-[#d8e8ff] hover:bg-[#1677ff]/20"><X data-icon="inline-start" />{de ? "Schließen" : "Затвори"}</Button>
         <div className="max-w-2xl">
           <p className="mb-2 hidden text-sm font-semibold text-[#6eafff] sm:block">Opportunity Demo</p>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#9dcaFF]">Opportunity Demo</p>
@@ -81,7 +83,7 @@ export function OpportunityDemo() {
               <div className="mt-6 rounded-2xl border border-[#1677ff]/25 bg-[#030817]/45 p-4" aria-live="polite">
                 {state === "idle" && <p className="text-sm text-[#b8c8e2]">Готово за неутрална проверка на наличните възможности.</p>}
                 {state === "analysing" && <p className="animate-pulse text-sm text-[#9dcaFF]">Анализираме избраните разходи…</p>}
-                {state === "done" && <div className="flex items-start gap-2 text-sm text-[#d8e8ff]"><Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-[#6eafff]" /><span>{outcomes[monthly % outcomes.length]}</span></div>}
+                {state === "done" && <div className="flex items-start gap-2 text-sm text-[#d8e8ff]"><Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-[#6eafff]" /><span>{outcomes[de ? "de" : "bg"][monthly % 3]}</span></div>}
               </div>
             </div>
             <div className="mt-8">
