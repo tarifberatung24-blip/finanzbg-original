@@ -1,7 +1,7 @@
 "use client"
 
 import { useLanguage } from "@/lib/i18n/language-context"
-import { usePathname, useRouter } from "@/i18n/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { routing, type Locale } from "@/i18n/routing"
 import { cn } from "@/lib/utils"
 
@@ -12,7 +12,8 @@ export function LanguageSwitcher({ className }: { className?: string }) {
 
   function changeLocale(nextLocale: Locale) {
     setLocale(nextLocale)
-    router.push(pathname, {locale: nextLocale})
+    const pathWithoutLocale = pathname.replace(/^\/(bg|de)(?=\/|$)/, "") || "/"
+    router.push(`/${nextLocale}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`)
   }
 
   return (

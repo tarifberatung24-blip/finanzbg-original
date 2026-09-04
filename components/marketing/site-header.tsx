@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Link, useRouter } from "@/i18n/navigation"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { Menu, X } from "lucide-react"
 import { Logo } from "@/components/brand/logo"
@@ -39,6 +40,7 @@ export function SiteHeader() {
     { href: "/documents", label: labels.documents },
     { href: "/za-nas", label: labels.about },
   ]
+  const localizedHref = (href: string) => href === "/" ? `/${locale}` : `/${locale}${href}`
   const closeMenu = () => setOpen(false)
   async function logout() { await createClient().auth.signOut(); closeMenu(); router.push("/") }
 
@@ -54,7 +56,7 @@ export function SiteHeader() {
           {links.map((l) => (
             <Link
               key={l.href}
-              href={l.href}
+              href={localizedHref(l.href)}
               className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {l.label}
@@ -94,7 +96,7 @@ export function SiteHeader() {
           {links.map((l) => (
             <Link
               key={l.href}
-              href={l.href}
+              href={localizedHref(l.href)}
               onClick={closeMenu}
               className="rounded-md px-3 py-3 text-sm font-medium text-foreground hover:bg-secondary"
             >
