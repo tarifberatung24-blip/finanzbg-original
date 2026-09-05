@@ -52,5 +52,5 @@ export async function validateDocument(file: File) {
 }
 
 export function isFrankfurtSupabase(url = process.env.NEXT_PUBLIC_SUPABASE_URL) {
-  return url === "https://numyqalfphyrnedlfzfs.supabase.co"
+  return url?.replace(/\/$/, "") === "https://numyqalfphyrnedlfzfs.supabase.co"
 }
