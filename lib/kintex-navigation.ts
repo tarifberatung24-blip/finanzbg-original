@@ -15,15 +15,16 @@ export const kintexModules = [
 // Presentation only. Access control remains in the existing Supabase proxy/pages.
 export function isKintexWorkspacePath(pathname: string) {
   const path = stripLocale(pathname)
-  return ["/protected", "/vertraege", "/documents", "/profil", "/steuer", "/finanzamt"]
+  return ["/dashboard", "/protected", "/vertraege", "/documents", "/profil", "/steuer", "/finanzamt"]
     .some((prefix) => path === prefix || path.startsWith(`${prefix}/`))
 }
 
 export function activeKintexModule(pathname: string, module: string | null) {
   const path = stripLocale(pathname)
-  if (path === "/protected") {
+  if (path === "/protected" || path === "/dashboard") {
     return kintexModules.find((item) => "planned" in item && item.id === module)?.id ?? "overview"
   }
   return kintexModules.find((item) => item.id !== "overview" && !item.href.includes("?") &&
     (path === item.href || path.startsWith(`${item.href}/`)))?.id ?? null
 }
+
