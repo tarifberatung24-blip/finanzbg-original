@@ -13,7 +13,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   function changeLocale(nextLocale: Locale) {
     setLocale(nextLocale)
     const pathWithoutLocale = pathname.replace(/^\/(bg|de)(?=\/|$)/, "") || "/"
-    router.push(`/${nextLocale}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`)
+    router.push(`/${nextLocale}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}${window.location.search}${window.location.hash}`)
   }
 
   return (

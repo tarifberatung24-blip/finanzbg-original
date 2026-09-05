@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
@@ -51,8 +52,8 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans: "IBM Plex Sans", var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", var(--font-geist-mono), ui-monospace, monospace;
 }
 
 :root {
@@ -172,4 +173,71 @@
   button:not([data-slot="icon"]), [role="button"] {
     min-height: 2.75rem;
   }
+}
+
+/* KintexBG customer workspace; public pages retain their existing theme. */
+.kintex-workspace {
+  color-scheme: light;
+  --nm-black: #000000;
+  --nm-white: #ffffff;
+  --nm-yellow: #ffb81c;
+  --nm-yellow-shadow: #fbde05;
+  --nm-gray-100: #f1f1f1;
+  --nm-gray-300: #d9d9d9;
+  --nm-gray-600: #5f6368;
+  --nm-yellow-dark: #8a5a00;
+  --radius: 0;
+  --background: var(--nm-white);
+  --foreground: var(--nm-black);
+  --card: var(--nm-white);
+  --card-foreground: var(--nm-black);
+  --popover: var(--nm-white);
+  --popover-foreground: var(--nm-black);
+  --primary: var(--nm-yellow);
+  --primary-foreground: var(--nm-black);
+  --secondary: var(--nm-gray-100);
+  --secondary-foreground: var(--nm-black);
+  --muted: var(--nm-gray-100);
+  --muted-foreground: var(--nm-gray-600);
+  --accent: var(--nm-black);
+  --accent-foreground: var(--nm-white);
+  --border: var(--nm-gray-300);
+  --input: var(--nm-gray-300);
+  --ring: var(--nm-yellow-dark);
+  --focus-ring: var(--nm-yellow-dark);
+  --success: #287047;
+  --success-foreground: var(--nm-white);
+  font-family: "IBM Plex Sans", Arial, sans-serif;
+}
+
+.kintex-workspace :is(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+
+.kintex-workspace h1 { color: var(--foreground); }
+.kintex-workspace #workspace-content .min-h-screen { min-height: calc(100dvh - 5rem); }
+.kintex-skip {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 60;
+  padding: 0.75rem 1rem;
+  background: var(--foreground);
+  color: var(--background);
+  transform: translateY(-200%);
+}
+.kintex-skip:focus { transform: translateY(0); }
+
+.kintex-workspace .nm-kicker {
+  color: var(--nm-yellow-dark);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.kintex-workspace .nm-brand-highlight {
+  box-shadow: inset 0 0.42em 0 0 var(--nm-yellow-shadow);
 }

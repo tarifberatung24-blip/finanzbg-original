@@ -1,4 +1,5 @@
 import {notFound} from "next/navigation"
+import { isKintexWorkspacePath } from "@/lib/kintex-navigation"
 import HomePage from "@/app/page"
 import CheckPage from "@/app/check/page"
 import UslugiPage from "@/app/uslugi/page"
@@ -35,6 +36,13 @@ const pages: Record<string, React.ComponentType> = {
   "auth/forgot-password": ForgotPasswordPage, "auth/update-password": UpdatePasswordPage, "auth/mfa-verify": MfaVerifyPage,
   finanzamt: FinanzamtPage, profil: ProfilPage, protected: ProtectedPage, "protected/home-office": HomeOfficePage, "protected/security": SecurityPage,
   steuer: SteuerPage, "steuer/providers": ProvidersPage, "steuer/review": ReviewPage, datenschutz: DatenschutzPage, agb: AgbPage, app: AppInstallPage,
+}
+
+export async function generateMetadata({params}: {params: Promise<{locale: string; slug?: string[]}>}) {
+  const {slug = []} = await params
+  return isKintexWorkspacePath(`/${slug.join("/")}`)
+    ? { title: { absolute: "KintexBG — BY VZG CONSULT" }, description: "KintexBG — Digital Financial Home Office" }
+    : {}
 }
 
 export default async function LocalizedPage({params}: {params: Promise<{locale: string; slug?: string[]}>}) {

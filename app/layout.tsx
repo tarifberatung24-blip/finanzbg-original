@@ -2,8 +2,9 @@ import { Analytics } from "@vercel/analytics/next"
 import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { cookies } from "next/headers"
+import { Suspense } from "react"
 import { ThemeProvider } from "@/components/theme-provider"
-import { SiteHeader } from "@/components/marketing/site-header"
+import { WorkspaceShell } from "@/components/finance/workspace-shell"
 import { PwaInstallPrompt } from "@/components/pwa-install-prompt"
 import { PwaServiceWorker } from "@/components/pwa-service-worker"
 import { LanguageProvider } from "@/lib/i18n/language-context"
@@ -78,8 +79,7 @@ export default async function RootLayout({
       <body className="font-sans antialiased">
         <ThemeProvider>
           <LanguageProvider initialLocale={initialLocale}>
-            <SiteHeader />
-            {children}
+            <Suspense fallback={null}><WorkspaceShell>{children}</WorkspaceShell></Suspense>
             <PwaInstallPrompt />
             <PwaServiceWorker />
           </LanguageProvider>
