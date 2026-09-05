@@ -8,7 +8,42 @@ import { useLanguage } from "@/lib/i18n/language-context"
 import { localizedPath } from "@/lib/i18n/routing"
 import { kintexModules } from "@/lib/kintex-navigation"
 
-export function PersonalDashboard({ firstName }: { firstName?: string }) {
+type RadarStats = { contracts: number; documents: number; profileCompleteness: number }
+
+function RadarPanel({ stats, locale }: { stats: RadarStats; locale: "bg" | "de" }) {
+  const de = locale === "de"
+  const missingProfile = stats.profileCompleteness < 60
+  const missingContracts = stats.contracts === 0
+  const missingDocuments = stats.documents === 0
+  const next = missingProfile ? { href: "/profil", label: de ? "Profil vervollständigen" : "Попълни профила" }
+    : missingContracts ? { href: "/vertraege", label: de ? "Verträge erfassen" : "Добави договори" }
+    : missingDocuments ? { href: "/documents", label: de ? "Dokumente hochladen" : "Качи документи" }
+    : { href: "/protected/home-office", label: de ? "AI Prüfung starten" : "Стартирай AI проверка" }
+  const rows = de ? [
+    ["Profil", `${stats.profileCompleteness}%`],
+    ["Verträge", String(stats.contracts)],
+    ["Dokumente", String(stats.documents)],
+  ] : [
+    ["Профил", `${stats.profileCompleteness}%`],
+    ["Договори", String(stats.contracts)],
+    ["Документи", String(stats.documents)],
+  ]
+  return (
+    <section className="mt-10 border-y border-border py-8" aria-labelledby="radar-title">
+      <div className="grid gap-6 lg:grid-cols-[1fr_320px] lg:items-end">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Kintex Radar</p>
+          <h2 id="radar-title" className="mt-3 text-2xl font-semibold tracking-tight">{de ? "Systemstatus deines Home Office." : "Системен статус на твоя Home Office."}</h2>
+          <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">{de ? "Radar nutzt nur gespeicherte Plattformdaten. Keine Angebote, keine Annahmen, keine automatische Entscheidung." : "Radar използва само записани данни в платформата. Без оферти, без предположения, без автоматично решение."}</p>
+        </div>
+        <Button asChild className="justify-self-start lg:justify-self-end"><Link href={localizedPath(next.href, locale)}>{next.label}<ArrowRight aria-hidden="true" /></Link></Button>
+      </div>
+      <div className="mt-6 grid gap-4 sm:grid-cols-3">{rows.map(([label, value]) => <div key={label} className="border border-border bg-card p-4"><p className="text-xs text-muted-foreground">{label}</p><p className="mt-2 text-2xl font-semibold text-foreground">{value}</p></div>)}</div>
+    </section>
+  )
+}
+
+export function PersonalDashboard({ firstName, stats = { contracts: 0, documents: 0, profileCompleteness: 0 } }: { firstName?: string; stats?: RadarStats }) {
   const { locale } = useLanguage()
   const search = useSearchParams()
   const de = locale === "de"
@@ -17,7 +52,7 @@ export function PersonalDashboard({ firstName }: { firstName?: string }) {
     title: "Dein finanzielles Home Office.", greeting: firstName ? `Willkommen, ${firstName}.` : "Willkommen bei KintexBG.",
     subtitle: "Verträge, Unterlagen und nächste Schritte an einem Ort.", overview: "Übersicht", pilot: "Pilotversion", profile: "Profil öffnen",
     next: "Dein nächster Schritt", profileTitle: "Beginne mit deinem Finanzprofil.", profileSub: "Erfasse Haushalt, Einkommen und laufende Kosten als Grundlage für deine nächsten Schritte.",
-    areas: "Deine Bereiche", planned: "In Vorbereitung", demo: "Connected pilot", documents: "Dateiauswahl · Speicherung noch nicht verbunden",
+    areas: "Deine Bereiche", planned: "In Vorbereitung", demo: "Connected pilot", documents: "Supabase Storage und AI Status", radar: "Systemstatus aus gespeicherten Daten",
     contracts: "Verträge und laufende Kosten erfassen", profileDetail: "Haushalt, Einkommen und Ausgaben", assistant: "Dokumentenprüfung mit Supabase und AI",
     deadlines: "Die gemeinsame Fristenübersicht ist noch nicht verbunden. Deine gespeicherten Erinnerungen werden hier noch nicht angezeigt.",
     opportunities: "Persönliche Möglichkeiten und Tarifangebote sind hier noch nicht verbunden. Geprüfte Ergebnisse werden in einer späteren Phase ergänzt.",
@@ -28,7 +63,7 @@ export function PersonalDashboard({ firstName }: { firstName?: string }) {
     title: "Твоят финансов домашен офис.", greeting: firstName ? `Здравей, ${firstName}.` : "Добре дошъл в KintexBG.",
     subtitle: "Договори, документи и следващи стъпки на едно място.", overview: "Преглед", pilot: "Пилотна версия", profile: "Отвори профила",
     next: "Следваща стъпка", profileTitle: "Започни с финансовия си профил.", profileSub: "Въведи домакинство, доходи и текущи разходи като основа за следващите си стъпки.",
-    areas: "Твоите раздели", planned: "В подготовка", demo: "Свързан pilot", documents: "Избор на файл · съхранението още не е свързано",
+    areas: "Твоите раздели", planned: "В подготовка", demo: "Свързан pilot", documents: "Supabase Storage и AI статус", radar: "Системен статус от записани данни",
     contracts: "Въвеждане на договори и текущи разходи", profileDetail: "Домакинство, доходи и разходи", assistant: "Проверка на документи със Supabase и AI",
     deadlines: "Общият преглед на срокове още не е свързан. Записаните ти напомняния все още не се показват тук.",
     opportunities: "Личните възможности и тарифните оферти още не са свързани тук. Проверени резултати ще бъдат добавени в следваща фаза.",
@@ -61,6 +96,7 @@ export function PersonalDashboard({ firstName }: { firstName?: string }) {
         <h1 id="dashboard-title" className="mt-3 max-w-3xl text-balance text-4xl font-semibold leading-[1.08] tracking-[-0.04em] sm:text-5xl xl:text-6xl">{text.title}</h1>
         <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground">{text.subtitle}</p>
       </section>
+      <RadarPanel stats={stats} locale={locale} />
       <section className="mt-10 grid gap-6 border-y border-border py-8 md:grid-cols-[1fr_auto] md:items-center" aria-labelledby="next-step-title">
         <div><p className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">{text.next}</p><h2 id="next-step-title" className="mt-3 text-2xl font-semibold tracking-tight">{text.profileTitle}</h2><p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">{text.profileSub}</p></div>
         <Button asChild className="h-11 justify-self-start px-5"><Link href={localizedPath("/profil", locale)}>{text.profile}<ArrowRight aria-hidden="true" /></Link></Button>
@@ -77,4 +113,3 @@ export function PersonalDashboard({ firstName }: { firstName?: string }) {
     </main>
   )
 }
-
