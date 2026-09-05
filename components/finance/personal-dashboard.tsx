@@ -17,8 +17,8 @@ export function PersonalDashboard({ firstName }: { firstName?: string }) {
     title: "Dein finanzielles Home Office.", greeting: firstName ? `Willkommen, ${firstName}.` : "Willkommen bei KintexBG.",
     subtitle: "Verträge, Unterlagen und nächste Schritte an einem Ort.", overview: "Übersicht", pilot: "Pilotversion", profile: "Profil öffnen",
     next: "Dein nächster Schritt", profileTitle: "Beginne mit deinem Finanzprofil.", profileSub: "Erfasse Haushalt, Einkommen und laufende Kosten als Grundlage für deine nächsten Schritte.",
-    areas: "Deine Bereiche", planned: "In Vorbereitung", demo: "Lokale Demo", documents: "Dateiauswahl · Speicherung noch nicht verbunden",
-    contracts: "Verträge und laufende Kosten erfassen", profileDetail: "Haushalt, Einkommen und Ausgaben", assistant: "Dokumentenprüfung im Demo-Modus",
+    areas: "Deine Bereiche", planned: "In Vorbereitung", demo: "Connected pilot", documents: "Dateiauswahl · Speicherung noch nicht verbunden",
+    contracts: "Verträge und laufende Kosten erfassen", profileDetail: "Haushalt, Einkommen und Ausgaben", assistant: "Dokumentenprüfung mit Supabase und AI",
     deadlines: "Die gemeinsame Fristenübersicht ist noch nicht verbunden. Deine gespeicherten Erinnerungen werden hier noch nicht angezeigt.",
     opportunities: "Persönliche Möglichkeiten und Tarifangebote sind hier noch nicht verbunden. Geprüfte Ergebnisse werden in einer späteren Phase ergänzt.",
     insurance: "Der Bereich für deine Versicherungen ist vorbereitet. Bestehende Verträge findest du weiterhin unter Verträge.",
@@ -28,8 +28,8 @@ export function PersonalDashboard({ firstName }: { firstName?: string }) {
     title: "Твоят финансов домашен офис.", greeting: firstName ? `Здравей, ${firstName}.` : "Добре дошъл в KintexBG.",
     subtitle: "Договори, документи и следващи стъпки на едно място.", overview: "Преглед", pilot: "Пилотна версия", profile: "Отвори профила",
     next: "Следваща стъпка", profileTitle: "Започни с финансовия си профил.", profileSub: "Въведи домакинство, доходи и текущи разходи като основа за следващите си стъпки.",
-    areas: "Твоите раздели", planned: "В подготовка", demo: "Локална демонстрация", documents: "Избор на файл · съхранението още не е свързано",
-    contracts: "Въвеждане на договори и текущи разходи", profileDetail: "Домакинство, доходи и разходи", assistant: "Демонстрация на преглед на документи",
+    areas: "Твоите раздели", planned: "В подготовка", demo: "Свързан pilot", documents: "Избор на файл · съхранението още не е свързано",
+    contracts: "Въвеждане на договори и текущи разходи", profileDetail: "Домакинство, доходи и разходи", assistant: "Проверка на документи със Supabase и AI",
     deadlines: "Общият преглед на срокове още не е свързан. Записаните ти напомняния все още не се показват тук.",
     opportunities: "Личните възможности и тарифните оферти още не са свързани тук. Проверени резултати ще бъдат добавени в следваща фаза.",
     insurance: "Разделът за застраховки е подготвен. Съществуващите си договори ще намериш в „Договори“.",
@@ -77,3 +77,4 @@ export function PersonalDashboard({ firstName }: { firstName?: string }) {
     </main>
   )
 }
+
