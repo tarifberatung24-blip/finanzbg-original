@@ -10,6 +10,14 @@ import type { DemoAnalysis } from "@/lib/home-office/types"
 type StoredDocument = { id: string; name: string; size: number; type: string; status: string }
 type Step = "idle" | "uploading" | "analyzing" | "needs_review" | "reviewed"
 
+const roadmap = [
+  { stage: "1", title: "Document Intake Agent", status: "ACTIVE", output: "Upload, validation, household-scoped storage" },
+  { stage: "2", title: "Analysis Agent", status: "ACTIVE", output: "Extract facts, risks, missing info, next steps" },
+  { stage: "3", title: "Review Agent", status: "ACTIVE", output: "Human confirmation before facts become trusted" },
+  { stage: "4", title: "Radar Orchestrator", status: "NEXT", output: "Rank contracts, documents, deadlines, claims" },
+  { stage: "5", title: "Connector Layer", status: "PLANNED", output: "Gmail, Telegram, GitHub-style workflows after approval" },
+] as const
+
 const messages: Record<string, string> = {
   FILE_TYPE_NOT_ALLOWED: "Nur PDF, JPG oder PNG sind erlaubt.",
   FILE_TOO_LARGE: "Die Datei ist größer als 10 MB.",
@@ -115,6 +123,12 @@ export function HomeOfficeWorkspace() {
           <h1 id="home-office-title" className="mt-5 text-balance text-4xl font-semibold tracking-tight sm:text-5xl">AI Home Office Assistant</h1>
           <p className="mt-3 max-w-2xl text-pretty leading-7 text-muted-foreground">Dokument speichern, Text prüfen lassen, Fakten kontrollieren und erst nach deiner Bestätigung abschließen.</p>
         </section>
+        <section className="border-y border-border py-8" aria-labelledby="ai-roadmap-title">
+          <p className="nm-kicker">AI System Plan</p>
+          <h2 id="ai-roadmap-title" className="mt-3 text-2xl font-semibold tracking-tight">От чатбот към автономен Home Office служител.</h2>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">Извод от учебния план: KintexBG трябва да работи като оркестрирана система от агенти, не като един чат. Първата безопасна версия остава human-in-the-loop: AI предлага, потребителят потвърждава.</p>
+          <div className="mt-6 grid gap-3 lg:grid-cols-5">{roadmap.map((item) => <div key={item.stage} className="border border-border bg-card p-4"><p className="font-mono text-xs text-muted-foreground">{item.stage} / {item.status}</p><h3 className="mt-3 text-sm font-semibold text-foreground">{item.title}</h3><p className="mt-2 text-xs leading-5 text-muted-foreground">{item.output}</p></div>)}</div>
+        </section>
         <div className="grid gap-5 lg:grid-cols-[0.95fr_1.25fr]">
           <div className="flex flex-col gap-5">
             <DocumentIntake document={selected} onSelect={selectFile} onTextChange={updateText} onAnalyze={analyze} canAnalyze={Boolean(selected?.file && selected.text.trim().length > 20)} isAnalyzed={Boolean(analysis)} error={error} busy={busy} mode="connected" />
@@ -150,3 +164,6 @@ export function HomeOfficeWorkspace() {
     </main>
   )
 }
+
+
+

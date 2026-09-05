@@ -33,8 +33,8 @@ export function WorkspaceShell({ children }: { children: ReactNode }) {
       <a href="#workspace-content" className="kintex-skip">{text.skip}</a>
       <header className="sticky top-0 z-40 flex h-20 items-center justify-between gap-3 border-b border-border bg-background px-5 lg:px-8">
         <Link href={localizedPath("/protected", locale)} aria-label="KintexBG — BY VZG CONSULT" className="shrink-0">
-          <span className="block text-2xl font-bold leading-none tracking-tight">KintexBG<span className="text-primary">.</span></span>
-          <span className="mt-2 block text-[10px] font-semibold leading-none tracking-[0.2em]">BY VZG CONSULT</span>
+          <span className="nm-brand-highlight block text-2xl font-bold leading-none tracking-tight">KintexBG<span className="text-primary">.</span></span>
+          <span className="nm-kicker mt-2 block leading-none">BY VZG CONSULT</span>
         </Link>
         <span className="hidden text-sm text-muted-foreground md:block">{text.workspace}</span>
         <div className="flex items-center gap-3">
@@ -72,3 +72,4 @@ export function WorkspaceShell({ children }: { children: ReactNode }) {
     </div>
   )
 }
+
