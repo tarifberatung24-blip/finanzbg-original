@@ -1,6 +1,8 @@
 "use client"
 
 import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { isKintexWorkspacePath } from "@/lib/kintex-navigation"
 import { useLanguage } from "@/lib/i18n/language-context"
 import { ArrowLeft, ArrowRight, CheckCircle2, CircleAlert, LockKeyhole } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -15,12 +17,20 @@ const translations: Record<string, { title: string; description: string; items: 
 }
 
 export function FinanceModulePage({ title, description, items }: { title: string; description: string; items: string[] }) {
+  const pathname = usePathname()
   const { locale } = useLanguage()
   const translated = locale === "bg" ? translations[title] : undefined
   const displayTitle = translated?.title ?? title
   const displayDescription = translated?.description ?? description
   const displayItems = translated?.items ?? items
   const labels = locale === "bg" ? { back: "Към началото", area: "Личен финансов раздел", secure: "Сигурен работен раздел", steps: "Провери стъпките си спокойно.", start: "Започни проверката", dashboard: "Към таблото", expected: "Какво ще направиш", notice: "Това е структурирана предварителна проверка.", disclaimer: "FinanzberaterBG не заменя данъчна или правна консултация." } : { back: "Zur Startseite", area: "Persönlicher Finanzbereich", secure: "Sicherer Arbeitsbereich", steps: "Prüfe deine nächsten Schritte in Ruhe.", start: "Prüfung starten", dashboard: "Zum Dashboard", expected: "Was dich erwartet", notice: "Dies ist eine strukturierte Vorprüfung.", disclaimer: "FinanzberaterBG ersetzt keine Steuer- oder Rechtsberatung." }
+  if (isKintexWorkspacePath(pathname)) return (
+    <section className="mx-auto max-w-4xl px-5 pb-14 pt-10 sm:px-8">
+      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">KintexBG</p>
+      <h1 className="mt-4 text-balance text-4xl font-semibold tracking-tight sm:text-5xl">{displayTitle}</h1>
+      <p className="mt-4 max-w-2xl text-base leading-7 text-muted-foreground">{displayDescription}</p>
+    </section>
+  )
   return (
     <main className="min-h-screen bg-background">
       <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">

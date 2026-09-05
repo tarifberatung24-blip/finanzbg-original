@@ -1,16 +1,79 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowRight, CalendarClock, FileText, Landmark, Receipt, ShieldCheck, WalletCards } from "lucide-react"
+import { useSearchParams } from "next/navigation"
+import { ArrowRight, ArrowUpRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/lib/i18n/language-context"
+import { localizedPath } from "@/lib/i18n/routing"
+import { kintexModules } from "@/lib/kintex-navigation"
 
 export function PersonalDashboard({ firstName }: { firstName?: string }) {
   const { locale } = useLanguage()
+  const search = useSearchParams()
   const de = locale === "de"
+  const selected = kintexModules.find((item) => "planned" in item && item.id === search.get("module"))
   const text = de ? {
-    eyebrow: "Persönlicher Finanzbereich", title: `Hallo${firstName ? `, ${firstName}` : ""}.`, sub: "Deine nächsten Schritte, Fristen und Möglichkeiten an einem Ort.", protected: "Deine Daten bleiben geschützt", opportunities: "Meine Möglichkeiten", empty: "Noch keine geprüften Möglichkeiten", emptySub: "Vervollständige dein Profil oder lade einen Vertrag hoch, um relevante Hinweise zu erhalten.", start: "Profil ergänzen", quick: "Schnellzugriff", contracts: "Verträge", tax: "Steuererklärung", benefits: "Kindergeld & Hilfen", deadlines: "Fristen", emptyDeadlines: "Keine bevorstehenden Fristen", notConfigured: "Noch nicht konfiguriert", evidence: "Jede Empfehlung wird mit Quelle, Datum und Nachweis angezeigt."
-  } : { eyebrow: "Личен финансов профил", title: `Здравей${firstName ? `, ${firstName}` : ""}.`, sub: "Следващите стъпки, срокове и възможности — на едно място.", protected: "Данните ти са защитени", opportunities: "Моите възможности", empty: "Все още няма проверени възможности", emptySub: "Попълни профила си или качи договор, за да получиш релевантни насоки.", start: "Попълни профила", quick: "Бърз достъп", contracts: "Договори", tax: "Данъчна декларация", benefits: "Kindergeld и помощи", deadlines: "Срокове", emptyDeadlines: "Няма предстоящи срокове", notConfigured: "Все още не е конфигурирано", evidence: "Всяка препоръка показва източник, дата и доказателство." }
-  const links = [{ href: "/protected/home-office", label: text.contracts, icon: FileText }, { href: "/steuer", label: text.tax, icon: Receipt }, { href: "/kindergeld", label: text.benefits, icon: Landmark }, { href: "/protected", label: text.deadlines, icon: CalendarClock }]
-  return <main className="min-h-screen bg-background text-foreground"><header className="border-b border-border bg-card/80"><div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5"><Link href="/" className="font-bold tracking-tight text-primary">FinanzberaterBG</Link><div className="flex items-center gap-3"><span className="hidden text-sm text-muted-foreground sm:block">{text.protected}</span><form action="/auth/logout" method="post"><Button variant="outline" size="sm">{de ? "Abmelden" : "Изход"}</Button></form></div></div></header><div className="mx-auto max-w-6xl space-y-8 px-4 py-10"><section className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">{text.eyebrow}</p><h1 className="mt-3 text-4xl font-bold tracking-tight">{text.title}</h1><p className="mt-3 max-w-xl text-base leading-7 text-muted-foreground">{text.sub}</p></div><span className="inline-flex items-center gap-2 rounded-full border border-success/30 bg-success/10 px-4 py-2 text-sm text-success"><ShieldCheck className="h-4 w-4" />{text.protected}</span></section><section className="rounded-2xl border border-border bg-card p-6"><div className="flex items-start justify-between gap-4"><div><p className="text-sm font-semibold text-primary">{text.opportunities}</p><h2 className="mt-2 text-2xl font-bold">{text.empty}</h2><p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">{text.emptySub}</p></div><WalletCards className="hidden h-8 w-8 text-primary/60 sm:block" /></div><Button asChild className="mt-5"><Link href="/profil">{text.start}<ArrowRight className="ml-2 h-4 w-4" /></Link></Button><p className="mt-4 text-xs text-muted-foreground">{text.evidence}</p></section><section><h2 className="text-lg font-semibold">{text.quick}</h2><div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{links.map(({ href, label, icon: Icon }) => <Link key={href} href={href} className="group rounded-2xl border border-border bg-card p-5 transition hover:-translate-y-0.5 hover:border-primary/40"><Icon className="h-5 w-5 text-primary" /><p className="mt-4 font-semibold">{label}</p><p className="mt-1 text-sm text-muted-foreground">{text.notConfigured}</p><ArrowRight className="mt-4 h-4 w-4 text-muted-foreground transition group-hover:translate-x-1" /></Link>)}</div></section><section className="rounded-2xl border border-dashed border-border p-6"><div className="flex items-center gap-3"><CalendarClock className="h-5 w-5 text-primary" /><h2 className="font-semibold">{text.deadlines}</h2></div><p className="mt-3 text-sm text-muted-foreground">{text.emptyDeadlines}</p></section></div></main>
+    title: "Dein finanzielles Home Office.", greeting: firstName ? `Willkommen, ${firstName}.` : "Willkommen bei KintexBG.",
+    subtitle: "Verträge, Unterlagen und nächste Schritte an einem Ort.", overview: "Übersicht", pilot: "Pilotversion", profile: "Profil öffnen",
+    next: "Dein nächster Schritt", profileTitle: "Beginne mit deinem Finanzprofil.", profileSub: "Erfasse Haushalt, Einkommen und laufende Kosten als Grundlage für deine nächsten Schritte.",
+    areas: "Deine Bereiche", planned: "In Vorbereitung", demo: "Lokale Demo", documents: "Dateiauswahl · Speicherung noch nicht verbunden",
+    contracts: "Verträge und laufende Kosten erfassen", profileDetail: "Haushalt, Einkommen und Ausgaben", assistant: "Dokumentenprüfung im Demo-Modus",
+    deadlines: "Die gemeinsame Fristenübersicht ist noch nicht verbunden. Deine gespeicherten Erinnerungen werden hier noch nicht angezeigt.",
+    opportunities: "Persönliche Möglichkeiten und Tarifangebote sind hier noch nicht verbunden. Geprüfte Ergebnisse werden in einer späteren Phase ergänzt.",
+    insurance: "Der Bereich für deine Versicherungen ist vorbereitet. Bestehende Verträge findest du weiterhin unter Verträge.",
+    credits: "Der Bereich für deine Kredite ist vorbereitet. Bestehende Verträge findest du weiterhin unter Verträge.",
+    back: "Zur Übersicht", contractsLink: "Verträge öffnen", status: "Dieser Bereich wird in einer späteren Phase eingerichtet.",
+  } : {
+    title: "Твоят финансов домашен офис.", greeting: firstName ? `Здравей, ${firstName}.` : "Добре дошъл в KintexBG.",
+    subtitle: "Договори, документи и следващи стъпки на едно място.", overview: "Преглед", pilot: "Пилотна версия", profile: "Отвори профила",
+    next: "Следваща стъпка", profileTitle: "Започни с финансовия си профил.", profileSub: "Въведи домакинство, доходи и текущи разходи като основа за следващите си стъпки.",
+    areas: "Твоите раздели", planned: "В подготовка", demo: "Локална демонстрация", documents: "Избор на файл · съхранението още не е свързано",
+    contracts: "Въвеждане на договори и текущи разходи", profileDetail: "Домакинство, доходи и разходи", assistant: "Демонстрация на преглед на документи",
+    deadlines: "Общият преглед на срокове още не е свързан. Записаните ти напомняния все още не се показват тук.",
+    opportunities: "Личните възможности и тарифните оферти още не са свързани тук. Проверени резултати ще бъдат добавени в следваща фаза.",
+    insurance: "Разделът за застраховки е подготвен. Съществуващите си договори ще намериш в „Договори“.",
+    credits: "Разделът за кредити е подготвен. Съществуващите си договори ще намериш в „Договори“.",
+    back: "Към прегледа", contractsLink: "Отвори договорите", status: "Този раздел ще бъде разработен в следваща фаза.",
+  }
+  const details: Record<string, string> = { contracts: text.contracts, documents: text.documents, assistant: text.assistant, profile: text.profileDetail }
+
+  if (selected && "planned" in selected) return (
+    <main className="px-5 py-10 sm:px-8 lg:px-12 lg:py-12">
+      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">{text.planned}</p>
+      <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">{selected[locale]}</h1>
+      <section className="mt-10 max-w-2xl border-y border-border py-8">
+        <h2 className="text-lg font-medium">{text.status}</h2>
+        <p className="mt-3 text-base leading-7 text-muted-foreground">{text[selected.id]}</p>
+        <div className="mt-6 flex flex-wrap gap-3">
+          {(selected.id === "insurance" || selected.id === "credits") && <Button asChild><Link href={localizedPath("/vertraege", locale)}>{text.contractsLink}<ArrowRight aria-hidden="true" /></Link></Button>}
+          <Button asChild variant="outline"><Link href={localizedPath("/protected", locale)}>{text.back}</Link></Button>
+        </div>
+      </section>
+    </main>
+  )
+
+  return (
+    <main className="px-5 py-10 sm:px-8 lg:px-12 lg:py-12">
+      <section aria-labelledby="dashboard-title">
+        <div className="flex items-center justify-between gap-4"><p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">{text.overview}</p><span className="border border-border px-2 py-1 text-xs text-muted-foreground">{text.pilot}</span></div>
+        <p className="mt-8 break-words text-sm text-muted-foreground">{text.greeting}</p>
+        <h1 id="dashboard-title" className="mt-3 max-w-3xl text-balance text-4xl font-semibold leading-[1.08] tracking-[-0.04em] sm:text-5xl xl:text-6xl">{text.title}</h1>
+        <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground">{text.subtitle}</p>
+      </section>
+      <section className="mt-10 grid gap-6 border-y border-border py-8 md:grid-cols-[1fr_auto] md:items-center" aria-labelledby="next-step-title">
+        <div><p className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">{text.next}</p><h2 id="next-step-title" className="mt-3 text-2xl font-semibold tracking-tight">{text.profileTitle}</h2><p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">{text.profileSub}</p></div>
+        <Button asChild className="h-11 justify-self-start px-5"><Link href={localizedPath("/profil", locale)}>{text.profile}<ArrowRight aria-hidden="true" /></Link></Button>
+      </section>
+      <section className="mt-10" aria-labelledby="areas-title">
+        <h2 id="areas-title" className="text-xl font-semibold tracking-tight">{text.areas}</h2>
+        <div className="mt-5 grid gap-x-8 md:grid-cols-2">
+          {kintexModules.filter((item) => item.id !== "overview").map((item) => <Link key={item.id} href={localizedPath(item.href, locale)} className="group flex items-start justify-between gap-4 border-t border-border py-5">
+            <div><h3 className="font-medium group-hover:text-primary">{item[locale]}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{"planned" in item ? text.planned : details[item.id]}</p>{item.id === "assistant" && <span className="mt-2 inline-block border border-border px-2 py-0.5 text-xs text-muted-foreground">{text.demo}</span>}</div>
+            <ArrowUpRight className="mt-1 size-4 shrink-0 text-muted-foreground group-hover:text-primary" aria-hidden="true" />
+          </Link>)}
+        </div>
+      </section>
+    </main>
+  )
 }
