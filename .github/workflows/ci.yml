@@ -31,10 +31,10 @@ jobs:
         run: pnpm run lint
 
       - name: Typecheck
-        run: pnpm run typecheck --if-present
+        run: pnpm run --if-present typecheck
 
       - name: Tests
-        run: pnpm test --if-present
+        run: pnpm run --if-present test
 
       - name: Production build
         run: pnpm run build
