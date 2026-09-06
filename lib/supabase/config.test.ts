@@ -1,10 +1,11 @@
 import { afterEach, describe, expect, it } from "vitest"
 import { getSupabaseConfig } from "./config"
+import project from "../../supabase/project.json"
 
 const originalEnv = { ...process.env }
-const projectUrl = "https://numyqalfphyrnedlfzfs.supabase.co"
+const projectUrl = `https://${project.projectRef}.supabase.co`
 
-function legacyAnonKey(ref = "numyqalfphyrnedlfzfs") {
+function legacyAnonKey(ref = project.projectRef) {
   const payload = Buffer.from(JSON.stringify({ role: "anon", ref }), "utf8").toString("base64url")
   return `header.${payload}.signature`
 }
