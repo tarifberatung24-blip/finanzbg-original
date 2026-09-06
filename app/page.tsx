@@ -27,8 +27,8 @@ export default function HomePage() {
         <OpportunityCheck />
         <FinancialOsOverview />
 
-        <section className="border-y border-border bg-card">
-          <div className="mx-auto max-w-6xl px-4 py-16 md:py-20">
+        <section className="kintex-marketing-section border-y border-border bg-card">
+          <div className="mx-auto max-w-[1440px] px-5 py-16 lg:px-8 md:py-20">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl">
                 {t.home.servicesTitle}
@@ -41,7 +41,7 @@ export default function HomePage() {
                 <Link
                   key={href}
                   href={href}
-                  className="group rounded-2xl border border-border bg-background p-6 transition-all hover:-translate-y-0.5 hover:shadow-md"
+                  className="kintex-marketing-item group p-6"
                 >
                   <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
                     <Icon className="h-5 w-5" />
@@ -58,7 +58,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-6xl px-4 py-16 md:py-20">
+        <section className="mx-auto max-w-[1440px] px-5 py-16 lg:px-8 md:py-20">
           <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:items-start">
             <div>
               <span className="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-medium text-success">
@@ -75,7 +75,7 @@ export default function HomePage() {
                 [t.home.step2Title, t.home.step2Desc],
                 [t.home.step3Title, t.home.step3Desc],
               ].map(([title, description], index) => (
-                <li key={title} className="flex gap-4 rounded-2xl border border-border bg-card p-5">
+                <li key={title} className="kintex-marketing-item flex gap-4 p-5">
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
                     {index + 1}
                   </span>
@@ -90,12 +90,12 @@ export default function HomePage() {
         </section>
 
         <section className="border-t border-border bg-accent text-accent-foreground">
-          <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-14 md:flex-row md:items-center md:justify-between">
+          <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-5 py-14 lg:px-8 md:flex-row md:items-center md:justify-between">
             <div className="max-w-2xl">
               <h2 className="text-2xl font-bold md:text-3xl">{t.home.finalCtaTitle}</h2>
               <p className="mt-2 text-accent-foreground/75">{t.home.finalCtaDesc}</p>
             </div>
-            <Button asChild size="lg" variant="secondary" className="shrink-0">
+            <Button asChild size="lg" variant="default" className="shrink-0">
               <Link href="/auth/sign-up">
                 {t.nav.register}
                 <CheckCircle2 className="ml-1 h-4 w-4" />

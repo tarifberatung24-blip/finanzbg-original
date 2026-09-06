@@ -45,8 +45,8 @@ export function SiteHeader() {
 
   return (
     <>
-    <header className="sticky top-0 z-40 border-b border-black/15 bg-white">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-5 lg:px-8">
+    <header className="sticky top-0 z-40 border-b border-border bg-white/95 backdrop-blur">
+      <div className="mx-auto flex h-[72px] max-w-[1440px] items-center justify-between gap-4 px-5 lg:px-8">
         <Link href="/" aria-label="KintexBG — BY VZG" className="shrink-0">
           <Logo />
         </Link>
@@ -56,7 +56,7 @@ export function SiteHeader() {
             <Link
               key={l.href}
               href={localizedHref(l.href)}
-              className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="rounded-md px-3 py-2 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             >
               {l.label}
             </Link>
@@ -67,7 +67,7 @@ export function SiteHeader() {
           <LanguageSwitcher className="hidden sm:inline-flex" />
           {authReady && authenticated ? (
             <>
-              <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex"><Link href="/protected">{labels.profile}</Link></Button>
+                <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex"><Link href="/protected">{labels.profile}</Link></Button>
               <Button variant="outline" size="sm" className="hidden md:inline-flex" onClick={logout}>{labels.logout}</Button>
             </>
           ) : authReady ? (

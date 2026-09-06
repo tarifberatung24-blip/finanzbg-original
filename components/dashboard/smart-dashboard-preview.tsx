@@ -14,6 +14,7 @@ import {
   Eye,
   FileText,
   Filter,
+  LayoutDashboard,
   Plus,
   Search,
   Send,
@@ -75,13 +76,14 @@ type AuditEvent = {
 }
 
 type Props = {
+  mode?: "live" | "preview"
   firstName?: string | null
-  profile: Profile
-  contracts: Contract[]
-  documents: Document[]
-  reviewCount: number
-  reminders: Reminder[]
-  auditEvents: AuditEvent[]
+  profile?: Profile
+  contracts?: Contract[]
+  documents?: Document[]
+  reviewCount?: number
+  reminders?: Reminder[]
+  auditEvents?: AuditEvent[]
 }
 
 type GroupId = "tariffs" | "credits" | "insurance" | "subscriptions" | "other"
@@ -120,20 +122,83 @@ function statusLabel(status: string | null) {
 
 function Kpi({ icon: Icon, label, value, note }: { icon: typeof WalletCards; label: string; value: string; note: string }) {
   return (
-    <article className="rounded-2xl border border-border bg-card p-5 shadow-sm shadow-slate-200/40">
+    <article className="rounded-lg border border-border bg-card p-4">
       <div className="flex items-center gap-3">
         <span className="grid size-10 place-items-center rounded-xl bg-primary/10 text-primary">
           <Icon className="size-5" aria-hidden="true" />
         </span>
         <p className="text-sm font-medium text-muted-foreground">{label}</p>
       </div>
-      <p className="mt-4 text-2xl font-bold tracking-tight text-foreground">{value}</p>
+      <p className="mt-4 text-2xl font-semibold tracking-tight text-foreground">{value}</p>
       <p className="mt-1 text-xs text-muted-foreground">{note}</p>
     </article>
   )
 }
 
-export function SmartDashboardPreview({ firstName, profile, contracts, documents, reviewCount, reminders, auditEvents }: Props) {
+function PreviewSurface() {
+  const previewKpis = [
+    { icon: WalletCards, label: "Verträge", note: "Keine Kontodaten geladen" },
+    { icon: FileText, label: "Dokumente", note: "Bereit für deinen Workspace" },
+    { icon: CalendarDays, label: "Nächster Termin", note: "Wird aus deinen Daten erstellt" },
+    { icon: Bell, label: "Für Prüfung", note: "Keine Annahmen im Preview" },
+  ]
+
+  return (
+    <div className="kintex-preview-frame" aria-label="KintexBG Produktvorschau ohne Kontodaten">
+      <div className="flex items-center justify-between border-b border-border bg-[#fbfbf9] px-4 py-3 sm:px-5">
+        <div className="flex items-center gap-2.5">
+          <span className="grid size-7 place-items-center rounded-md bg-primary text-xs font-bold text-primary-foreground">K</span>
+          <span className="text-sm font-semibold tracking-tight text-foreground">KintexBG</span>
+        </div>
+        <span className="border border-border bg-white px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">Preview</span>
+      </div>
+      <div className="grid min-h-[360px] grid-cols-[56px_1fr] sm:grid-cols-[76px_1fr]">
+        <aside className="border-r border-border bg-[#f5f5f2] p-3">
+          <div className="space-y-2.5">
+            {[LayoutDashboard, WalletCards, FileText, Bot].map((Icon, index) => (
+              <span key={index} className={`grid size-8 place-items-center rounded-md ${index === 0 ? "bg-primary text-primary-foreground" : "bg-white text-muted-foreground"}`}>
+                <Icon className="size-4" aria-hidden="true" />
+              </span>
+            ))}
+          </div>
+        </aside>
+        <div className="p-4 sm:p-5">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">Personal workspace</p>
+              <h3 className="mt-1 text-xl font-semibold tracking-tight text-foreground sm:text-2xl">Finanzübersicht</h3>
+            </div>
+            <span className="hidden border border-border px-2 py-1 text-[10px] text-muted-foreground sm:inline-flex">Illustrative view</span>
+          </div>
+          <div className="mt-5 grid gap-2 sm:grid-cols-2">
+            {previewKpis.map(({ icon, label, note }) => <Kpi key={label} icon={icon} label={label} value="—" note={note} />)}
+          </div>
+          <div className="mt-3 border border-border bg-[#fbfbf9] p-4">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-sm font-semibold text-foreground">Deine Daten, deine Entscheidung</p>
+                <p className="mt-1 text-xs leading-5 text-muted-foreground">Der echte Workspace zeigt nur bestätigte Inhalte aus deinem Profil.</p>
+              </div>
+              <span className="hidden size-8 place-items-center rounded-md bg-[#f9e9e9] text-primary sm:grid"><Bot className="size-4" aria-hidden="true" /></span>
+            </div>
+            <div className="mt-4 space-y-2" aria-hidden="true">
+              <span className="kintex-preview-line w-11/12" />
+              <span className="kintex-preview-line w-8/12" />
+              <span className="kintex-preview-line w-5/12" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function SmartDashboardPreview(props: Props) {
+  if (props.mode === "preview") return <PreviewSurface />
+  return <LiveSmartDashboardPreview {...props} />
+}
+
+function LiveSmartDashboardPreview({ firstName, profile, contracts = [], documents = [], reviewCount = 0, reminders = [], auditEvents = [] }: Props) {
   const [query, setQuery] = useState("")
   const [collapsed, setCollapsed] = useState<Set<GroupId>>(new Set())
   const [onlyNeedsAttention, setOnlyNeedsAttention] = useState(false)
@@ -160,8 +225,8 @@ export function SmartDashboardPreview({ firstName, profile, contracts, documents
 
   const stats: SmartDashboardStats = {
     profileCompleteness: profile?.completeness ?? 0,
-    contracts: contracts.length,
-    documents: documents.length,
+    contracts: contracts?.length ?? 0,
+    documents: documents?.length ?? 0,
   }
   const problems = getSmartDashboardProblems(stats)
   const nextAction = getSmartDashboardNextAction(stats, "bg")
@@ -201,13 +266,13 @@ export function SmartDashboardPreview({ firstName, profile, contracts, documents
   }
 
   return (
-    <main className="min-h-[calc(100dvh-5rem)] bg-slate-50/70 px-4 py-6 text-foreground sm:px-6 lg:px-8">
+    <main className="min-h-[calc(100dvh-5rem)] bg-background px-4 py-6 text-foreground sm:px-6 lg:px-8">
       <div className="mx-auto max-w-[1440px]">
         <header className="flex flex-col justify-between gap-5 xl:flex-row xl:items-center">
           <div>
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-3xl font-bold tracking-tight">Финансов преглед</h1>
-              <span className="rounded-full border border-primary/20 bg-primary/5 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-primary">Реални данни</span>
+              <h1 className="text-3xl font-semibold tracking-tight">Финансов преглед</h1>
+              <span className="border border-primary/20 bg-primary/5 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-primary">Реални данни</span>
             </div>
             <p className="mt-2 text-sm text-muted-foreground">
               {firstName ? `${firstName}, ` : ""}всички потвърдени плащания и задачи на едно място.
@@ -216,12 +281,12 @@ export function SmartDashboardPreview({ firstName, profile, contracts, documents
           <div className="flex flex-col gap-3 sm:flex-row">
             <div className="relative sm:w-80">
               <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-              <Input value={query} onChange={(event) => setQuery(event.target.value)} className="h-11 rounded-xl bg-card pl-10" placeholder="Търсене в договорите..." />
+              <Input value={query} onChange={(event) => setQuery(event.target.value)} className="h-11 rounded-md bg-card pl-10" placeholder="Търсене в договорите…" />
             </div>
-            <Button asChild className="h-11 rounded-xl px-5">
+            <Button asChild className="h-11 rounded-md px-5">
               <Link href="/vertraege"><Plus className="size-4" aria-hidden="true" />Добави плащане</Link>
             </Button>
-            <Button type="button" variant="outline" className="h-11 rounded-xl px-5" onClick={() => setAssistantOpen(true)}>
+            <Button type="button" variant="outline" className="h-11 rounded-md px-5" onClick={() => setAssistantOpen(true)}>
               <Bot className="size-4" aria-hidden="true" />AI Assistant
             </Button>
           </div>
@@ -235,7 +300,7 @@ export function SmartDashboardPreview({ firstName, profile, contracts, documents
         </section>
 
         <div className="mt-6 grid gap-6 2xl:grid-cols-[minmax(0,1fr)_340px]">
-          <section className="min-w-0 overflow-hidden rounded-2xl border border-border bg-card shadow-sm shadow-slate-200/40" aria-labelledby="payments-title">
+          <section className="kintex-panel min-w-0 overflow-hidden" aria-labelledby="payments-title">
             <div className="flex flex-col justify-between gap-4 border-b border-border px-5 py-4 sm:flex-row sm:items-center">
               <div>
                 <h2 id="payments-title" className="text-lg font-semibold">Месечни плащания</h2>
@@ -334,14 +399,14 @@ export function SmartDashboardPreview({ firstName, profile, contracts, documents
           </section>
 
           <aside className="space-y-4">
-            <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm shadow-slate-200/40" aria-labelledby="assistant-title">
+            <section className="kintex-panel overflow-hidden" aria-labelledby="assistant-title">
               <div className="flex items-center justify-between border-b border-border px-5 py-4">
                 <div className="flex items-center gap-3"><span className="grid size-9 place-items-center rounded-xl bg-primary/10 text-primary"><Bot className="size-5" /></span><div><h2 id="assistant-title" className="font-semibold">AI Home Office</h2><p className="text-xs text-muted-foreground">Assistant</p></div></div>
                 <span className="size-2 rounded-full bg-emerald-500" aria-label="Активен" />
               </div>
               <div className="space-y-3 p-4">
                 <Link href={nextAction.href} className="block rounded-xl border border-border p-4 transition-colors hover:border-primary/40 hover:bg-primary/[0.03]"><div className="flex items-start gap-3"><CircleAlert className="mt-0.5 size-5 shrink-0 text-primary" /><div><p className="font-semibold">Следваща стъпка</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{nextAction.label}</p><span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-primary">Отвори <ArrowRight className="size-3" /></span></div></div></Link>
-                <Link href="/documents" className="block rounded-xl border border-border p-4 transition-colors hover:border-primary/40 hover:bg-primary/[0.03]"><div className="flex items-start gap-3"><FileText className="mt-0.5 size-5 shrink-0 text-primary" /><div><p className="font-semibold">Документи за преглед</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{reviewCount > 0 ? `${reviewCount} документа чакат потвърждение.` : "Няма документи, чакащи потвърждение."}</p></div></div></Link>
+                <Link href="/documents" className="block rounded-lg border border-border p-4 transition-colors hover:border-primary/40 hover:bg-primary/[0.03]"><div className="flex items-start gap-3"><FileText className="mt-0.5 size-5 shrink-0 text-primary" /><div><p className="font-semibold">Документи за преглед</p><p className="mt-1 text-xs leading-5 text-muted-foreground">{reviewCount > 0 ? `${reviewCount} документа чакат потвърждение.` : "Няма документи, чакащи потвърждение."}</p></div></div></Link>
                 {problems.length > 0 && <div className="rounded-xl bg-amber-50 p-4 text-sm text-amber-900">{problems.length} сигнала изискват внимание. AI не предприема действие без потвърждение.</div>}
               </div>
               <div className="border-t border-border p-4">
@@ -350,7 +415,7 @@ export function SmartDashboardPreview({ firstName, profile, contracts, documents
               </div>
             </section>
 
-            <section className="rounded-2xl border border-border bg-card p-5 shadow-sm shadow-slate-200/40">
+            <section className="kintex-panel p-5">
               <h2 className="font-semibold">Последна активност</h2>
               <div className="mt-4 space-y-3">
                 {auditEvents.length === 0 ? <p className="text-sm text-muted-foreground">Няма записани събития.</p> : auditEvents.slice(0, 4).map((event) => <div key={event.id} className="border-b border-border pb-3 last:border-0 last:pb-0"><p className="text-sm font-medium">{event.event_summary ?? event.event_type}</p><p className="mt-1 text-xs text-muted-foreground">{formatDate(event.created_at)}</p></div>)}
