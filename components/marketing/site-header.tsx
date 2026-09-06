@@ -51,12 +51,12 @@ export function SiteHeader() {
           <Logo />
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex">
-          {links.map((l) => (
+        <nav className="hidden items-center gap-2 md:flex">
+          {links.slice(0, 4).map((l) => (
             <Link
               key={l.href}
               href={localizedHref(l.href)}
-              className="rounded-md px-3 py-2 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              className="rounded-full px-3 py-2 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             >
               {l.label}
             </Link>
@@ -73,7 +73,7 @@ export function SiteHeader() {
           ) : authReady ? (
             <>
               <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex"><Link href="/auth/login">{t.nav.login}</Link></Button>
-              <Button asChild size="sm" className="hidden md:inline-flex"><Link href="/auth/sign-up">{t.nav.register}</Link></Button>
+              <Button asChild size="sm" className="hidden rounded-full bg-foreground px-5 text-background hover:bg-foreground/90 md:inline-flex"><Link href="/auth/sign-up">{t.nav.register}</Link></Button>
             </>
           ) : null}
 
