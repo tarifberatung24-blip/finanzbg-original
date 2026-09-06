@@ -23,6 +23,8 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { AiHomeOfficeChat } from "@/components/dashboard/ai-home-office-chat"
+import { getKintexRadarSignals } from "@/lib/kintex-radar"
 import {
   getSmartDashboardNextAction,
   getSmartDashboardProblems,
@@ -166,6 +168,7 @@ export function SmartDashboardPreview({ firstName, profile, contracts, documents
   const monthlyTotal = contracts.reduce((sum, contract) => sum + (Number(contract.monthly_amount) || 0), 0)
   const missingCosts = contracts.filter((contract) => contract.monthly_amount == null).length
   const nextReminder = reminders.find((reminder) => reminder.due_at) ?? null
+  const radarSignals = getKintexRadarSignals(contracts)
 
   const filteredContracts = useMemo(() => {
     const normalized = query.trim().toLowerCase()
@@ -353,6 +356,11 @@ export function SmartDashboardPreview({ firstName, profile, contracts, documents
                 {auditEvents.length === 0 ? <p className="text-sm text-muted-foreground">Няма записани събития.</p> : auditEvents.slice(0, 4).map((event) => <div key={event.id} className="border-b border-border pb-3 last:border-0 last:pb-0"><p className="text-sm font-medium">{event.event_summary ?? event.event_type}</p><p className="mt-1 text-xs text-muted-foreground">{formatDate(event.created_at)}</p></div>)}
               </div>
             </section>
+            <section className="rounded-2xl border border-border bg-card p-5 shadow-sm shadow-slate-200/40" aria-labelledby="radar-title">
+              <div className="flex items-center justify-between gap-3"><div><p className="text-[11px] font-semibold uppercase tracking-wide text-primary">Kintex Radar</p><h2 id="radar-title" className="mt-1 font-semibold">Сигнали от твоите данни</h2></div><span className="text-xs text-muted-foreground">{radarSignals.length}</span></div>
+              <div className="mt-4 space-y-3">{radarSignals.length === 0 ? <p className="text-sm text-muted-foreground">Няма открити сигнали.</p> : radarSignals.slice(0, 3).map((signal) => <div key={signal.id} className="border-l-2 border-primary px-3 py-1"><p className="text-sm font-medium">{signal.title}</p><p className="mt-1 text-xs leading-5 text-muted-foreground">{signal.detail}</p></div>)}</div>
+              <p className="mt-4 text-[11px] text-muted-foreground">Radar показва само записани данни. Не изчислява измислени спестявания.</p>
+            </section>
           </aside>
         </div>
       </div>
@@ -390,6 +398,11 @@ export function SmartDashboardPreview({ firstName, profile, contracts, documents
                 <p>• Подготовка на следваща стъпка без автоматично изпращане</p>
               </div>
             </section>
+            <section>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-primary">Kintex Radar</p>
+              <div className="space-y-2">{radarSignals.length === 0 ? <p className="text-sm text-muted-foreground">Няма сигнали за проверка.</p> : radarSignals.slice(0, 4).map((signal) => <div key={signal.id} className="border-l-2 border-primary px-3 py-2"><p className="text-sm font-medium">{signal.title}</p><p className="mt-1 text-xs text-muted-foreground">{signal.detail}</p></div>)}</div>
+            </section>
+            <AiHomeOfficeChat />
           </div>
           <footer className="border-t border-border p-5">
             <Button asChild variant="outline" className="h-12 w-full justify-between rounded-xl"><Link href="/protected/home-office"><span>Отвори пълния AI Assistant</span><Send className="size-4" /></Link></Button>
