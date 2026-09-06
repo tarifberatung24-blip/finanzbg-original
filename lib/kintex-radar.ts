@@ -21,5 +21,5 @@ export function getKintexRadarSignals(contracts: RadarContract[], now = new Date
       if (end >= now && end <= soon) signals.push({ id: `${contract.id}-end`, title: `${contract.title}: срокът наближава`, detail: `Крайна дата: ${end.toLocaleDateString("bg-BG")}.`, tone: "info" })
     }
   }
-  return signals.slice(0, 6)
+  return Array.from(new Map(signals.map((signal) => [signal.id, signal])).values()).slice(0, 6)
 }
