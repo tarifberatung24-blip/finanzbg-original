@@ -6,12 +6,10 @@ import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { Menu, X } from "lucide-react"
 import { Logo } from "@/components/brand/logo"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { useLanguage } from "@/lib/i18n/language-context"
 import { cn } from "@/lib/utils"
-import { LegalBanner } from "@/components/marketing/legal-banner"
 import { openPwaInstallPrompt } from "@/components/pwa-install-prompt"
 
 export function SiteHeader() {
@@ -29,8 +27,8 @@ export function SiteHeader() {
   }, [])
 
   const labels = locale === "de"
-    ? { home: "Startseite", services: "Leistungen", taxes: "Steuern", benefits: "Staatliche Hilfen", tariffs: "Tarife", documents: "Dokumente", about: "Über FinanzberaterBG", profile: "Persönlicher Bereich", logout: "Abmelden", install: "App installieren", menu: "Menü" }
-    : { home: "Начало", services: "Услуги", taxes: "Данъци", benefits: "Държавни помощи", tariffs: "Тарифи", documents: "Документи", about: "За FinanzberaterBG", profile: "Личен профил", logout: "Изход", install: "Инсталирай приложението", menu: "Меню" }
+    ? { home: "Startseite", services: "Leistungen", taxes: "Steuern", benefits: "Staatliche Hilfen", tariffs: "Tarife", documents: "Dokumente", about: "Über KintexBG", profile: "Persönlicher Bereich", logout: "Abmelden", install: "App installieren", menu: "Menü" }
+    : { home: "Начало", services: "Услуги", taxes: "Данъци", benefits: "Държавни помощи", tariffs: "Тарифи", documents: "Документи", about: "За KintexBG", profile: "Личен профил", logout: "Изход", install: "Инсталирай приложението", menu: "Меню" }
   const links = [
     { href: "/", label: labels.home },
     { href: "/uslugi", label: labels.services },
@@ -47,9 +45,9 @@ export function SiteHeader() {
 
   return (
     <>
-    <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
-        <Link href="/" aria-label="FinanzberaterBG" className="shrink-0">
+    <header className="sticky top-0 z-40 border-b border-black/15 bg-white">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-5 lg:px-8">
+        <Link href="/" aria-label="KintexBG — BY VZG" className="shrink-0">
           <Logo />
         </Link>
 
@@ -66,7 +64,6 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <ThemeToggle />
           <LanguageSwitcher className="hidden sm:inline-flex" />
           {authReady && authenticated ? (
             <>
@@ -107,7 +104,6 @@ export function SiteHeader() {
           <div className="mt-2 flex flex-col gap-3 border-t border-border pt-3 sm:flex-row sm:items-center sm:justify-between">
             <Button type="button" variant="ghost" size="sm" className="justify-start" onClick={openPwaInstallPrompt}>{labels.install}</Button>
             <div className="flex items-center gap-2">
-              <ThemeToggle />
               <LanguageSwitcher />
             </div>
             <div className="flex gap-2">
@@ -127,7 +123,6 @@ export function SiteHeader() {
         </nav>
       </div>
     </header>
-    <LegalBanner />
     </>
   )
 }

@@ -17,8 +17,7 @@ export function FinancialOsOverview() {
     <section className="border-y border-border bg-card" aria-labelledby="financial-os-title">
       <div className="mx-auto max-w-6xl px-4 py-16 md:py-20">
         <div className="max-w-2xl">
-          <p className="text-sm font-semibold text-primary">{t.home.promise}</p>
-          <h2 id="financial-os-title" className="mt-3 text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl">Твоят финансов и административен помощник в Германия.</h2>
+          <h2 id="financial-os-title" className="text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl">Твоят финансов и административен помощник в Германия.</h2>
           <p className="mt-4 max-w-xl text-pretty leading-7 text-muted-foreground">Една ясна картина на парите за спестяване, парите за получаване, сроковете и документите, които са важни за теб.</p>
         </div>
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

@@ -1,6 +1,6 @@
 import { Analytics } from "@vercel/analytics/next"
 import type { Metadata, Viewport } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Geist, Geist_Mono, Inter } from "next/font/google"
 import { cookies } from "next/headers"
 import { Suspense } from "react"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -14,19 +14,20 @@ import "./globals.css"
 
 const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" })
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" })
+const inter = Inter({ subsets: ["latin", "cyrillic"], variable: "--font-inter" })
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://finanzbg.de"),
   title: {
-    default: "FinanzberaterBG — Финансовият ти помощник в Германия",
-    template: "%s · FinanzberaterBG",
+    default: "KintexBG — BY VZG",
+    template: "%s · KintexBG",
   },
   description:
-    "FinanzberaterBG проверява данъци, държавни помощи, договори и месечни разходи за живота ти в Германия. Не оставяй пари на масата.",
+    "KintexBG организира договори, документи, срокове и финансови задачи за живота ти в Германия.",
   generator: "v0.app",
-  applicationName: "FinanzberaterBG",
+  applicationName: "KintexBG",
   keywords: [
-    "FinanzberaterBG",
+    "KintexBG",
     "данъци Германия",
     "Steuererklärung",
     "Kindergeld",
@@ -38,9 +39,9 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   openGraph: {
     type: "website",
-    siteName: "FinanzberaterBG",
-    title: "FinanzberaterBG — Финансовият ти помощник в Германия",
-    description: "Провери данъци, държавни помощи, договори и разходи — на едно място.",
+    siteName: "KintexBG",
+    title: "KintexBG — BY VZG",
+    description: "Договори, документи, срокове и финансови задачи за живота ти в Германия.",
   },
   icons: {
     icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
@@ -48,7 +49,7 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     capable: true,
-    title: "FinanzberaterBG",
+    title: "KintexBG",
     statusBarStyle: "black-translucent",
   },
 }
@@ -60,8 +61,8 @@ export const viewport: Viewport = {
   userScalable: false,
   colorScheme: "light dark",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0d1526" },
+    { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
+    { media: "(prefers-color-scheme: dark)", color: "#020617" },
   ],
 }
 
@@ -75,7 +76,7 @@ export default async function RootLayout({
   const initialLocale: Locale = isLocale(stored) ? stored : defaultLocale
 
   return (
-    <html lang={initialLocale} suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} bg-background`}>
+    <html lang={initialLocale} suppressHydrationWarning className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} bg-background`}>
       <body className="font-sans antialiased">
         <ThemeProvider>
           <LanguageProvider initialLocale={initialLocale}>

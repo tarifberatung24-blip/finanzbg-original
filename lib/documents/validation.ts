@@ -51,6 +51,6 @@ export async function validateDocument(file: File) {
   return { name: normalizeDocumentName(file.name), type, size: file.size }
 }
 
-export function isFrankfurtSupabase(url = process.env.NEXT_PUBLIC_SUPABASE_URL) {
-  return url?.replace(/\/$/, "") === "https://numyqalfphyrnedlfzfs.supabase.co"
+export function isCanonicalSupabase(url = process.env.NEXT_PUBLIC_SUPABASE_URL) {
+  return url?.replace(/\/$/, "") === "https://sophzmteuemggqlstebw.supabase.co"
 }

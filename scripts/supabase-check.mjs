@@ -55,13 +55,20 @@ if (process.argv.includes("--config-only")) {
   process.exit(0)
 }
 
+const settingsResponse = await fetch(`${url}/auth/v1/settings`, {
+  headers: { apikey: key, Authorization: `Bearer ${key}` },
+})
+if (!settingsResponse.ok) fail(`/auth/v1/settings returned HTTP ${settingsResponse.status}.`)
+const settings = await settingsResponse.json()
+if (settings?.external?.google !== true) fail("Google sign-in is not enabled.")
+
 const checks = [
-  "/auth/v1/settings",
   "/rest/v1/profiles?select=id,employment_status,household_size,monthly_income,monthly_fixed_costs,completeness&limit=0",
   "/rest/v1/households?select=id,owner_id,name,country&limit=0",
   "/rest/v1/contracts?select=id,household_id,title,category,provider_name,monthly_amount,status&limit=0",
   "/rest/v1/documents?select=id,household_id,original_filename,storage_path,mime_type,size_bytes,processing_status&limit=0",
-  "/rest/v1/tasks?select=id,household_id,title,status,due_at,reminder_at&limit=0",
+  "/rest/v1/reminders?select=id,user_id,title,status,due_at&limit=0",
+  "/rest/v1/deadlines?select=id,user_id,title,status,due_at&limit=0",
   "/rest/v1/audit_events?select=id,household_id,actor_user_id,entity_type,entity_id,event_type,event_summary,metadata&limit=0",
 ]
 

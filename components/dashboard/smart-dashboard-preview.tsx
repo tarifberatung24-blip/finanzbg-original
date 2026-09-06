@@ -1,73 +1,402 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowRight, BarChart3, Bell, Bot, CalendarClock, CheckCircle2, FileText, HelpCircle, LayoutDashboard, Menu, Search, Settings, ShieldCheck, WalletCards } from "lucide-react"
+import { Fragment, useEffect, useMemo, useRef, useState } from "react"
+import {
+  ArrowRight,
+  Bell,
+  Bot,
+  CalendarDays,
+  ChevronDown,
+  ChevronRight,
+  CircleAlert,
+  CircleCheck,
+  Eye,
+  FileText,
+  Filter,
+  Plus,
+  Search,
+  Send,
+  SlidersHorizontal,
+  WalletCards,
+  X,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { getSmartDashboardNextAction, getSmartDashboardProblems, smartDashboardAgents, type SmartDashboardStats } from "@/lib/kintex-smart-dashboard"
+import {
+  getSmartDashboardNextAction,
+  getSmartDashboardProblems,
+  type SmartDashboardStats,
+} from "@/lib/kintex-smart-dashboard"
 
-type Profile = { completeness: number | null; employment_status: string | null; household_size: number | null; monthly_income: number | null; monthly_fixed_costs: number | null } | null
-type Contract = { id: string; title: string; category: string; provider_name: string | null; monthly_amount: number | null; status: string | null; created_at: string | null }
-type Document = { id: string; original_filename: string; processing_status: string | null; created_at: string | null; size_bytes: number | null }
-type Reminder = { id: string; title: string; due_at: string | null; status: string | null; created_at: string | null }
-type AuditEvent = { id: string; event_type: string; event_summary: string | null; entity_type: string | null; created_at: string | null }
-type Props = { firstName?: string | null; profile: Profile; contracts: Contract[]; documents: Document[]; reviewCount: number; reminders: Reminder[]; auditEvents: AuditEvent[] }
+type Profile = {
+  completeness: number | null
+  employment_status: string | null
+  household_size: number | null
+  monthly_income: number | null
+  monthly_fixed_costs: number | null
+} | null
 
-const nav = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/vertraege", label: "Contracts", icon: WalletCards },
-  { href: "/documents", label: "Documents", icon: FileText },
-  { href: "/protected/home-office", label: "AI Assistant", icon: Bot },
-  { href: "/protected?module=deadlines", label: "Deadlines", icon: CalendarClock },
-  { href: "/protected?module=opportunities", label: "Radar", icon: BarChart3 },
-]
-
-function formatDate(value: string | null) { return value ? new Intl.DateTimeFormat("bg-BG", { dateStyle: "medium" }).format(new Date(value)) : "Няма дата" }
-function money(value: number | null) { return value == null ? "Няма данни" : `${Number(value).toFixed(2)} €` }
-function Pill({ children, tone = "neutral" }: { children: string; tone?: "neutral" | "active" | "warn" }) { return <span className={`rounded-full px-3 py-1 text-[11px] font-semibold ${tone === "active" ? "bg-[#ffb81c] text-black" : tone === "warn" ? "bg-black text-white" : "bg-[#f3f4f6] text-[#6b7280]"}`}>{children}</span> }
-function Kpi({ label, value, note, icon: Icon }: { label: string; value: string; note: string; icon: typeof LayoutDashboard }) { return <div className="rounded-[28px] border border-[#e6e8ee] bg-white p-5 shadow-[0_14px_30px_rgba(20,28,45,.06)]"><div className="flex items-center justify-between"><p className="text-sm font-semibold text-[#6b7280]">{label}</p><span className="grid size-10 place-items-center rounded-2xl bg-[#f3f4f6]"><Icon className="size-5 text-black" /></span></div><p className="mt-4 text-3xl font-bold tracking-tight text-black">{value}</p><p className="mt-1 text-xs text-[#6b7280]">{note}</p></div> }
-
-export function SmartDashboardPreview({ firstName, profile, contracts, documents, reviewCount, reminders, auditEvents }: Props) {
-  const stats: SmartDashboardStats = { profileCompleteness: profile?.completeness ?? 0, contracts: contracts.length, documents: documents.length }
-  const nextAction = getSmartDashboardNextAction(stats, "bg")
-  const problems = getSmartDashboardProblems(stats)
-  const monthlyTotal = contracts.reduce((sum, contract) => sum + (Number(contract.monthly_amount) || 0), 0)
-  const missingContractCosts = contracts.filter((contract) => contract.monthly_amount == null).length
-  const upcomingReminders = reminders.filter((item) => item.due_at).length
-
-  return <main className="min-h-screen bg-[#f5f6fa] text-[#111827]">
-    <div className="grid min-h-screen lg:grid-cols-[280px_1fr]">
-      <aside className="hidden border-r border-[#e2e5ec] bg-white p-6 lg:block">
-        <div className="mb-10"><p className="text-2xl font-black tracking-[-.04em] text-black"><span className="bg-[#ffde05] px-1">KintexBG</span><span className="text-[#ffb81c]">.</span></p><p className="mt-2 font-mono text-[10px] font-semibold uppercase tracking-[.2em] text-[#8a5a00]">BY VZG CONSULT</p></div>
-        <p className="mb-3 text-xs font-bold uppercase tracking-[.16em] text-[#9ca3af]">Menu</p>
-        <nav className="space-y-2">{nav.map((item) => <Link key={item.href} href={item.href} className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-[#6b7280] hover:bg-[#f3f4f6] hover:text-black"><item.icon className="size-5" />{item.label}</Link>)}</nav>
-        <div className="mt-10 border-t border-[#e2e5ec] pt-5"><Link href="/profil" className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-[#6b7280] hover:bg-[#f3f4f6]"><Settings className="size-5" />Profile</Link><Link href="/protected/security" className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-[#6b7280] hover:bg-[#f3f4f6]"><HelpCircle className="size-5" />Security</Link></div>
-      </aside>
-
-      <section className="min-w-0 p-4 sm:p-6 xl:p-8">
-        <header className="mb-6 flex flex-wrap items-center justify-between gap-4"><div className="flex items-center gap-3 lg:hidden"><Button variant="outline" size="icon"><Menu className="size-5" /></Button><strong>KintexBG</strong></div><div className="relative max-w-xl flex-1"><Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[#9ca3af]" /><Input className="h-12 rounded-2xl border-[#e2e5ec] bg-white pl-11" placeholder="Search contracts, documents, deadlines" /></div><div className="flex items-center gap-3"><Button variant="outline" className="h-12 rounded-2xl bg-white"><Bell className="size-4" />{reviewCount}</Button><Button className="h-12 rounded-2xl bg-black px-5 text-white hover:bg-[#ffb81c] hover:text-black">+ Add document</Button></div></header>
-
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
-          <div className="space-y-6">
-            <section className="rounded-[32px] bg-black p-7 text-white shadow-[0_18px_45px_rgba(20,28,45,.18)]"><div className="flex flex-wrap items-start justify-between gap-6"><div><p className="font-mono text-xs uppercase tracking-[.18em] text-[#ffb81c]">Smart Financial Home Office</p><h1 className="mt-5 max-w-3xl text-4xl font-black leading-[.95] tracking-[-.055em] sm:text-6xl">{firstName ? `${firstName}, ` : ""}контролирай всичко от един dashboard.</h1><p className="mt-5 max-w-2xl text-sm leading-6 text-white/70">Договори, документи, срокове и AI review от реални Supabase данни. Без измислени баланси, оферти или обещани спестявания.</p></div><div className="rounded-[24px] border border-white/15 bg-white/10 p-5"><p className="text-xs text-white/60">Next action</p><p className="mt-2 text-2xl font-bold">{nextAction.label}</p><Button asChild className="mt-5 rounded-2xl bg-[#ffb81c] text-black hover:bg-white"><Link href={nextAction.href}>Start<ArrowRight className="size-4" /></Link></Button></div></div></section>
-
-            <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"><Kpi label="Profile" value={`${stats.profileCompleteness}%`} note="Confirmed base data" icon={ShieldCheck} /><Kpi label="Contracts" value={String(contracts.length)} note="Household records" icon={WalletCards} /><Kpi label="Documents" value={String(documents.length)} note="Storage metadata" icon={FileText} /><Kpi label="Review" value={String(reviewCount)} note="Needs confirmation" icon={CheckCircle2} /></section>
-
-            <section className="grid gap-6 xl:grid-cols-[1.15fr_.85fr]"><div className="rounded-[28px] border border-[#e6e8ee] bg-white p-6 shadow-[0_14px_30px_rgba(20,28,45,.06)]"><div className="flex items-center justify-between"><div><h2 className="text-xl font-bold">Kintex Radar</h2><p className="text-sm text-[#6b7280]">Ranked operational signals</p></div><Pill tone={problems.length ? "warn" : "active"}>{problems.length ? `${problems.length} open` : "ready"}</Pill></div><div className="mt-6 space-y-3">{problems.length === 0 ? <p className="rounded-2xl bg-[#f3f4f6] p-4 text-sm text-[#6b7280]">Няма блокиращи сигнали. Готово за AI review.</p> : problems.map((problem) => <div key={problem.code} className="flex items-center justify-between rounded-2xl border border-[#e6e8ee] p-4"><div><p className="font-semibold">{problem.code}</p><p className="text-xs text-[#6b7280]">module: {problem.module}</p></div><Pill>{problem.severity}</Pill></div>)}</div></div><div className="rounded-[28px] border border-[#e6e8ee] bg-white p-6 shadow-[0_14px_30px_rgba(20,28,45,.06)]"><h2 className="text-xl font-bold">Financial state</h2><p className="mt-4 text-4xl font-black tracking-tight">{monthlyTotal ? money(monthlyTotal) : "Няма данни"}</p><p className="mt-2 text-sm text-[#6b7280]">Monthly costs from entered contracts only.</p><div className="mt-6 rounded-2xl bg-[#f3f4f6] p-4"><p className="text-sm font-semibold">Missing costs</p><p className="mt-1 text-2xl font-bold">{missingContractCosts}</p></div></div></section>
-
-            <section className="grid gap-6 xl:grid-cols-2"><div className="rounded-[28px] border border-[#e6e8ee] bg-white p-6 shadow-[0_14px_30px_rgba(20,28,45,.06)]"><h2 className="text-xl font-bold">Contracts</h2><div className="mt-5 space-y-3">{contracts.length === 0 ? <p className="text-sm text-[#6b7280]">Все още няма договори.</p> : contracts.slice(0,4).map((contract) => <div key={contract.id} className="flex items-center justify-between rounded-2xl bg-[#f3f4f6] p-4"><div><p className="font-semibold">{contract.title}</p><p className="text-xs text-[#6b7280]">{contract.provider_name ?? contract.category}</p></div><p className="font-bold">{money(contract.monthly_amount)}</p></div>)}</div></div><div className="rounded-[28px] border border-[#e6e8ee] bg-white p-6 shadow-[0_14px_30px_rgba(20,28,45,.06)]"><h2 className="text-xl font-bold">Documents</h2><div className="mt-5 space-y-3">{documents.length === 0 ? <p className="text-sm text-[#6b7280]">Все още няма документи.</p> : documents.slice(0,4).map((document) => <div key={document.id} className="flex items-center justify-between rounded-2xl bg-[#f3f4f6] p-4"><div className="min-w-0"><p className="truncate font-semibold">{document.original_filename}</p><p className="text-xs text-[#6b7280]">{formatDate(document.created_at)}</p></div><Pill>{document.processing_status ?? "uploaded"}</Pill></div>)}</div></div></section>
-          </div>
-
-          <aside className="space-y-6">
-            <section className="rounded-[32px] border border-[#e6e8ee] bg-white p-6 shadow-[0_14px_30px_rgba(20,28,45,.06)]"><div className="flex items-center gap-3"><span className="grid size-11 place-items-center rounded-2xl bg-[#ffb81c]"><Bot className="size-5 text-black" /></span><div><h2 className="text-xl font-bold">AI Home Office</h2><p className="text-xs text-[#6b7280]">inside dashboard</p></div></div><div className="mt-5 rounded-[24px] bg-black p-5 text-white"><p className="text-sm leading-6 text-white/75">Питай за документи, договори и следваща стъпка. Отговорите трябва да са grounded само в потвърдени household данни.</p><Button asChild className="mt-5 rounded-2xl bg-[#ffb81c] text-black hover:bg-white"><Link href="/protected/home-office">Open chat</Link></Button></div><div className="mt-5 grid gap-3">{smartDashboardAgents.slice(0,4).map((agent) => <div key={agent.id} className="rounded-2xl border border-[#e6e8ee] p-3"><p className="font-mono text-[10px] text-[#6b7280]">{agent.stage} / {agent.status}</p><p className="mt-1 text-sm font-bold">{agent.title}</p></div>)}</div></section>
-            <section className="rounded-[32px] border border-[#e6e8ee] bg-white p-6 shadow-[0_14px_30px_rgba(20,28,45,.06)]"><h2 className="text-xl font-bold">Reminders</h2><div className="mt-5 space-y-3">{reminders.length === 0 ? <p className="text-sm text-[#6b7280]">Няма записани срокове.</p> : reminders.map((reminder) => <div key={reminder.id} className="rounded-2xl bg-[#f3f4f6] p-4"><p className="font-semibold">{reminder.title}</p><p className="text-xs text-[#6b7280]">{formatDate(reminder.due_at)}</p></div>)}</div><p className="mt-5 text-xs text-[#6b7280]">Upcoming: {upcomingReminders}</p></section>
-            <section className="rounded-[32px] border border-[#e6e8ee] bg-white p-6 shadow-[0_14px_30px_rgba(20,28,45,.06)]"><h2 className="text-xl font-bold">Activity</h2><div className="mt-5 space-y-3">{auditEvents.length === 0 ? <p className="text-sm text-[#6b7280]">Няма audit събития.</p> : auditEvents.map((event) => <div key={event.id} className="border-b border-[#e6e8ee] pb-3"><p className="text-sm font-semibold">{event.event_summary ?? event.event_type}</p><p className="text-xs text-[#6b7280]">{event.entity_type ?? "system"} · {formatDate(event.created_at)}</p></div>)}</div></section>
-          </aside>
-        </div>
-      </section>
-    </div>
-
-    <div className="pointer-events-none fixed bottom-6 right-6 hidden md:block"><div className="relative"><div className="absolute -inset-3 rounded-full bg-[#5b8cff]/20 blur-xl" /><div className="relative grid size-24 place-items-center rounded-[32px] border-4 border-[#2857d9] bg-[#5b8cff] shadow-2xl"><div className="grid size-14 place-items-center rounded-2xl bg-[#111827] text-[#8ff6ff]"><Bot className="size-8" /></div></div><div className="absolute -right-2 bottom-1 size-7 rounded-full bg-[#ffb81c]" /></div></div>
-  </main>
+type Contract = {
+  id: string
+  title: string
+  category: string
+  provider_name: string | null
+  monthly_amount: number | null
+  status: string | null
+  created_at: string | null
+  end_date: string | null
 }
 
+type Document = {
+  id: string
+  original_filename: string
+  processing_status: string | null
+  created_at: string | null
+  size_bytes: number | null
+}
+
+type Reminder = {
+  id: string
+  title: string
+  due_at: string | null
+  status: string | null
+  created_at: string | null
+}
+
+type AuditEvent = {
+  id: string
+  event_type: string
+  event_summary: string | null
+  entity_type: string | null
+  created_at: string | null
+}
+
+type Props = {
+  firstName?: string | null
+  profile: Profile
+  contracts: Contract[]
+  documents: Document[]
+  reviewCount: number
+  reminders: Reminder[]
+  auditEvents: AuditEvent[]
+}
+
+type GroupId = "tariffs" | "credits" | "insurance" | "subscriptions" | "other"
+
+const groupMeta: Record<GroupId, { label: string; categories: string[] }> = {
+  tariffs: { label: "Тарифи", categories: ["electricity", "gas", "internet", "mobile", "strom"] },
+  credits: { label: "Кредити", categories: ["credit", "loan", "kredit"] },
+  insurance: { label: "Застраховки", categories: ["insurance", "versicherung"] },
+  subscriptions: { label: "Абонаменти", categories: ["subscription", "abo"] },
+  other: { label: "Други", categories: ["housing", "other"] },
+}
+
+const groupOrder: GroupId[] = ["tariffs", "credits", "insurance", "subscriptions", "other"]
+
+function contractGroup(category: string): GroupId {
+  const normalized = category.toLowerCase()
+  return groupOrder.find((id) => groupMeta[id].categories.includes(normalized)) ?? "other"
+}
+
+function formatMoney(value: number | null) {
+  if (value == null) return "Няма данни"
+  return new Intl.NumberFormat("bg-BG", { style: "currency", currency: "EUR" }).format(Number(value))
+}
+
+function formatDate(value: string | null) {
+  if (!value) return "Няма данни"
+  return new Intl.DateTimeFormat("bg-BG", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(value))
+}
+
+function statusLabel(status: string | null) {
+  if (status === "confirmed" || status === "active") return "Потвърден"
+  if (status === "needs_review") return "За преглед"
+  if (status === "draft") return "Чернова"
+  return status || "Неуточнен"
+}
+
+function Kpi({ icon: Icon, label, value, note }: { icon: typeof WalletCards; label: string; value: string; note: string }) {
+  return (
+    <article className="rounded-2xl border border-border bg-card p-5 shadow-sm shadow-slate-200/40">
+      <div className="flex items-center gap-3">
+        <span className="grid size-10 place-items-center rounded-xl bg-primary/10 text-primary">
+          <Icon className="size-5" aria-hidden="true" />
+        </span>
+        <p className="text-sm font-medium text-muted-foreground">{label}</p>
+      </div>
+      <p className="mt-4 text-2xl font-bold tracking-tight text-foreground">{value}</p>
+      <p className="mt-1 text-xs text-muted-foreground">{note}</p>
+    </article>
+  )
+}
+
+export function SmartDashboardPreview({ firstName, profile, contracts, documents, reviewCount, reminders, auditEvents }: Props) {
+  const [query, setQuery] = useState("")
+  const [collapsed, setCollapsed] = useState<Set<GroupId>>(new Set())
+  const [onlyNeedsAttention, setOnlyNeedsAttention] = useState(false)
+  const [sortByAmount, setSortByAmount] = useState(false)
+  const [assistantOpen, setAssistantOpen] = useState(false)
+  const assistantCloseButton = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!assistantOpen) return
+    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    assistantCloseButton.current?.focus()
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setAssistantOpen(false)
+    }
+    window.addEventListener("keydown", closeOnEscape)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener("keydown", closeOnEscape)
+      previous?.focus()
+    }
+  }, [assistantOpen])
+
+  const stats: SmartDashboardStats = {
+    profileCompleteness: profile?.completeness ?? 0,
+    contracts: contracts.length,
+    documents: documents.length,
+  }
+  const problems = getSmartDashboardProblems(stats)
+  const nextAction = getSmartDashboardNextAction(stats, "bg")
+  const monthlyTotal = contracts.reduce((sum, contract) => sum + (Number(contract.monthly_amount) || 0), 0)
+  const missingCosts = contracts.filter((contract) => contract.monthly_amount == null).length
+  const nextReminder = reminders.find((reminder) => reminder.due_at) ?? null
+
+  const filteredContracts = useMemo(() => {
+    const normalized = query.trim().toLowerCase()
+    const matchesQuery = normalized ? contracts.filter((contract) =>
+      [contract.title, contract.provider_name, contract.category, contract.status]
+        .filter(Boolean)
+        .some((value) => String(value).toLowerCase().includes(normalized)),
+    ) : contracts
+    const matchesAttention = onlyNeedsAttention
+      ? matchesQuery.filter((contract) => contract.monthly_amount == null || contract.status === "draft" || contract.status === "needs_review")
+      : matchesQuery
+    return sortByAmount
+      ? [...matchesAttention].sort((a, b) => (Number(b.monthly_amount) || 0) - (Number(a.monthly_amount) || 0))
+      : matchesAttention
+  }, [contracts, onlyNeedsAttention, query, sortByAmount])
+
+  const groups = useMemo(() => groupOrder.map((id) => ({
+    id,
+    ...groupMeta[id],
+    items: filteredContracts.filter((contract) => contractGroup(contract.category) === id),
+  })).filter((group) => group.items.length > 0), [filteredContracts])
+
+  function toggleGroup(id: GroupId) {
+    setCollapsed((current) => {
+      const next = new Set(current)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  return (
+    <main className="min-h-[calc(100dvh-5rem)] bg-slate-50/70 px-4 py-6 text-foreground sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1440px]">
+        <header className="flex flex-col justify-between gap-5 xl:flex-row xl:items-center">
+          <div>
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-3xl font-bold tracking-tight">Финансов преглед</h1>
+              <span className="rounded-full border border-primary/20 bg-primary/5 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-primary">Реални данни</span>
+            </div>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {firstName ? `${firstName}, ` : ""}всички потвърдени плащания и задачи на едно място.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="relative sm:w-80">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+              <Input value={query} onChange={(event) => setQuery(event.target.value)} className="h-11 rounded-xl bg-card pl-10" placeholder="Търсене в договорите..." />
+            </div>
+            <Button asChild className="h-11 rounded-xl px-5">
+              <Link href="/vertraege"><Plus className="size-4" aria-hidden="true" />Добави плащане</Link>
+            </Button>
+            <Button type="button" variant="outline" className="h-11 rounded-xl px-5" onClick={() => setAssistantOpen(true)}>
+              <Bot className="size-4" aria-hidden="true" />AI Assistant
+            </Button>
+          </div>
+        </header>
+
+        <section className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Обобщение">
+          <Kpi icon={WalletCards} label="Общо месечно" value={monthlyTotal > 0 ? formatMoney(monthlyTotal) : "Няма данни"} note="Само въведени месечни суми" />
+          <Kpi icon={CircleCheck} label="Активни плащания" value={String(contracts.length)} note="Всички записани договори" />
+          <Kpi icon={CalendarDays} label="Следващ падеж" value={nextReminder ? formatDate(nextReminder.due_at) : "Няма данни"} note={nextReminder?.title ?? "Няма записан предстоящ срок"} />
+          <Kpi icon={Bell} label="За проверка" value={String(reviewCount + missingCosts)} note="Документи и липсващи суми" />
+        </section>
+
+        <div className="mt-6 grid gap-6 2xl:grid-cols-[minmax(0,1fr)_340px]">
+          <section className="min-w-0 overflow-hidden rounded-2xl border border-border bg-card shadow-sm shadow-slate-200/40" aria-labelledby="payments-title">
+            <div className="flex flex-col justify-between gap-4 border-b border-border px-5 py-4 sm:flex-row sm:items-center">
+              <div>
+                <h2 id="payments-title" className="text-lg font-semibold">Месечни плащания</h2>
+                <p className="mt-1 text-xs text-muted-foreground">Групирани от въведените договори в KintexBG</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button type="button" variant={onlyNeedsAttention ? "secondary" : "outline"} size="sm" className="rounded-lg" onClick={() => setOnlyNeedsAttention((value) => !value)}><Filter className="size-4" />За внимание</Button>
+                <Button type="button" variant={sortByAmount ? "secondary" : "outline"} size="sm" className="rounded-lg" onClick={() => setSortByAmount((value) => !value)}><SlidersHorizontal className="size-4" />По сума</Button>
+              </div>
+            </div>
+
+            <div className="hidden overflow-x-auto md:block">
+              <table className="w-full min-w-[980px] border-collapse text-left text-sm">
+                <thead className="bg-slate-50 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  <tr>
+                    <th className="w-10 px-4 py-3"><span className="sr-only">Избор</span></th>
+                    <th className="px-3 py-3">Категория</th>
+                    <th className="px-3 py-3">Договор / доставчик</th>
+                    <th className="px-3 py-3 text-right">Месечна вноска</th>
+                    <th className="px-3 py-3">Падеж</th>
+                    <th className="px-3 py-3">Край на договор</th>
+                    <th className="px-3 py-3">Статус</th>
+                    <th className="px-4 py-3 text-right">Действия</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {groups.map((group) => {
+                    const isCollapsed = collapsed.has(group.id)
+                    const groupTotal = group.items.reduce((sum, item) => sum + (Number(item.monthly_amount) || 0), 0)
+                    return (
+                      <Fragment key={group.id}>
+                        <tr className="border-t border-border bg-slate-50/80">
+                          <td className="px-4 py-3">
+                            <button type="button" onClick={() => toggleGroup(group.id)} className="grid size-6 place-items-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground" aria-label={`${isCollapsed ? "Покажи" : "Скрий"} ${group.label}`}>
+                              {isCollapsed ? <ChevronRight className="size-4" /> : <ChevronDown className="size-4" />}
+                            </button>
+                          </td>
+                          <td className="px-3 py-3 font-semibold">{group.label} <span className="ml-1 rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">{group.items.length}</span></td>
+                          <td className="px-3 py-3 text-muted-foreground">Обобщение</td>
+                          <td className="px-3 py-3 text-right font-semibold">{groupTotal > 0 ? formatMoney(groupTotal) : "Няма данни"}</td>
+                          <td colSpan={4} />
+                        </tr>
+                        {!isCollapsed && group.items.map((contract) => (
+                          <tr key={contract.id} className="border-t border-border/70 transition-colors hover:bg-slate-50">
+                            <td className="px-4 py-3"><span className="block size-4 rounded border border-input bg-background" /></td>
+                            <td className="px-3 py-3 text-muted-foreground">{group.label}</td>
+                            <td className="px-3 py-3"><p className="font-medium">{contract.title}</p><p className="mt-0.5 text-xs text-muted-foreground">{contract.provider_name ?? "Доставчикът не е въведен"}</p></td>
+                            <td className="px-3 py-3 text-right font-semibold tabular-nums">{formatMoney(contract.monthly_amount)}</td>
+                            <td className="px-3 py-3 text-muted-foreground">{formatDate(contract.end_date)}</td>
+                            <td className="px-3 py-3 text-muted-foreground">Няма данни</td>
+                            <td className="px-3 py-3"><span className={`rounded-full px-2.5 py-1 text-xs font-medium ${contract.status === "confirmed" || contract.status === "active" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>{statusLabel(contract.status)}</span></td>
+                            <td className="px-4 py-3 text-right"><Button asChild variant="ghost" size="icon" className="size-8 rounded-lg" aria-label={`Отвори ${contract.title}`}><Link href="/vertraege"><Eye className="size-4" /></Link></Button></td>
+                          </tr>
+                        ))}
+                      </Fragment>
+                    )
+                  })}
+                  {groups.length === 0 && (
+                    <tr><td colSpan={8} className="px-6 py-14 text-center"><WalletCards className="mx-auto size-8 text-muted-foreground" /><p className="mt-3 font-medium">Няма намерени договори</p><p className="mt-1 text-sm text-muted-foreground">Добави първото плащане или промени търсенето.</p></td></tr>
+                  )}
+                </tbody>
+                <tfoot className="border-t border-border bg-slate-50/70">
+                  <tr>
+                    <td colSpan={3} className="px-4 py-4 font-semibold">Общо ({filteredContracts.length} плащания)</td>
+                    <td className="px-3 py-4 text-right font-bold tabular-nums">{filteredContracts.some((item) => item.monthly_amount != null) ? formatMoney(filteredContracts.reduce((sum, item) => sum + (Number(item.monthly_amount) || 0), 0)) : "Няма данни"}</td>
+                    <td colSpan={4} />
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <div className="divide-y divide-border md:hidden">
+              {groups.map((group) => (
+                <section key={group.id} aria-label={group.label}>
+                  <button type="button" onClick={() => toggleGroup(group.id)} className="flex w-full items-center justify-between bg-slate-50 px-4 py-3 text-left">
+                    <span className="flex items-center gap-2 text-sm font-semibold">{collapsed.has(group.id) ? <ChevronRight className="size-4" /> : <ChevronDown className="size-4" />}{group.label}</span>
+                    <span className="text-xs font-medium text-muted-foreground">{group.items.length}</span>
+                  </button>
+                  {!collapsed.has(group.id) && <div className="divide-y divide-border">
+                    {group.items.map((contract) => <article key={contract.id} className="space-y-4 p-4">
+                      <div className="flex items-start justify-between gap-4">
+                        <div><p className="font-semibold">{contract.title}</p><p className="mt-1 text-xs text-muted-foreground">{contract.provider_name ?? "Доставчикът не е въведен"}</p></div>
+                        <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${contract.status === "confirmed" || contract.status === "active" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>{statusLabel(contract.status)}</span>
+                      </div>
+                      <dl className="grid grid-cols-2 gap-3 text-sm">
+                        <div><dt className="text-xs text-muted-foreground">Месечно</dt><dd className="mt-1 font-semibold tabular-nums">{formatMoney(contract.monthly_amount)}</dd></div>
+                        <div><dt className="text-xs text-muted-foreground">Край на договор</dt><dd className="mt-1">{formatDate(contract.end_date)}</dd></div>
+                      </dl>
+                      <Button asChild variant="outline" size="sm" className="w-full rounded-lg"><Link href="/vertraege">Отвори договора<ArrowRight className="size-4" /></Link></Button>
+                    </article>)}
+                  </div>}
+                </section>
+              ))}
+              {groups.length === 0 && <div className="px-6 py-12 text-center"><WalletCards className="mx-auto size-8 text-muted-foreground" /><p className="mt-3 font-medium">Няма намерени договори</p><p className="mt-1 text-sm text-muted-foreground">Добави първото плащане или промени търсенето.</p></div>}
+            </div>
+          </section>
+
+          <aside className="space-y-4">
+            <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm shadow-slate-200/40" aria-labelledby="assistant-title">
+              <div className="flex items-center justify-between border-b border-border px-5 py-4">
+                <div className="flex items-center gap-3"><span className="grid size-9 place-items-center rounded-xl bg-primary/10 text-primary"><Bot className="size-5" /></span><div><h2 id="assistant-title" className="font-semibold">AI Home Office</h2><p className="text-xs text-muted-foreground">Assistant</p></div></div>
+                <span className="size-2 rounded-full bg-emerald-500" aria-label="Активен" />
+              </div>
+              <div className="space-y-3 p-4">
+                <Link href={nextAction.href} className="block rounded-xl border border-border p-4 transition-colors hover:border-primary/40 hover:bg-primary/[0.03]"><div className="flex items-start gap-3"><CircleAlert className="mt-0.5 size-5 shrink-0 text-primary" /><div><p className="font-semibold">Следваща стъпка</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{nextAction.label}</p><span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-primary">Отвори <ArrowRight className="size-3" /></span></div></div></Link>
+                <Link href="/documents" className="block rounded-xl border border-border p-4 transition-colors hover:border-primary/40 hover:bg-primary/[0.03]"><div className="flex items-start gap-3"><FileText className="mt-0.5 size-5 shrink-0 text-primary" /><div><p className="font-semibold">Документи за преглед</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{reviewCount > 0 ? `${reviewCount} документа чакат потвърждение.` : "Няма документи, чакащи потвърждение."}</p></div></div></Link>
+                {problems.length > 0 && <div className="rounded-xl bg-amber-50 p-4 text-sm text-amber-900">{problems.length} сигнала изискват внимание. AI не предприема действие без потвърждение.</div>}
+              </div>
+              <div className="border-t border-border p-4">
+                <Button asChild variant="outline" className="h-11 w-full justify-between rounded-xl font-normal text-muted-foreground"><Link href="/protected/home-office"><span>Попитай за разходите си</span><Send className="size-4" /></Link></Button>
+                <p className="mt-3 text-center text-[11px] leading-4 text-muted-foreground">Отговорите използват само потвърдени данни.</p>
+              </div>
+            </section>
+
+            <section className="rounded-2xl border border-border bg-card p-5 shadow-sm shadow-slate-200/40">
+              <h2 className="font-semibold">Последна активност</h2>
+              <div className="mt-4 space-y-3">
+                {auditEvents.length === 0 ? <p className="text-sm text-muted-foreground">Няма записани събития.</p> : auditEvents.slice(0, 4).map((event) => <div key={event.id} className="border-b border-border pb-3 last:border-0 last:pb-0"><p className="text-sm font-medium">{event.event_summary ?? event.event_type}</p><p className="mt-1 text-xs text-muted-foreground">{formatDate(event.created_at)}</p></div>)}
+              </div>
+            </section>
+          </aside>
+        </div>
+      </div>
+
+      <button type="button" onClick={() => setAssistantOpen(true)} className="fixed bottom-5 right-5 z-30 flex h-13 items-center gap-3 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-xl shadow-blue-500/20 transition-transform hover:-translate-y-0.5 focus-visible:outline-none md:bottom-7 md:right-7" aria-label="Отвори AI Home Office Assistant">
+        <Bot className="size-5" aria-hidden="true" /><span className="hidden sm:inline">AI Home Office</span>
+      </button>
+
+      {assistantOpen && <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-labelledby="assistant-drawer-title">
+        <button type="button" className="absolute inset-0 bg-slate-950/25 backdrop-blur-[2px]" onClick={() => setAssistantOpen(false)} aria-label="Затвори AI Assistant" />
+        <aside className="absolute inset-y-0 right-0 flex w-full max-w-[430px] flex-col border-l border-border bg-card shadow-2xl">
+          <header className="flex items-center justify-between border-b border-border px-5 py-4">
+            <div className="flex items-center gap-3">
+              <span className="grid size-10 place-items-center rounded-xl bg-primary text-primary-foreground"><Bot className="size-5" /></span>
+              <div><h2 id="assistant-drawer-title" className="font-semibold">AI Home Office Assistant</h2><p className="text-xs text-muted-foreground">KintexBG работно пространство</p></div>
+            </div>
+            <Button ref={assistantCloseButton} type="button" variant="ghost" size="icon" className="rounded-lg" onClick={() => setAssistantOpen(false)} aria-label="Затвори"><X className="size-5" /></Button>
+          </header>
+          <div className="flex-1 space-y-5 overflow-y-auto p-5">
+            <section className="rounded-xl bg-slate-950 p-5 text-white">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-300">Следваща стъпка</p>
+              <p className="mt-3 text-sm leading-6 text-slate-200">{nextAction.label}</p>
+              <Button asChild className="mt-5 w-full rounded-lg"><Link href={nextAction.href}>Продължи<ArrowRight className="size-4" /></Link></Button>
+            </section>
+            <section className="grid grid-cols-3 divide-x divide-border rounded-xl border border-border bg-card text-center">
+              <div className="p-3"><p className="text-lg font-bold">{contracts.length}</p><p className="text-[11px] text-muted-foreground">Договори</p></div>
+              <div className="p-3"><p className="text-lg font-bold">{documents.length}</p><p className="text-[11px] text-muted-foreground">Документи</p></div>
+              <div className="p-3"><p className="text-lg font-bold">{problems.length}</p><p className="text-[11px] text-muted-foreground">Сигнали</p></div>
+            </section>
+            <section className="rounded-xl border border-border p-4">
+              <h3 className="text-sm font-semibold">Какво може да направи сега</h3>
+              <div className="mt-3 space-y-2 text-sm text-muted-foreground">
+                <p>• Преглед на потвърдени договори и месечни разходи</p>
+                <p>• Анализ на качени документи след твое потвърждение</p>
+                <p>• Подготовка на следваща стъпка без автоматично изпращане</p>
+              </div>
+            </section>
+          </div>
+          <footer className="border-t border-border p-5">
+            <Button asChild variant="outline" className="h-12 w-full justify-between rounded-xl"><Link href="/protected/home-office"><span>Отвори пълния AI Assistant</span><Send className="size-4" /></Link></Button>
+            <p className="mt-3 text-center text-[11px] text-muted-foreground">Работи само с данните в твоя KintexBG профил.</p>
+          </footer>
+        </aside>
+      </div>}
+    </main>
+  )
+}

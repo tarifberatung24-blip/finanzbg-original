@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { ensureHousehold } from "@/lib/supabase/household"
-import { DocumentValidationError, isFrankfurtSupabase, validateDocument } from "@/lib/documents/validation"
+import { DocumentValidationError, isCanonicalSupabase, validateDocument } from "@/lib/documents/validation"
 
 const jsonError = (code: string, status: number) => NextResponse.json({ code }, { status })
 
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return jsonError("UPLOAD_NOT_AUTHENTICATED", 401)
-    if (!isFrankfurtSupabase()) return jsonError("SCHEMA_NOT_VERIFIED", 503)
+    if (!isCanonicalSupabase()) return jsonError("SCHEMA_NOT_VERIFIED", 503)
 
     const form = await request.formData()
     const file = form.get("file")
