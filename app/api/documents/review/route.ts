@@ -47,7 +47,7 @@ export async function POST(request: Request) {
       document_id: documentId,
       title: facts.title || document.original_filename,
       category: facts.category,
-      provider_name: facts.provider || null,
+      provider_name: facts.provider || "",
       monthly_amount: facts.monthlyAmount,
       contract_number: facts.contractNumber || null,
       start_date: facts.startDate || null,
