@@ -223,6 +223,32 @@
   border-color: var(--border);
 }
 
+.kintex-template-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.kintex-grid-background {
+  background-image:
+    linear-gradient(to right, rgb(21 21 21 / 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(21 21 21 / 0.055) 1px, transparent 1px);
+  background-size: 64px 64px;
+  background-position: center top;
+}
+
+.kintex-template-hero::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  background: linear-gradient(to bottom, rgb(247 247 245 / 0.08), var(--background) 82%);
+}
+
+.kintex-template-hero > div {
+  position: relative;
+  z-index: 1;
+}
+
 .kintex-marketing-item {
   border: 1px solid var(--border);
   background: var(--card);
