@@ -1,11 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
 @custom-variant dark (&:is(.dark *));
 
-/* KintexBG Nexus system: light operational SaaS workspace. */
+/* KintexBG visual system: a precise, light financial workspace. */
 @theme inline {
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -48,46 +47,46 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
   --font-sans: var(--font-inter), Arial, "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", var(--font-geist-mono), ui-monospace, monospace;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 :root {
   color-scheme: light;
-  --radius: 0.75rem;
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --radius: 0.5rem;
+  --background: #f7f7f5;
+  --foreground: #151515;
   --card: #ffffff;
-  --card-foreground: #0f172a;
+  --card-foreground: #151515;
   --popover: #ffffff;
-  --popover-foreground: #0f172a;
-  --primary: #2563eb;
+  --popover-foreground: #151515;
+  --primary: #b4232f;
   --primary-foreground: #ffffff;
-  --secondary: #eef2ff;
-  --secondary-foreground: #1e3a8a;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #eef2ff;
-  --accent-foreground: #1e3a8a;
+  --secondary: #efefec;
+  --secondary-foreground: #3c3c39;
+  --muted: #f2f2ef;
+  --muted-foreground: #60605b;
+  --accent: #191919;
+  --accent-foreground: #ffffff;
   --destructive: #dc2626;
-  --success: #16a34a;
+  --success: #2d6a4f;
   --success-foreground: #ffffff;
-  --border: #e2e8f0;
-  --input: #cbd5e1;
-  --ring: #2563eb;
-  --focus-ring: #2563eb;
-  --chart-1: #2563eb;
-  --chart-2: #16a34a;
-  --chart-3: #f59e0b;
-  --chart-4: #7c3aed;
-  --chart-5: #64748b;
+  --border: #deded9;
+  --input: #c9c9c3;
+  --ring: #b4232f;
+  --focus-ring: #b4232f;
+  --chart-1: #b4232f;
+  --chart-2: #2d6a4f;
+  --chart-3: #9a6b12;
+  --chart-4: #555555;
+  --chart-5: #60605b;
   --sidebar: #ffffff;
-  --sidebar-foreground: #0f172a;
-  --sidebar-primary: #2563eb;
+  --sidebar-foreground: #151515;
+  --sidebar-primary: #b4232f;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #eef2ff;
-  --sidebar-accent-foreground: #1e3a8a;
-  --sidebar-border: #e2e8f0;
-  --sidebar-ring: #2563eb;
+  --sidebar-accent: #f9e9e9;
+  --sidebar-accent-foreground: #8f1d28;
+  --sidebar-border: #deded9;
+  --sidebar-ring: #b4232f;
 }
 
 .dark {
@@ -154,15 +153,15 @@
 /* KintexBG customer workspace. */
 .kintex-workspace {
   color-scheme: light;
-  --nm-black: #0f172a;
+  --nm-black: #151515;
   --nm-white: #ffffff;
-  --nm-yellow: #2563eb;
-  --nm-yellow-shadow: #dbeafe;
-  --nm-gray-100: #f1f5f9;
-  --nm-gray-300: #e2e8f0;
-  --nm-gray-600: #64748b;
-  --nm-yellow-dark: #1d4ed8;
-  --radius: 0.75rem;
+  --nm-yellow: #b4232f;
+  --nm-yellow-shadow: #f9e0e2;
+  --nm-gray-100: #f2f2ef;
+  --nm-gray-300: #deded9;
+  --nm-gray-600: #60605b;
+  --nm-yellow-dark: #8f1d28;
+  --radius: 0.5rem;
   --background: var(--nm-white);
   --foreground: var(--nm-black);
   --card: var(--nm-white);
@@ -170,7 +169,7 @@
   --popover: var(--nm-white);
   --popover-foreground: var(--nm-black);
   --primary: var(--nm-yellow);
-  --primary-foreground: var(--nm-black);
+  --primary-foreground: var(--nm-white);
   --secondary: var(--nm-gray-100);
   --secondary-foreground: var(--nm-black);
   --muted: var(--nm-gray-100);
@@ -207,7 +206,7 @@
 
 .kintex-workspace .nm-kicker {
   color: var(--nm-yellow-dark);
-  font-family: "IBM Plex Mono", monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -216,4 +215,62 @@
 
 .kintex-workspace .nm-brand-highlight {
   box-shadow: inset 0 0.42em 0 0 var(--nm-yellow-shadow);
+}
+
+/* Shared marketing composition primitives. Keep surfaces quiet and let the
+   product preview carry the visual weight. */
+.kintex-marketing-section {
+  border-color: var(--border);
+}
+
+.kintex-marketing-item {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 0.5rem;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.kintex-marketing-item:hover {
+  border-color: color-mix(in srgb, var(--primary) 42%, var(--border));
+  box-shadow: 0 12px 28px rgb(21 21 21 / 0.07);
+  transform: translateY(-2px);
+}
+
+.kintex-preview-frame {
+  overflow: hidden;
+  border: 1px solid #cfcfc9;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  box-shadow: 0 24px 60px rgb(21 21 21 / 0.12), 0 2px 8px rgb(21 21 21 / 0.06);
+}
+
+.kintex-preview-line {
+  display: block;
+  height: 0.65rem;
+  border-radius: 999px;
+  background: #e6e6e1;
+}
+
+.kintex-workspace .kintex-panel {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 24px rgb(21 21 21 / 0.04);
+}
+
+.kintex-workspace .kintex-panel-subtle {
+  border: 1px solid var(--border);
+  background: var(--background);
+  border-radius: 0.5rem;
+}
+
+.kintex-workspace .tabular-nums,
+.kintex-workspace [data-tabular="true"] {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kintex-marketing-item {
+    transition: none;
+  }
 }

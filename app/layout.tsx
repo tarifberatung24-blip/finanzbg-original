@@ -19,7 +19,7 @@ const inter = Inter({ subsets: ["latin", "cyrillic"], variable: "--font-inter" }
 export const metadata: Metadata = {
   metadataBase: new URL("https://finanzbg.de"),
   title: {
-    default: "KintexBG — BY VZG",
+    default: "KintexBG — BY VZG CONSULT",
     template: "%s · KintexBG",
   },
   description:
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "KintexBG",
-    title: "KintexBG — BY VZG",
+    title: "KintexBG — BY VZG CONSULT",
     description: "Договори, документи, срокове и финансови задачи за живота ти в Германия.",
   },
   icons: {
@@ -61,8 +61,8 @@ export const viewport: Viewport = {
   userScalable: false,
   colorScheme: "light dark",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
-    { media: "(prefers-color-scheme: dark)", color: "#020617" },
+    { media: "(prefers-color-scheme: light)", color: "#f7f7f5" },
+    { media: "(prefers-color-scheme: dark)", color: "#f7f7f5" },
   ],
 }
 

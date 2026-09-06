@@ -9,7 +9,7 @@ export function SiteFooter() {
 
   return (
     <footer className="border-t border-border bg-card">
-      <div className="mx-auto max-w-6xl px-4 py-12">
+      <div className="mx-auto max-w-[1440px] px-5 py-14 lg:px-8">
         <div className="flex flex-col gap-8 md:flex-row md:justify-between">
           <div className="max-w-sm">
             <Logo />
@@ -44,7 +44,7 @@ export function SiteFooter() {
           </nav>
         </div>
 
-        <div className="mt-10 border-t border-border pt-6">
+        <div className="mt-12 border-t border-border pt-6">
           <p className="text-xs leading-relaxed text-muted-foreground">{t.home.disclaimer}</p>
           <p className="mt-4 text-xs text-muted-foreground">
             © {new Date().getFullYear()} KintexBG · Made for life in Germany
