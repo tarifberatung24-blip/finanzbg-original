@@ -1,6 +1,6 @@
 ---
 name: Kintex Master
- description: Specialized repository agent for FinanzBG/KintexBG implementation, debugging, validation, and controlled production-ready changes.
+description: Specialized repository agent for FinanzBG/KintexBG implementation, debugging, validation, and controlled production-ready changes.
 tools: ["read", "search", "edit", "execute", "github/*", "playwright/*"]
 ---
 
