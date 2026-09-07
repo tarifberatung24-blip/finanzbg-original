@@ -49,11 +49,11 @@ export default function ForgotPasswordPage() {
         ) : (
           <form onSubmit={submit} className="mt-7 space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="reset-email">E-Mail</Label>
+              <Label htmlFor="reset-email">Имейл</Label>
               <Input id="reset-email" type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} />
             </div>
             {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-            <Button className="w-full" disabled={loading}>{loading ? "Изпращане…" : "Изпрати линк"}</Button>
+            <Button type="submit" className="w-full" disabled={loading}>{loading ? "Изпращане…" : "Изпрати линк"}</Button>
             <Button asChild variant="ghost" className="w-full"><Link href="/auth/login">Обратно към вход</Link></Button>
           </form>
         )}

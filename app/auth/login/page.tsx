@@ -47,7 +47,7 @@ export default function LoginPage() {
         intro: "Отвори клиентската зона на KintexBG.",
         email: "Имейл",
         password: "Парола",
-        login: "Вход с имейл",
+        login: "Вход",
         loading: "Влизане...",
         error: "Имейлът или паролата не са правилни.",
         confirm: "Първо потвърди имейл адреса си.",
@@ -79,6 +79,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const signUpPath = `/${locale}/auth/sign-up`
+  const forgotPasswordPath = `/${locale}/auth/forgot-password`
 
   function destination() {
     return sanitizeNextPath(new URLSearchParams(window.location.search).get("next"))
@@ -90,7 +91,10 @@ export default function LoginPage() {
     setError(null)
     const { error } = await createClient().auth.signInWithPassword({ email, password })
     if (error) setError(error.message.toLowerCase().includes("confirm") ? copy.confirm : copy.error)
-    else router.push(destination())
+    else {
+      router.replace(destination())
+      router.refresh()
+    }
     setLoading(false)
   }
 
@@ -123,7 +127,10 @@ export default function LoginPage() {
     } else {
       const { error } = await createClient().auth.verifyOtp({ phone: normalizedPhone, token: otp, type: "sms" })
       if (error) setError(phoneAuthMessage(error.message))
-      else router.push(destination())
+      else {
+        router.replace(destination())
+        router.refresh()
+      }
     }
     setLoading(false)
   }
@@ -158,7 +165,7 @@ export default function LoginPage() {
           <div className="space-y-2">
             <div className="flex items-center justify-between gap-3">
               <Label htmlFor="password">{copy.password}</Label>
-              <Link href="/auth/forgot-password" className="text-xs font-medium text-primary hover:underline">{copy.forgot}</Link>
+              <Link href={forgotPasswordPath} className="text-xs font-medium text-primary hover:underline">{copy.forgot}</Link>
             </div>
             <Input id="password" type="password" autoComplete="current-password" required value={password} onChange={(event) => setPassword(event.target.value)} />
           </div>
