@@ -23,7 +23,7 @@ function toRow(value: z.infer<typeof contractSchema>, householdId: string) {
     household_id: householdId,
     title: value.title,
     category: value.category,
-    provider_name: value.provider || null,
+    provider_name: value.provider || "",
     monthly_amount: value.monthlyAmount,
     contract_number: value.contractNumber || null,
     start_date: value.startDate || null,
