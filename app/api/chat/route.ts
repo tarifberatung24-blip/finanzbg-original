@@ -24,10 +24,12 @@ export async function POST(request: Request) {
   if (!parsed.success) return Response.json({ code: "INVALID_CHAT_REQUEST" }, { status: 400 })
 
   const householdId = await ensureHousehold(supabase)
-  const [{ data: contracts }, { data: documents }] = await Promise.all([
-    supabase.from("contracts").select("title,category,provider_name,monthly_amount,status,end_date").eq("household_id", householdId).order("created_at", { ascending: false }).limit(30),
+  const [{ data: contracts, error: contractsError }, { data: documents, error: documentsError }] = await Promise.all([
+    supabase.from("contracts").select("title,category,provider_name,monthly_amount,status,end_date,cancellation_deadline,review_status").eq("household_id", householdId).eq("review_status", "confirmed").order("created_at", { ascending: false }).limit(30),
     supabase.from("documents").select("original_filename,processing_status,created_at").eq("household_id", householdId).order("created_at", { ascending: false }).limit(12),
   ])
+
+  if (contractsError || documentsError) return Response.json({ code: "CHAT_CONTEXT_UNAVAILABLE" }, { status: 503 })
 
   const context = JSON.stringify({ contracts: contracts ?? [], documents: documents ?? [] })
   const result = streamText({

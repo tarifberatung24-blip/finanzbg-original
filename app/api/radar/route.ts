@@ -10,7 +10,7 @@ export async function GET() {
     if (!user) return NextResponse.json({ code: "RADAR_NOT_AUTHENTICATED" }, { status: 401 })
     const householdId = await ensureHousehold(supabase)
     const { data: contracts, error } = await supabase.from("contracts")
-      .select("id,title,category,monthly_amount,status,end_date")
+      .select("id,title,category,monthly_amount,status,end_date,cancellation_deadline,review_status")
       .eq("household_id", householdId)
     if (error) return NextResponse.json({ code: "SCHEMA_NOT_VERIFIED" }, { status: 503 })
     const signals = getKintexRadarSignals(contracts ?? [])
