@@ -17,7 +17,7 @@ export default async function Page() {
 
   return (
     <main>
-      <FinanceModulePage title="Dokumente" description="Organisiere wichtige Unterlagen als Grundlage für deine Finanzthemen." items={["Dokumente sicher speichern", "Status von AI-Prüfungen sehen", "Unterlagen nach Haushalt trennen", "Bereit für die nächste Prüfung bleiben"]} />
+      <FinanceModulePage title="Dokumente" description="Organisiere wichtige Unterlagen als Grundlage für deine Finanzthemen." items={["Dokumente sicher speichern", "Vorbereitung fuer manuelle Angebots- oder Vertragspruefung", "Unterlagen nach Haushalt trennen", "Bereit fuer die naechste Pruefung bleiben"]} />
       <div className="mx-auto -mt-10 max-w-4xl px-4 pb-10 sm:px-6 lg:px-8"><DocumentsWorkspace initialDocuments={documents ?? []} loadError={error ? "Dokumente konnten nicht geladen werden." : null} /></div>
     </main>
   )

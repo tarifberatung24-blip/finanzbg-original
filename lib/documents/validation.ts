@@ -1,3 +1,5 @@
+import project from "../../supabase/project.json"
+
 export const MAX_DOCUMENT_BYTES = 10 * 1024 * 1024
 
 export type SupportedDocument = "application/pdf" | "image/jpeg" | "image/png"
@@ -52,5 +54,5 @@ export async function validateDocument(file: File) {
 }
 
 export function isCanonicalSupabase(url = process.env.NEXT_PUBLIC_SUPABASE_URL) {
-  return url?.replace(/\/$/, "") === "https://sophzmteuemggqlstebw.supabase.co"
+  return url?.replace(/\/$/, "") === `https://${project.projectRef}.supabase.co`
 }

@@ -16,11 +16,11 @@ type StoredDocument = {
 
 const statusLabel: Record<string, string> = {
   uploaded: "Uploaded",
-  awaiting_analysis: "Awaiting analysis",
+  awaiting_analysis: "Queued for manual review",
   needs_review: "Needs review",
   processed: "Processed",
   failed: "Failed",
-  analysis_not_configured: "AI not configured",
+  analysis_not_configured: "Review not configured",
 }
 
 const errorLabel: Record<string, string> = {
@@ -51,7 +51,7 @@ export function DocumentsWorkspace({ initialDocuments, loadError }: { initialDoc
         return
       }
       setDocuments((current) => [{ id: payload.document!.id, original_filename: payload.document!.name, mime_type: payload.document!.type, size_bytes: payload.document!.size, processing_status: payload.document!.status, created_at: new Date().toISOString() }, ...current])
-      setMessage("Dokument gespeichert. Für AI-Prüfung öffne den Assistant.")
+      setMessage("Dokument gespeichert. Er kann jetzt fuer eine manuelle Angebots- oder Vertragspruefung genutzt werden.")
     } catch {
       setMessage("UPLOAD_NETWORK_ERROR")
     } finally {
@@ -65,7 +65,7 @@ export function DocumentsWorkspace({ initialDocuments, loadError }: { initialDoc
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Documents</p>
           <h2 id="documents-workspace-title" className="mt-2 text-2xl font-semibold text-foreground">Документна зона</h2>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">Реално съхранение в Supabase Storage. AI анализът се стартира от AI Home Office Assistant след потребителско потвърждение.</p>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">Реално съхранение в Supabase Storage. Документите служат за ръчна проверка на оферта, тарифа или договор.</p>
         </div>
         <label className="inline-flex cursor-pointer items-center gap-2 bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
           <Upload className="size-4" aria-hidden="true" />{uploading ? "Uploading…" : "Upload"}
@@ -81,7 +81,7 @@ export function DocumentsWorkspace({ initialDocuments, loadError }: { initialDoc
           </div>
         ))}
       </div>
-      <Button asChild variant="outline" className="mt-5"><Link href="/protected/home-office">Open AI Assistant</Link></Button>
+      <Button asChild variant="outline" className="mt-5"><Link href="/zayavka">Заяви проверка по документ</Link></Button>
     </section>
   )
 }
