@@ -27,6 +27,9 @@ import ProvidersPage from "@/app/steuer/providers/page"
 import ReviewPage from "@/app/steuer/review/page"
 import DatenschutzPage from "@/app/datenschutz/page"
 import AgbPage from "@/app/agb/page"
+import ImpressumPage from "@/app/impressum/page"
+import AffiliateNoticePage from "@/app/affiliate-hinweis/page"
+import WithdrawalPage from "@/app/widerruf/page"
 import AppInstallPage from "@/app/app/page"
 
 const pages: Record<string, React.ComponentType> = {
@@ -35,7 +38,7 @@ const pages: Record<string, React.ComponentType> = {
   "auth/login": LoginPage, "auth/sign-up": SignUpPage, "auth/sign-up-success": SignUpSuccessPage, "auth/error": AuthErrorPage,
   "auth/forgot-password": ForgotPasswordPage, "auth/update-password": UpdatePasswordPage, "auth/mfa-verify": MfaVerifyPage,
   finanzamt: FinanzamtPage, profil: ProfilPage, protected: ProtectedPage, "protected/home-office": HomeOfficePage, "protected/security": SecurityPage,
-  steuer: SteuerPage, "steuer/providers": ProvidersPage, "steuer/review": ReviewPage, datenschutz: DatenschutzPage, agb: AgbPage, app: AppInstallPage,
+  steuer: SteuerPage, "steuer/providers": ProvidersPage, "steuer/review": ReviewPage, datenschutz: DatenschutzPage, agb: AgbPage, impressum: ImpressumPage, "affiliate-hinweis": AffiliateNoticePage, widerruf: WithdrawalPage, app: AppInstallPage,
 }
 
 export async function generateMetadata({params}: {params: Promise<{locale: string; slug?: string[]}>}) {

@@ -1,4 +1,3 @@
-import { Analytics } from "@vercel/analytics/next"
 import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono, Inter } from "next/font/google"
 import { cookies } from "next/headers"
@@ -17,7 +16,7 @@ const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono"
 const inter = Inter({ subsets: ["latin", "cyrillic"], variable: "--font-inter" })
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://finanzbg.de"),
+  metadataBase: new URL("https://finanzberaterbg.de"),
   title: {
     default: "KintexBG — BY VZG CONSULT",
     template: "%s · KintexBG",
@@ -85,7 +84,6 @@ export default async function RootLayout({
             <PwaServiceWorker />
           </LanguageProvider>
         </ThemeProvider>
-        {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
   )
