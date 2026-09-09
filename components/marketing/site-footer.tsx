@@ -41,6 +41,15 @@ export function SiteFooter() {
             <Link href={`/${locale}/agb`} className="text-muted-foreground hover:text-foreground">
               {locale === "bg" ? "Общи условия" : "AGB"}
             </Link>
+            <Link href={`/${locale}/impressum`} className="text-muted-foreground hover:text-foreground">
+              {locale === "bg" ? "Импресум" : "Impressum"}
+            </Link>
+            <Link href={`/${locale}/affiliate-hinweis`} className="text-muted-foreground hover:text-foreground">
+              {locale === "bg" ? "Партньорска прозрачност" : "Partnerhinweis"}
+            </Link>
+            <Link href={`/${locale}/widerruf`} className="text-muted-foreground hover:text-foreground">
+              {locale === "bg" ? "Отказ" : "Widerruf"}
+            </Link>
           </nav>
         </div>
 

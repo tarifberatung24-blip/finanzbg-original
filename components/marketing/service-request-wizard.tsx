@@ -2,7 +2,6 @@
 
 import { FormEvent, useMemo, useState } from "react"
 import Link from "next/link"
-import { track } from "@vercel/analytics"
 import { ArrowLeft, ArrowRight, CheckCircle2, Clock3, Send, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -272,7 +271,6 @@ export function ServiceRequestWizard({ initialKind }: { initialKind?: ServiceReq
       })
       const payload = await response.json().catch(() => ({})) as { requestId?: string; code?: string }
       if (!response.ok) throw new Error(payload.code ?? "REQUEST_FAILED")
-      track("service_request_submitted", { kind, locale })
       setRequestId(payload.requestId ?? null)
       setMessage(de ? "Anfrage ist eingegangen. Wir melden uns mit Angebot oder klarer Rueckfrage." : "Заявката е приета. Ще получиш оферта или ясен уточняващ въпрос.")
     } catch (cause) {
