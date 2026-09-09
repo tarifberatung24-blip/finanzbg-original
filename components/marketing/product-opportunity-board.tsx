@@ -2,9 +2,10 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowUpRight, Check, ChevronRight, CircleDollarSign, Gauge, Lightbulb, ShieldCheck, Wifi } from "lucide-react"
+import { ArrowUpRight, Check, ChevronRight, CircleDollarSign, FileSearch, Gauge, Lightbulb, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { useLanguage } from "@/lib/i18n/language-context"
 
 type Product = {
   id: string
@@ -16,43 +17,45 @@ type Product = {
   eyebrow: string
   detail: string[]
   action: string
-  href?: string
+  href: string
 }
 
 const products: Product[] = [
   {
     id: "strom",
-    label: "Strom",
-    title: "Stromkosten im Blick",
-    description: "Vergleiche deinen aktuellen Vertrag mit passenden Stromtarifen.",
+    label: "Strom & Gas",
+    title: "Energiekosten im Blick",
+    description: "Vergleiche deinen aktuellen Strom- oder Gasvertrag mit passenden Tarifen.",
     icon: Lightbulb,
     accent: "bg-[#2563eb]/15 text-[#2563eb]",
     eyebrow: "Mögliche monatliche Optimierung",
     detail: ["Verbrauch strukturiert erfassen", "Preis und Laufzeit vergleichen", "Wechsel transparent vorbereiten"],
-    action: "Tarife vergleichen",
-    href: "https://www.check24.de/strom/?utm_source=finanzbg&utm_medium=partner&utm_campaign=produkte_strom",
+    action: "Angebot bis 2 Std. anfragen",
+    href: "/zayavka?service=energy",
   },
   {
-    id: "internet",
-    label: "Internet",
-    title: "Vertrag, der zu dir passt",
-    description: "Finde heraus, ob dein Internetvertrag noch zu deinem Alltag passt.",
-    icon: Wifi,
+    id: "schufa",
+    label: "SCHUFA",
+    title: "Bonität verstehen",
+    description: "Prüfe deine Bonitätsdaten, bevor du einen wichtigen Vertrag oder Kredit beantragst.",
+    icon: FileSearch,
     accent: "bg-[#2563eb]/15 text-[#2563eb]",
-    eyebrow: "Noch nicht verfügbar",
-    detail: ["Bandbreite und Bedarf klären", "Vertragslaufzeit prüfen", "Anbieterangebote später vergleichen"],
-    action: "Auf die Merkliste",
+    eyebrow: "Bonitätscheck",
+    detail: ["Passende Auskunft auswählen", "Daten beim Partner prüfen", "Für Miet- oder Kreditpläne vorbereitet sein"],
+    action: "SCHUFA Anfrage starten",
+    href: "/zayavka?service=schufa",
   },
   {
     id: "versicherungen",
-    label: "Versicherungen",
-    title: "Schutz ohne Lücken",
-    description: "Ordne deine Verträge und erkenne, wo Prüfung sinnvoll ist.",
+    label: "Kfz-Versicherung",
+    title: "Kfz-Schutz vergleichen",
+    description: "Prüfe Beitrag, Deckung und Selbstbeteiligung für dein Fahrzeug.",
     icon: ShieldCheck,
     accent: "bg-slate-100 text-slate-700",
-    eyebrow: "Noch nicht verfügbar",
-    detail: ["Bestehende Verträge sammeln", "Deckung und Selbstbehalt prüfen", "Doppelte Absicherung vermeiden"],
-    action: "Verträge prüfen",
+    eyebrow: "Partnervergleich",
+    detail: ["HSN/TSN und SF-Klasse vorbereiten", "Deckung und Selbstbeteiligung prüfen", "Tarife beim Partner vergleichen"],
+    action: "Kfz-Angebot anfragen",
+    href: "/zayavka?service=kfz",
   },
   {
     id: "kredit",
@@ -61,16 +64,19 @@ const products: Product[] = [
     description: "Bereite deine Finanzierungsfragen vor, bevor du Angebote vergleichst.",
     icon: CircleDollarSign,
     accent: "bg-blue-50 text-blue-700",
-    eyebrow: "Noch nicht verfügbar",
-    detail: ["Finanzierungsziel festhalten", "Rate und Laufzeit verstehen", "Keine Empfehlung ohne echte Anbieterbasis"],
-    action: "Vormerken",
+    eyebrow: "Partnervergleich",
+    detail: ["Finanzierungsziel festhalten", "Rate und Laufzeit verstehen", "Angebote beim Partner vergleichen"],
+    action: "Kredit-Anfrage vorbereiten",
+    href: "/zayavka?service=credit",
   },
 ]
 
 export function ProductOpportunityBoard() {
+  const { locale } = useLanguage()
   const [activeId, setActiveId] = useState("strom")
   const active = products.find((product) => product.id === activeId) ?? products[0]
   const ActiveIcon = active.icon
+  const localizedHref = (href: string) => `/${locale}${href}`
 
   return (
     <section className="relative overflow-hidden border-b border-border bg-background text-foreground" aria-labelledby="produkte-title">
@@ -83,7 +89,7 @@ export function ProductOpportunityBoard() {
             Finde die Hebel, die <span className="text-primary">wirklich zählen.</span>
           </h1>
           <p className="mt-5 max-w-2xl text-pretty text-base leading-7 text-muted-foreground sm:text-lg">
-            KintexBG verbindet deine persönlichen Daten mit konkreten nächsten Schritten. Nicht alles ist sofort verfügbar — aber alles bleibt nachvollziehbar.
+            KintexBG sammelt nur die Angaben, die fuer ein echtes Angebot gebraucht werden. Danach geht die Anfrage an den n8n Workflow und wird manuell bearbeitet.
           </p>
         </div>
 
@@ -120,7 +126,7 @@ export function ProductOpportunityBoard() {
                 <span className={`flex size-14 items-center justify-center rounded-sm ${active.accent}`}>
                   <ActiveIcon aria-hidden="true" className="size-7" />
                 </span>
-                <Badge variant={active.href ? "default" : "secondary"}>{active.href ? "Partner verfügbar" : "In Vorbereitung"}</Badge>
+                <Badge variant="default">2h Service-SLA</Badge>
               </div>
               <p className="mt-10 text-xs font-semibold uppercase tracking-[0.18em] text-primary">{active.eyebrow}</p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">{active.title}</h2>
@@ -136,22 +142,18 @@ export function ProductOpportunityBoard() {
               </ul>
 
               <div className="mt-auto flex flex-col gap-3 pt-10 sm:flex-row sm:items-center">
-                {active.href ? (
-                  <Button asChild size="lg">
-                    <a href={active.href} target="_blank" rel="sponsored noopener noreferrer">
+                <Button asChild size="lg">
+                    <Link href={localizedHref(active.href)}>
                       {active.action}
                       <ArrowUpRight data-icon="inline-end" />
-                    </a>
+                    </Link>
                   </Button>
-                ) : (
-                  <Button size="lg" disabled>{active.action}</Button>
-                )}
-                <Link href="/steuer" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-                  Erst Potenziale prüfen
+                <Link href={localizedHref("/documents")} className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+                  Dokumente vorbereiten
                   <Gauge aria-hidden="true" className="size-4" />
                 </Link>
               </div>
-              {active.href && <p className="mt-4 text-xs leading-5 text-muted-foreground">Anzeige / Partnerlink. KintexBG erhält möglicherweise eine Vergütung. Die Konditionen werden beim Partner angezeigt.</p>}
+              <p className="mt-4 text-xs leading-5 text-muted-foreground">Keine automatische Entscheidung. Preise, Annahmen und Kreditentscheidungen werden erst nach individueller Prüfung bestätigt.</p>
             </div>
           </div>
         </div>

@@ -49,6 +49,8 @@ type Contract = {
   status: string | null
   created_at: string | null
   end_date: string | null
+  cancellation_deadline?: string | null
+  review_status?: string | null
 }
 
 type Document = {

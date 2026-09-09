@@ -17,7 +17,8 @@ export const smartDashboardEnvironment = {
   auth: "Supabase Auth",
   database: "Supabase Postgres",
   storage: "Supabase Storage",
-  aiLayer: "Vercel AI SDK",
+  aiLayer: "AI explanation layer after manual offer preparation",
+  automationLayer: "n8n manual offer workflows",
   deployment: "Vercel",
   designSystem: "NovaMind institutional finance UI",
 } as const
@@ -29,8 +30,8 @@ export const smartDashboardRules = {
   userConfirmationRequired: true,
   noExternalActionWithoutApproval: true,
   noServiceRoleInClient: true,
-  auditEveryAiAction: true,
-  aiSuggestsButDoesNotDecide: true,
+  auditEveryAutomationAction: true,
+  noAutomatedDecisionMaking: true,
 } as const
 
 export const smartDashboardModules = [
@@ -38,7 +39,7 @@ export const smartDashboardModules = [
   { id: "contracts", labelBg: "Договори", labelDe: "Verträge", status: "active", dataSources: ["contracts", "documents"] },
   { id: "documents", labelBg: "Документи", labelDe: "Dokumente", status: "active", dataSources: ["documents", "storage.objects", "audit_events"] },
   { id: "kintex-radar", labelBg: "Kintex Radar", labelDe: "Kintex Radar", status: "next", dataSources: ["profiles", "contracts", "documents", "reminders", "audit_events"] },
-  { id: "ai-home-office", labelBg: "AI Home Office Assistant", labelDe: "AI Home Office Assistant", status: "active", dataSources: ["documents", "contracts", "audit_events"] },
+  { id: "offer-desk", labelBg: "Офертен desk", labelDe: "Angebotsdesk", status: "active", dataSources: ["documents", "contracts", "audit_events"] },
   { id: "deadlines", labelBg: "Срокове", labelDe: "Fristen", status: "planned", dataSources: ["reminders", "contracts", "documents"] },
   { id: "opportunities", labelBg: "Възможности", labelDe: "Möglichkeiten", status: "planned", dataSources: ["contracts", "profiles"] },
 ] as const satisfies ReadonlyArray<{
@@ -51,8 +52,8 @@ export const smartDashboardModules = [
 
 export const smartDashboardAgents = [
   { id: "intake-agent", stage: "1", title: "Document Intake Agent", status: "ACTIVE", output: "Upload, validation, household-scoped storage" },
-  { id: "analysis-agent", stage: "2", title: "Analysis Agent", status: "ACTIVE", output: "Extract facts, risks, missing info, next steps" },
-  { id: "review-agent", stage: "3", title: "Review Agent", status: "ACTIVE", output: "Human confirmation before facts become trusted" },
+  { id: "workflow-router", stage: "2", title: "n8n Intake Workflow", status: "ACTIVE", output: "Route offer requests to manual processing" },
+  { id: "review-agent", stage: "3", title: "Manual Review Desk", status: "ACTIVE", output: "Human confirmation before offers become trusted" },
   { id: "radar-agent", stage: "4", title: "Radar Orchestrator", status: "NEXT", output: "Rank contracts, documents, deadlines, claims" },
   { id: "workflow-agent", stage: "5", title: "Connector Layer", status: "PLANNED", output: "Gmail, Telegram, Calendar, GitHub/Vercel workflows after approval" },
 ] as const
@@ -62,7 +63,7 @@ export function getSmartDashboardNextAction(stats: SmartDashboardStats, locale: 
   if (stats.profileCompleteness < 60) return { id: "profile", href: "/profil", label: de ? "Profil vervollständigen" : "Попълни профила", reason: "PROFILE_INCOMPLETE" }
   if (stats.contracts === 0) return { id: "contracts", href: "/vertraege", label: de ? "Verträge erfassen" : "Добави договори", reason: "NO_CONTRACTS" }
   if (stats.documents === 0) return { id: "documents", href: "/documents", label: de ? "Dokumente hochladen" : "Качи документи", reason: "NO_DOCUMENTS" }
-  return { id: "assistant", href: "/protected/home-office", label: de ? "AI Prüfung starten" : "Стартирай AI проверка", reason: "READY_FOR_AI_REVIEW" }
+  return { id: "offer_request", href: "/zayavka", label: de ? "Angebot anfragen" : "Заяви оферта", reason: "READY_FOR_MANUAL_OFFER_REQUEST" }
 }
 
 export function getSmartDashboardProblems(stats: SmartDashboardStats) {

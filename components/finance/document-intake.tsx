@@ -42,9 +42,9 @@ export function DocumentIntake({ document, onSelect, onTextChange, onAnalyze, ca
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <h2 id="intake-title" className="font-semibold text-foreground">Dokument hinzufügen</h2>
-            <span className="border border-border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{connected ? "Supabase + AI" : "Lokaler Demo-Modus"}</span>
+            <span className="border border-border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{connected ? "Supabase + manuelle Prüfung" : "Lokaler Demo-Modus"}</span>
           </div>
-          <p className="mt-1 text-sm leading-6 text-muted-foreground">{connected ? "PDF, JPG oder PNG werden im geschützten Dokumentbereich gespeichert. Text für die AI-Prüfung wird bewusst separat bestätigt." : "PDF, JPG oder PNG bleiben nur in dieser Vorschau und werden nicht übertragen."}</p>
+          <p className="mt-1 text-sm leading-6 text-muted-foreground">{connected ? "PDF, JPG oder PNG werden im geschützten Dokumentbereich gespeichert. Relevante Angaben werden bewusst separat bestätigt." : "PDF, JPG oder PNG bleiben nur in dieser Vorschau und werden nicht übertragen."}</p>
         </div>
       </div>
       <input ref={inputRef} className="sr-only" type="file" accept="application/pdf,image/jpeg,image/png" onChange={(event) => void handleFile(event.target.files?.[0])} />
@@ -54,16 +54,16 @@ export function DocumentIntake({ document, onSelect, onTextChange, onAnalyze, ca
       </button>
       {connected && document && document.type !== "error" && (
         <label className="mt-5 block text-sm font-medium text-foreground">
-          Text für AI-Prüfung
-          <Textarea className="mt-2 min-h-36 resize-y" value={document.text} onChange={(event) => onTextChange?.(event.target.value)} placeholder="Füge hier den relevanten Text aus dem Dokument ein. Die AI extrahiert Fakten, Risiken und nächste Schritte zur manuellen Prüfung." />
+          Relevanter Text fuer die manuelle Pruefung
+          <Textarea className="mt-2 min-h-36 resize-y" value={document.text} onChange={(event) => onTextChange?.(event.target.value)} placeholder="Fuege hier den relevanten Text aus dem Dokument ein. Die Angaben helfen bei der manuellen Angebots- oder Vertragspruefung." />
         </label>
       )}
       {error && <p role="alert" className="mt-3 text-sm text-destructive">{error}</p>}
       <div className="mt-4 flex flex-wrap gap-2">
         <Button type="button" variant="outline" onClick={() => inputRef.current?.click()}>Datei auswählen</Button>
-        <Button type="button" onClick={onAnalyze} disabled={!canAnalyze || isAnalyzed || busy}>{busy ? "Analyse läuft …" : isAnalyzed ? "Analysiert" : "Analyze document"}</Button>
+        <Button type="button" onClick={onAnalyze} disabled={!canAnalyze || isAnalyzed || busy}>{busy ? "Pruefung laeuft ..." : isAnalyzed ? "Geprueft" : "Dokument vorbereiten"}</Button>
       </div>
-      <p className="mt-4 flex items-center gap-2 text-xs text-muted-foreground"><LockKeyhole aria-hidden="true" className="size-3.5" />{connected ? "Geschützte Verarbeitung · Nutzer bestätigt Fakten vor Speicherung." : "Lokale Validierung · keine Supabase- oder AI-Anfrage."}</p>
+      <p className="mt-4 flex items-center gap-2 text-xs text-muted-foreground"><LockKeyhole aria-hidden="true" className="size-3.5" />{connected ? "Geschuetzte Verarbeitung · Nutzer bestaetigt Angaben vor Speicherung." : "Lokale Validierung · keine Supabase- oder externe Anfrage."}</p>
     </section>
   )
 }

@@ -8,7 +8,7 @@ export const kintexModules = [
   { id: "documents", href: "/documents", bg: "Документи", de: "Dokumente" },
   { id: "deadlines", href: "/protected?module=deadlines", bg: "Срокове", de: "Fristen", planned: true },
   { id: "opportunities", href: "/protected?module=opportunities", bg: "Възможности", de: "Möglichkeiten", planned: true },
-  { id: "assistant", href: "/protected/home-office", bg: "AI Home Office Assistant", de: "AI Home Office Assistant" },
+  { id: "assistant", href: "/protected/home-office", bg: "Умен чатбот", de: "Smart Chatbot" },
   { id: "profile", href: "/profil", bg: "Профил", de: "Profil" },
 ] as const
 
@@ -27,4 +27,3 @@ export function activeKintexModule(pathname: string, module: string | null) {
   return kintexModules.find((item) => item.id !== "overview" && !item.href.includes("?") &&
     (path === item.href || path.startsWith(`${item.href}/`)))?.id ?? null
 }
-
