@@ -8,7 +8,7 @@ export function SiteFooter() {
   const { t, locale } = useLanguage()
 
   return (
-    <footer className="border-t border-border bg-card">
+    <footer id="contact" className="scroll-mt-24 border-t border-border bg-card">
       <div className="mx-auto max-w-[1440px] px-5 py-14 lg:px-8">
         <div className="flex flex-col gap-8 md:flex-row md:justify-between">
           <div className="max-w-sm">
