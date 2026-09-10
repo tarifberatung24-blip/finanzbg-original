@@ -27,33 +27,36 @@ export function SiteHeader() {
   }, [])
 
   const labels = locale === "de"
-    ? { features: "Funktionen", how: "So funktioniert es", pricing: "Preise", about: "Über uns", contact: "Kontakt", profile: "Persönlicher Bereich", logout: "Abmelden", install: "App installieren", menu: "Menü" }
-    : { features: "Функции", how: "Как работи", pricing: "Цени", about: "За нас", contact: "Контакт", profile: "Личен профил", logout: "Изход", install: "Инсталирай приложението", menu: "Меню" }
+    ? { home: "Startseite", services: "Leistungen", taxes: "Steuern", benefits: "Staatliche Hilfen", tariffs: "Tarife", documents: "Dokumente", about: "Über KintexBG", profile: "Persönlicher Bereich", logout: "Abmelden", install: "App installieren", menu: "Menü" }
+    : { home: "Начало", services: "Услуги", taxes: "Данъци", benefits: "Държавни помощи", tariffs: "Тарифи", documents: "Документи", about: "За KintexBG", profile: "Личен профил", logout: "Изход", install: "Инсталирай приложението", menu: "Меню" }
   const links = [
-    { href: "#features", label: labels.features },
-    { href: "#how-it-works", label: labels.how },
-    { href: "#pricing", label: labels.pricing },
-    { href: "#about", label: labels.about },
-    { href: "#contact", label: labels.contact },
+    { href: "/", label: labels.home },
+    { href: "/uslugi", label: labels.services },
+    { href: "/kindergeld", label: "Kindergeld" },
+    { href: "/steuer", label: labels.taxes },
+    { href: "/anspruch", label: labels.benefits },
+    { href: "/tarife", label: labels.tariffs },
+    { href: "/documents", label: labels.documents },
+    { href: "/za-nas", label: labels.about },
   ]
-  const localizedHref = (href: string) => `/${locale}${href}`
+  const localizedHref = (href: string) => href === "/" ? `/${locale}` : `/${locale}${href}`
   const closeMenu = () => setOpen(false)
   async function logout() { await createClient().auth.signOut(); closeMenu(); router.push("/") }
 
   return (
     <>
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#09090b]/90 text-white backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-border bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-[72px] max-w-[1440px] items-center justify-between gap-4 px-5 lg:px-8">
-        <Link href={`/${locale}`} aria-label="KintexBG — BY VZG" className="shrink-0">
-          <Logo textClassName="text-white [&_span]:text-white/55" />
+        <Link href="/" aria-label="KintexBG — BY VZG" className="shrink-0">
+          <Logo />
         </Link>
 
         <nav className="hidden items-center gap-2 md:flex">
-          {links.map((l) => (
+          {links.slice(0, 4).map((l) => (
             <Link
               key={l.href}
               href={localizedHref(l.href)}
-              className="rounded-full px-3 py-2 text-[13px] font-medium text-white/65 transition-colors hover:bg-white/10 hover:text-white"
+              className="rounded-full px-3 py-2 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             >
               {l.label}
             </Link>
@@ -61,22 +64,22 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <LanguageSwitcher className="hidden border-white/15 bg-white/5 text-white sm:inline-flex [&_button:not([aria-pressed=true])]:text-white/60" />
+          <LanguageSwitcher className="hidden sm:inline-flex" />
           {authReady && authenticated ? (
             <>
-                <Button asChild variant="ghost" size="sm" className="hidden text-white hover:bg-white/10 hover:text-white md:inline-flex"><Link href={`/${locale}/protected`}>{labels.profile}</Link></Button>
-              <Button variant="outline" size="sm" className="hidden border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white md:inline-flex" onClick={logout}>{labels.logout}</Button>
+                <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex"><Link href="/protected">{labels.profile}</Link></Button>
+              <Button variant="outline" size="sm" className="hidden md:inline-flex" onClick={logout}>{labels.logout}</Button>
             </>
           ) : authReady ? (
             <>
-              <Button asChild variant="ghost" size="sm" className="hidden text-white hover:bg-white/10 hover:text-white md:inline-flex"><Link href={`/${locale}/auth/login`}>{t.nav.login}</Link></Button>
-              <Button asChild size="sm" className="hidden rounded-full bg-white px-5 text-[#09090b] hover:bg-white/90 md:inline-flex"><Link href={`/${locale}/auth/sign-up`}>{t.nav.register}</Link></Button>
+              <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex"><Link href="/auth/login">{t.nav.login}</Link></Button>
+              <Button asChild size="sm" className="hidden rounded-full bg-foreground px-5 text-background hover:bg-foreground/90 md:inline-flex"><Link href="/auth/sign-up">{t.nav.register}</Link></Button>
             </>
           ) : null}
 
           <button
             type="button"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-md text-white md:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-md text-foreground md:hidden"
             aria-label={labels.menu}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
@@ -86,14 +89,14 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <div className={cn("border-t border-white/10 bg-[#09090b] md:hidden", open ? "block" : "hidden")}>
+      <div className={cn("border-t border-border bg-background md:hidden", open ? "block" : "hidden")}>
         <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-3">
           {links.map((l) => (
             <Link
               key={l.href}
               href={localizedHref(l.href)}
               onClick={closeMenu}
-              className="rounded-md px-3 py-3 text-sm font-medium text-white/75 hover:bg-white/10 hover:text-white"
+              className="rounded-md px-3 py-3 text-sm font-medium text-foreground hover:bg-secondary"
             >
               {l.label}
             </Link>
@@ -106,13 +109,13 @@ export function SiteHeader() {
             <div className="flex gap-2">
               {authReady && authenticated ? (
                 <>
-                  <Button asChild variant="outline" size="sm"><Link href={`/${locale}/protected`} onClick={closeMenu}>{labels.profile}</Link></Button>
+                  <Button asChild variant="outline" size="sm"><Link href="/protected" onClick={closeMenu}>{labels.profile}</Link></Button>
                   <Button variant="outline" size="sm" onClick={logout}>{labels.logout}</Button>
                 </>
               ) : authReady ? (
                 <>
-                  <Button asChild variant="outline" size="sm"><Link href={`/${locale}/auth/login`} onClick={closeMenu}>{t.nav.login}</Link></Button>
-                  <Button asChild size="sm"><Link href={`/${locale}/auth/sign-up`} onClick={closeMenu}>{t.nav.register}</Link></Button>
+                  <Button asChild variant="outline" size="sm"><Link href="/auth/login" onClick={closeMenu}>{t.nav.login}</Link></Button>
+                  <Button asChild size="sm"><Link href="/auth/sign-up" onClick={closeMenu}>{t.nav.register}</Link></Button>
                 </>
               ) : null}
             </div>

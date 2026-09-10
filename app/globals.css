@@ -228,58 +228,6 @@
   overflow: hidden;
 }
 
-.kintex-entry-hero {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-}
-
-.kintex-entry-grid {
-  position: absolute;
-  inset: 0;
-  opacity: 0.22;
-  background-image:
-    linear-gradient(rgb(255 255 255 / 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(255 255 255 / 0.08) 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: linear-gradient(to bottom, black, transparent 88%);
-}
-
-.kintex-entry-orb {
-  position: absolute;
-  width: 34rem;
-  height: 34rem;
-  border-radius: 999px;
-  filter: blur(90px);
-  opacity: 0.2;
-  animation: kintex-orbit 12s ease-in-out infinite alternate;
-}
-
-.kintex-entry-orb-left {
-  top: -18rem;
-  left: -12rem;
-  background: #b4232f;
-}
-
-.kintex-entry-orb-right {
-  right: -14rem;
-  bottom: -20rem;
-  background: #7c3aed;
-  animation-delay: -5s;
-}
-
-.kintex-entry-gradient {
-  color: transparent;
-  background: linear-gradient(90deg, #ffffff 8%, #fca5a5 50%, #c4b5fd 92%);
-  background-clip: text;
-  -webkit-background-clip: text;
-}
-
-@keyframes kintex-orbit {
-  from { transform: translate3d(-2rem, -1rem, 0) scale(0.92); }
-  to { transform: translate3d(4rem, 3rem, 0) scale(1.08); }
-}
-
 .kintex-grid-background {
   background-image:
     linear-gradient(to right, rgb(21 21 21 / 0.055) 1px, transparent 1px),
@@ -348,10 +296,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .kintex-entry-orb {
-    animation: none;
-  }
-
   .kintex-marketing-item {
     transition: none;
   }

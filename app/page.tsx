@@ -24,13 +24,13 @@ export default function HomePage() {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-card focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-foreground focus:shadow-lg">{locale === "de" ? "Zum Inhalt" : "Към съдържанието"}</a>
       <main id="main-content">
         <Hero />
-        <div id="features" className="scroll-mt-24"><OpportunityCheck /></div>
+        <OpportunityCheck />
         <FinancialOsOverview />
 
-        <section className="kintex-marketing-section scroll-mt-24 border-y border-border bg-card" aria-labelledby="features-title">
+        <section className="kintex-marketing-section border-y border-border bg-card">
           <div className="mx-auto max-w-[1440px] px-5 py-16 lg:px-8 md:py-20">
             <div className="mx-auto max-w-2xl text-center">
-              <h2 id="features-title" className="text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+              <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl">
                 {t.home.servicesTitle}
               </h2>
               <p className="mt-3 text-pretty text-muted-foreground">{t.home.servicesSub}</p>
@@ -58,7 +58,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="how-it-works" className="mx-auto max-w-[1440px] scroll-mt-24 px-5 py-16 lg:px-8 md:py-20">
+        <section className="mx-auto max-w-[1440px] px-5 py-16 lg:px-8 md:py-20">
           <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:items-start">
             <div>
               <span className="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-medium text-success">
@@ -89,24 +89,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="pricing" className="scroll-mt-24 border-t border-border bg-card">
-          <div className="mx-auto max-w-[1440px] px-5 py-16 lg:px-8 md:py-20">
-            <div className="mx-auto max-w-2xl text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">{locale === "de" ? "Preise" : "Цени"}</p>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground md:text-4xl">{locale === "de" ? "Kostenlos starten" : "Започни безплатно"}</h2>
-              <p className="mt-3 text-muted-foreground">{locale === "de" ? "Erstelle dein Profil und entdecke die verfügbaren KintexBG-Werkzeuge. Weitere Pläne folgen transparent vor dem Start." : "Създай профил и разгледай наличните инструменти на KintexBG. Следващите планове ще бъдат показани прозрачно преди пускането им."}</p>
-            </div>
-            <div className="mx-auto mt-9 max-w-md rounded-3xl border border-border bg-background p-7 shadow-sm">
-              <div className="flex items-end justify-between gap-4">
-                <div><p className="font-semibold text-foreground">KintexBG Free</p><p className="mt-1 text-sm text-muted-foreground">{locale === "de" ? "Ohne Kreditkarte" : "Без кредитна карта"}</p></div>
-                <p className="text-4xl font-bold tracking-tight text-foreground">0 €</p>
-              </div>
-              <Button asChild size="lg" className="mt-7 w-full rounded-full"><Link href={`/${locale}/auth/sign-up`}>{t.nav.register}</Link></Button>
-            </div>
-          </div>
-        </section>
-
-        <section id="about" className="scroll-mt-24 border-t border-border bg-accent text-accent-foreground">
+        <section className="border-t border-border bg-accent text-accent-foreground">
           <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-5 py-14 lg:px-8 md:flex-row md:items-center md:justify-between">
             <div className="max-w-2xl">
               <h2 className="text-2xl font-bold md:text-3xl">{t.home.finalCtaTitle}</h2>
