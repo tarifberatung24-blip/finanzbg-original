@@ -54,11 +54,11 @@ This is safer than forcing two incompatible `cases`, `tasks`, `audit_events`, an
 
 ### Phase 2 — Identity migration
 
-Auth is the primary blocker. The target currently has zero users and the source has six. Do not copy `auth.users` with ordinary SQL. Use a supported Supabase Auth export/import or an Admin API migration that preserves user IDs and password hashes where supported. If password-hash import is unavailable, use a controlled password-reset flow and preserve the source-to-target user ID mapping in a private migration manifest. Never place auth secrets or password material in GitHub, chat, or `.env` files.
+The source contains six existing Auth users, confirmed by the read-only audit. The owner has identified them as disposable test accounts and has instructed that they must **not** be preserved. Therefore no `auth.users`, source `profiles`, `households`, or user-owned test rows will be migrated. The Frankfurt target remains clean and new production users will register there with fresh identities. Do not delete the source users automatically; retain the source project unchanged until the owner explicitly requests cleanup. The nine `tax_form_registry` rows are reference data, not user accounts, and can be migrated separately after a uniqueness check.
 
 ### Phase 3 — Data migration
 
-Migrate source rows in foreign-key order: profiles → households → family members → contracts/documents/deadlines → financial/tax/benefit cases → audit rows. Preserve UUIDs where possible. For every row, validate the owner exists in target Auth and the household relationship is present. Migrate the nine `tax_form_registry` rows as reference data only after checking their uniqueness and official-source foreign keys.
+Because the six source accounts are disposable test accounts, skip all user-owned source rows in the first production migration: profiles, households, family members, contracts, documents, deadlines, financial profiles, tax/benefit cases, and user audit rows. Migrate only approved non-user reference data, currently the nine `tax_form_registry` rows and their official-source dependencies, after a uniqueness and content review.
 
 Assistant data is currently zero rows in Frankfurt and no assistant user data needs merging. After the office tables are namespaced, deploy the updated VZGplattform module code against Frankfurt and run end-to-end tests with a non-production test user.
 
@@ -84,4 +84,4 @@ Only after the observation window, verified backups, and explicit owner approval
 
 ## Current status
 
-**Audit complete. No production schema or data was changed.** The target is the correct long-term location, but a direct table merge is unsafe because the two repositories define incompatible domain models under the same table names. The next implementation step is the additive Frankfurt migration plus VZGoffice table namespacing, followed by identity migration planning.
+**Audit complete. No production schema or data was changed.** The six source Auth users are disposable test accounts and are excluded from migration; Auth migration is no longer a blocker. The target is the correct long-term location, but a direct table merge is unsafe because the two repositories define incompatible domain models under the same table names. The next implementation step is the additive Frankfurt migration plus VZGoffice table namespacing, followed by a clean-account staging test.
