@@ -31,6 +31,7 @@ import ImpressumPage from "@/app/impressum/page"
 import AffiliateNoticePage from "@/app/affiliate-hinweis/page"
 import WithdrawalPage from "@/app/widerruf/page"
 import AppInstallPage from "@/app/app/page"
+import FinanzbildungPage from "@/app/finanzbildung/page"
 
 const pages: Record<string, React.ComponentType> = {
   "": HomePage, check: CheckPage, uslugi: UslugiPage, anspruch: AnspruchPage, kindergeld: KindergeldPage,
@@ -38,7 +39,7 @@ const pages: Record<string, React.ComponentType> = {
   "auth/login": LoginPage, "auth/sign-up": SignUpPage, "auth/sign-up-success": SignUpSuccessPage, "auth/error": AuthErrorPage,
   "auth/forgot-password": ForgotPasswordPage, "auth/update-password": UpdatePasswordPage, "auth/mfa-verify": MfaVerifyPage,
   finanzamt: FinanzamtPage, profil: ProfilPage, protected: ProtectedPage, "protected/home-office": HomeOfficePage, "protected/security": SecurityPage,
-  steuer: SteuerPage, "steuer/providers": ProvidersPage, "steuer/review": ReviewPage, datenschutz: DatenschutzPage, agb: AgbPage, impressum: ImpressumPage, "affiliate-hinweis": AffiliateNoticePage, widerruf: WithdrawalPage, app: AppInstallPage,
+  steuer: SteuerPage, "steuer/providers": ProvidersPage, "steuer/review": ReviewPage, finanzbildung: FinanzbildungPage, datenschutz: DatenschutzPage, agb: AgbPage, impressum: ImpressumPage, "affiliate-hinweis": AffiliateNoticePage, widerruf: WithdrawalPage, app: AppInstallPage,
 }
 
 export async function generateMetadata({params}: {params: Promise<{locale: string; slug?: string[]}>}) {

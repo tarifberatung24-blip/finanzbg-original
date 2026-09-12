@@ -3,8 +3,8 @@ import { activeKintexModule, isKintexWorkspacePath, kintexModules } from "./kint
 import { isProtectedAppPath } from "./supabase/auth-routing"
 
 describe("KintexBG workspace navigation", () => {
-  it("keeps all nine modules under the existing authentication boundary", () => {
-    expect(kintexModules).toHaveLength(9)
+  it("keeps all ten modules under the existing authentication boundary", () => {
+    expect(kintexModules).toHaveLength(10)
     for (const item of kintexModules) {
       const path = item.href.split("?")[0]
       expect(isProtectedAppPath(`/bg${path}`)).toBe(true)

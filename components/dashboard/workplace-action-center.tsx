@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowRight, FilePlus2, MessageSquareText, SearchCheck, TriangleAlert } from "lucide-react"
+import { ArrowRight, BookOpen, FilePlus2, MessageSquareText, SearchCheck, TriangleAlert } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 type Props = {
@@ -17,6 +17,7 @@ const intakeOptions = [
   { href: "/documents", label: "Получих писмо и не го разбирам", icon: MessageSquareText },
   { href: "/anspruch", label: "Искам да проверя помощ или право", icon: SearchCheck },
   { href: "/documents", label: "Трябва да подготвя документ", icon: FilePlus2 },
+  { href: "/finanzbildung", label: "Искам да разбера финансите си", icon: BookOpen },
 ]
 
 export function WorkplaceActionCenter({ firstName, nextAction, reviewCount, documentCount, contractCount, reminderCount }: Props) {
@@ -37,7 +38,7 @@ export function WorkplaceActionCenter({ firstName, nextAction, reviewCount, docu
             <div className="min-w-0 flex-1"><p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Следваща стъпка</p><p className="mt-1 font-semibold text-foreground">{nextAction.label}</p><Button asChild size="sm" className="mt-3"><Link href={nextAction.href}>Продължи <ArrowRight className="size-4" /></Link></Button></div>
           </div>
         </div>
-        <div className="mt-5 grid gap-2 sm:grid-cols-3">
+        <div className="mt-5 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
           {intakeOptions.map(({ href, label, icon: Icon }) => <Link key={label} href={href} className="group rounded-xl border border-border bg-background p-3 transition-colors hover:border-primary/40 hover:bg-primary/[0.03]"><Icon className="size-4 text-primary" aria-hidden="true" /><span className="mt-2 block text-sm font-medium leading-5">{label}</span><span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary">Започни <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" /></span></Link>)}
         </div>
       </div>

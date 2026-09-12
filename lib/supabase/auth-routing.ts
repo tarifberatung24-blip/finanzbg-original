@@ -8,6 +8,7 @@ const protectedPrefixes = [
   "/steuer",
   "/vertraege",
   "/documents",
+  "/finanzbildung",
   "/auth/update-password",
 ]
 
