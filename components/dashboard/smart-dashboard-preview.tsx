@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { AiHomeOfficeChat } from "@/components/dashboard/ai-home-office-chat"
 import { WorkplaceActionCenter } from "@/components/dashboard/workplace-action-center"
+import { MissingInformationInterviewer } from "@/components/dashboard/missing-information-interviewer"
 import { getKintexRadarSignals } from "@/lib/kintex-radar"
 import {
   getSmartDashboardNextAction,
@@ -236,6 +237,15 @@ function LiveSmartDashboardPreview({ firstName, profile, contracts = [], documen
   }
   const problems = getSmartDashboardProblems(stats)
   const nextAction = getSmartDashboardNextAction(stats, "bg")
+  const missingInformationQuestions = contracts
+    .filter((contract) => contract.monthly_amount == null)
+    .slice(0, 3)
+    .map((contract) => ({
+      id: contract.id,
+      label: `Каква е месечната сума по „${contract.title}“?`,
+      detail: "Сумата липсва и няма да бъде изчислявана автоматично.",
+      href: "/vertraege",
+    }))
   const monthlyTotal = contracts.reduce((sum, contract) => sum + (Number(contract.monthly_amount) || 0), 0)
   const nextReminder = reminders.find((reminder) => reminder.due_at) ?? null
   const radarSignals = getKintexRadarSignals(contracts)
@@ -312,6 +322,7 @@ function LiveSmartDashboardPreview({ firstName, profile, contracts = [], documen
           contractCount={contracts.length}
           reminderCount={reminders.length}
         />
+        <MissingInformationInterviewer questions={missingInformationQuestions} />
 
         <div className="mt-6 grid gap-6 2xl:grid-cols-[minmax(0,1fr)_340px]">
           <section className="kintex-panel min-w-0 overflow-hidden" aria-labelledby="payments-title">
