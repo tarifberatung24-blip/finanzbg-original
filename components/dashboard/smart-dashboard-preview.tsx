@@ -25,6 +25,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { AiHomeOfficeChat } from "@/components/dashboard/ai-home-office-chat"
+import { WorkplaceActionCenter } from "@/components/dashboard/workplace-action-center"
 import { getKintexRadarSignals } from "@/lib/kintex-radar"
 import {
   getSmartDashboardNextAction,
@@ -300,6 +301,15 @@ function LiveSmartDashboardPreview({ firstName, profile, contracts = [], documen
           <Kpi icon={CalendarDays} label="Следващ падеж" value={nextReminder ? formatDate(nextReminder.due_at) : "Няма данни"} note={nextReminder?.title ?? "Няма записан предстоящ срок"} />
           <Kpi icon={Bell} label="За проверка" value={String(reviewCount + missingCosts)} note="Документи и липсващи суми" />
         </section>
+
+        <WorkplaceActionCenter
+          firstName={firstName}
+          nextAction={nextAction}
+          reviewCount={reviewCount}
+          documentCount={documents.length}
+          contractCount={contracts.length}
+          reminderCount={reminders.length}
+        />
 
         <div className="mt-6 grid gap-6 2xl:grid-cols-[minmax(0,1fr)_340px]">
           <section className="kintex-panel min-w-0 overflow-hidden" aria-labelledby="payments-title">
