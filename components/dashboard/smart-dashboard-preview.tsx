@@ -226,15 +226,17 @@ function LiveSmartDashboardPreview({ firstName, profile, contracts = [], documen
     }
   }, [assistantOpen])
 
+  const missingCosts = contracts.filter((contract) => contract.monthly_amount == null).length
   const stats: SmartDashboardStats = {
     profileCompleteness: profile?.completeness ?? 0,
     contracts: contracts?.length ?? 0,
     documents: documents?.length ?? 0,
+    documentsNeedingReview: reviewCount,
+    contractsNeedingInfo: missingCosts,
   }
   const problems = getSmartDashboardProblems(stats)
   const nextAction = getSmartDashboardNextAction(stats, "bg")
   const monthlyTotal = contracts.reduce((sum, contract) => sum + (Number(contract.monthly_amount) || 0), 0)
-  const missingCosts = contracts.filter((contract) => contract.monthly_amount == null).length
   const nextReminder = reminders.find((reminder) => reminder.due_at) ?? null
   const radarSignals = getKintexRadarSignals(contracts)
 

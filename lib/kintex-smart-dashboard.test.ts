@@ -14,6 +14,14 @@ describe("Kintex Smart Dashboard", () => {
     expect(getSmartDashboardNextAction({ profileCompleteness: 80, contracts: 1, documents: 1 }, "de")).toMatchObject({ id: "offer_request", reason: "READY_FOR_MANUAL_OFFER_REQUEST" })
   })
 
+  it("routes document review before onboarding or offer request", () => {
+    expect(getSmartDashboardNextAction({ profileCompleteness: 80, contracts: 2, documents: 3, documentsNeedingReview: 1 }, "bg")).toMatchObject({ id: "document_review", reason: "DOCUMENTS_NEED_REVIEW" })
+  })
+
+  it("routes missing contract facts before an offer request", () => {
+    expect(getSmartDashboardNextAction({ profileCompleteness: 80, contracts: 2, documents: 2, contractsNeedingInfo: 1 }, "de")).toMatchObject({ id: "contract_info", reason: "CONTRACTS_NEED_INFO" })
+  })
+
   it("keeps human confirmation and anti-fake-data rules enabled", () => {
     expect(smartDashboardRules).toMatchObject({ noMockFinancialData: true, noFakeTariffOffers: true, userConfirmationRequired: true })
   })

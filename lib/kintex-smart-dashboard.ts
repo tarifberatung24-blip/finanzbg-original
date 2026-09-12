@@ -5,6 +5,8 @@ export type SmartDashboardStats = {
   contracts: number
   documents: number
   profileCompleteness: number
+  documentsNeedingReview?: number
+  contractsNeedingInfo?: number
 }
 
 export const smartDashboardEnvironment = {
@@ -60,6 +62,8 @@ export const smartDashboardAgents = [
 
 export function getSmartDashboardNextAction(stats: SmartDashboardStats, locale: "bg" | "de") {
   const de = locale === "de"
+  if ((stats.documentsNeedingReview ?? 0) > 0) return { id: "document_review", href: "/documents", label: de ? "Dokumente prüfen" : "Провери чакащите документи", reason: "DOCUMENTS_NEED_REVIEW" }
+  if ((stats.contractsNeedingInfo ?? 0) > 0) return { id: "contract_info", href: "/vertraege", label: de ? "Vertragsdaten ergänzen" : "Допълни данните по договор", reason: "CONTRACTS_NEED_INFO" }
   if (stats.profileCompleteness < 60) return { id: "profile", href: "/profil", label: de ? "Profil vervollständigen" : "Попълни профила", reason: "PROFILE_INCOMPLETE" }
   if (stats.contracts === 0) return { id: "contracts", href: "/vertraege", label: de ? "Verträge erfassen" : "Добави договори", reason: "NO_CONTRACTS" }
   if (stats.documents === 0) return { id: "documents", href: "/documents", label: de ? "Dokumente hochladen" : "Качи документи", reason: "NO_DOCUMENTS" }
